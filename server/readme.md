@@ -1,1 +1,1 @@
-#socia-media-mern-server
+# social-media-mern-server
