@@ -2,6 +2,8 @@ import React from "react";
 import { MdMoreHoriz } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import "./post.scss";
+
 const Post = ({ post }) => {
   return (
     <div className="post">

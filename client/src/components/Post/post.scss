@@ -1,0 +1,39 @@
+.post {
+
+    .user {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+
+        .userInfo {
+            img {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+
+            }
+
+            a {
+
+
+            }
+
+            span {
+
+            }
+        }
+
+    }
+
+    .content {
+
+
+    }
+
+    .info {
+
+    }
+}
