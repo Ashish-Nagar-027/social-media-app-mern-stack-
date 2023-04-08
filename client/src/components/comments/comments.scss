@@ -1,0 +1,43 @@
+
+
+.comments {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .comment {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        
+
+
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: flex-start;
+
+            span {
+
+            }
+
+            p {
+
+            }
+        }
+
+        span {
+            text-align: end;
+
+        }
+    }
+}

@@ -32,12 +32,14 @@ function App() {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             padding: "1rem",
+            backgroundColor: " #f5f7f8",
           }}
         >
           <LeftBar />
-          <Outlet />
+          <div style={{ flex: 6, padding: "0 2rem" }}>
+            <Outlet />
+          </div>
           <RightBar />
         </div>
       </>

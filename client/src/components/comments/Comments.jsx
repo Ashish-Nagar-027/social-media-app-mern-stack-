@@ -1,9 +1,8 @@
-import React from "react";
-import Post from "../Post/Post";
-import "./posts.scss";
+import React, { useState } from "react";
+import "./comments.scss";
 
-const Posts = () => {
-  const posts = [
+const Comments = () => {
+  const comments = [
     {
       id: 1,
       name: "John Doe",
@@ -33,12 +32,19 @@ const Posts = () => {
   ];
 
   return (
-    <div className="posts">
-      {posts.map((post) => (
-        <Post post={post} key={post.id} />
+    <div className="comments">
+      {comments.map((comment) => (
+        <div className="comment">
+          <img alt="" src={comment.profilePic} />
+          <div className="info">
+            <span>{comment.name}</span>
+            <p>{comment.desc}</p>
+          </div>
+          <span className="date">1 hour ago</span>
+        </div>
       ))}
     </div>
   );
 };
 
-export default Posts;
+export default Comments;
