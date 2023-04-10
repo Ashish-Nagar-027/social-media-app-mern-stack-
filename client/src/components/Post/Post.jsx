@@ -18,7 +18,7 @@ const Post = ({ post }) => {
           <div className="userInfo">
             <img src={post.profilePic} alt={post.name} />
             <div className="details">
-              <Link to={`profile/${post.userId}`}>
+              <Link to={`./profile/${post.userId}`}>
                 <span>{post.name}</span>
                 <span>1 min ago</span>
               </Link>
