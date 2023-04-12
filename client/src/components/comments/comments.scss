@@ -1,4 +1,4 @@
-
+@import '../../style.scss';
 
 .comments {
     margin-top: 20px;
@@ -17,7 +17,6 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
-
         }
         input {
             width: 100%;
@@ -35,11 +34,10 @@
     }
 
     .comment {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        
 
+       div {
+        display: flex;
+        gap: 10px;
 
         img {
             width: 40px;
@@ -59,13 +57,16 @@
             }
 
             p {
-
+                font-size: 12px;
             }
         }
+    }
 
-        span {
-            text-align: end;
 
+        .date {
+            font-size: 11px;
+            color: gray;
+            
         }
     }
 }

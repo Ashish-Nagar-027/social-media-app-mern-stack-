@@ -21,9 +21,9 @@ const Navbar = () => {
         </div>
       </div>
       <div className="right-nav">
-        <MdOutlineMessage fontSize={24} />
-        <MdGroup fontSize={24} />
-        <MdNotificationsNone fontSize={24} />
+        <MdOutlineMessage fontSize={24} className="icon" />
+        <MdGroup fontSize={24} className="icon" />
+        <MdNotificationsNone fontSize={24} className="icon" />
         <div className="user">
           <img
             alt="profile"
