@@ -3,11 +3,15 @@ import "./register.scss";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  const formSubmitHandler = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="register">
       <div className="card">
         <h1>Beings Social</h1>
-        <form>
+        <form onSubmit={formSubmitHandler}>
           <input placeholder="username" name="username" />
           <input placeholder="name" name="name" />
           <input placeholder="email" name="email" />

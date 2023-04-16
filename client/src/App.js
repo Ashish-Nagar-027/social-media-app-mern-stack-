@@ -17,7 +17,7 @@ import Profile from "./pages/profile/Profile";
 import "./style.scss";
 
 function App() {
-  const [currentUser] = useState(true);
+  const [currentUser] = useState(false);
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
