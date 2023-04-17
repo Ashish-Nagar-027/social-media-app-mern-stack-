@@ -6,11 +6,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter a name"],
     },
-    username: {
-      type: String,
-      required: [true, "Please enter a user"],
-      unique: [true, "username already exits"],
-    },
+
     email: {
       type: String,
       required: [true, "username already exits"],
