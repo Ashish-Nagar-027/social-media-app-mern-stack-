@@ -1,24 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./register.scss";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 
-const Register = () => {
-  function validateEmail(email) {
-    return email.match(
-      '/^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/'
-    );
+// for formik errors
+const validate = (values) => {
+  const errors = {};
+
+  if (!values.name) {
+    errors.name = "Required";
   }
 
+  if (!values.password) {
+    errors.password = "Required";
+  }
+
+  if (!values.email) {
+    errors.email = "Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  return errors;
+};
+
+const Register = () => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  // formik here
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    validate,
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+
       console.log(values);
+      setIsSubmitting(false);
     },
   });
 
@@ -34,7 +55,9 @@ const Register = () => {
               value={formik.values.name}
               onChange={formik.handleChange}
             />
-            <p className="form-warning"></p>
+            <p className="form-warning">
+              {formik.errors.name && <span> * {formik.errors.name} </span>}
+            </p>
           </div>
           <div>
             <input
@@ -43,7 +66,9 @@ const Register = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
             />
-            <p className="form-warning"></p>
+            <p className="form-warning">
+              {formik.errors.email && <span> * {formik.errors.email} </span>}
+            </p>
           </div>
           <div>
             <input
@@ -52,10 +77,16 @@ const Register = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
             />
-            <p className="form-warning"></p>
+            <p className="form-warning">
+              {formik.errors.password && (
+                <span> * {formik.errors.password} </span>
+              )}
+            </p>
           </div>
 
-          <button>Sign in</button>
+          <button className={isSubmitting ? "form-submitting" : ""}>
+            {isSubmitting ? "Submitting" : "Sign up"}
+          </button>
         </form>
         <p>
           Already have account? <Link to="/login">Log in</Link>

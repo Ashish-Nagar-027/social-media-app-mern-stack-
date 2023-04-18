@@ -48,8 +48,15 @@
     .form-warning {
         font-size: 0.8rem;
         color: red;
+        text-align: start;
+    }
+
+
+    .form-submitting {
+      pointer-events: none;
     }
     }
+
 
     
 
