@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 //        register
 //=============================
 const register = async (req, res) => {
+  console.log("new request");
+  // console.log(req.body);
   try {
     const { email, name, password } = req.body;
 
@@ -18,9 +20,11 @@ const register = async (req, res) => {
     const existUser = await User.findOne({ email });
     if (existUser) {
       throw Error("User Already Exits");
+      console.log("new request 0");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("new request 1");
 
     const user = await User.create({
       name,
@@ -28,15 +32,18 @@ const register = async (req, res) => {
       password: hashedPassword,
     });
 
+    console.log("new request 2");
+
     user.password = undefined;
 
+    console.log(user);
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/// =====================
+///====================
 //         login
 ///=====================
 const login = async (req, res) => {

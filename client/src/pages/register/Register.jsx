@@ -25,7 +25,23 @@ const validate = (values) => {
 };
 
 const Register = () => {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const submitFunction = async (values) => {
+    try {
+      const data = await fetch("http://localhost:3000/api/v1/user/register", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const jsonData = await data.json();
+      formik.setSubmitting(false);
+      console.log(jsonData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // formik here
   const formik = useFormik({
@@ -35,11 +51,8 @@ const Register = () => {
       password: "",
     },
     validate,
-    onSubmit: async (values) => {
-      setIsSubmitting(true);
-
-      console.log(values);
-      setIsSubmitting(false);
+    onSubmit: (values) => {
+      return submitFunction(values);
     },
   });
 
@@ -56,7 +69,9 @@ const Register = () => {
               onChange={formik.handleChange}
             />
             <p className="form-warning">
-              {formik.errors.name && <span> * {formik.errors.name} </span>}
+              {formik.errors.name && formik.touched.name && (
+                <span> * {formik.errors.name} </span>
+              )}
             </p>
           </div>
           <div>
@@ -67,7 +82,9 @@ const Register = () => {
               onChange={formik.handleChange}
             />
             <p className="form-warning">
-              {formik.errors.email && <span> * {formik.errors.email} </span>}
+              {formik.errors.email && formik.touched.email && (
+                <span> * {formik.errors.email} </span>
+              )}
             </p>
           </div>
           <div>
@@ -78,14 +95,17 @@ const Register = () => {
               onChange={formik.handleChange}
             />
             <p className="form-warning">
-              {formik.errors.password && (
+              {formik.errors.password && formik.touched.password && (
                 <span> * {formik.errors.password} </span>
               )}
             </p>
           </div>
 
-          <button className={isSubmitting ? "form-submitting" : ""}>
-            {isSubmitting ? "Submitting" : "Sign up"}
+          <button
+            type="submit"
+            className={formik.isSubmitting ? "form-submitting" : ""}
+          >
+            {formik.isSubmitting ? "Submitting" : "Sign up"}
           </button>
         </form>
         <p>
