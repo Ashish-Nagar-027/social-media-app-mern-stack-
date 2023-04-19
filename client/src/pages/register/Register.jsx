@@ -37,6 +37,7 @@ const Register = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        credentials: "same-origin",
       });
       const jsonData = await data.json();
       if (data.ok) {

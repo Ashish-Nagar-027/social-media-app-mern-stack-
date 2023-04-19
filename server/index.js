@@ -3,13 +3,15 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 //importing routes
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
 
-//
+//middlewares
 app.use(cors());
+app.use(cookieParser());
 app.use(morgan("tiny"));
 
 // Using middlewares
