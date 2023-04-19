@@ -5,7 +5,10 @@
 }
 
 
+
+
 .login {
+   
     height: 100vh;
     display: flex;
     align-items: center;
@@ -45,8 +48,24 @@
         outline: none;
     }
 
+    .form-warning {
+        font-size: 0.9rem;
+        color: red;
+        text-align: start;
     }
-    
+
+    .center {
+        text-align: center;
+        font-weight: bold;
+    }
+
+
+    .form-submitting {
+      pointer-events: none;
+    }
+    }
+
+
     p  {
         font-size: 1.1rem;
         a {

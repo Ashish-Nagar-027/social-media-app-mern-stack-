@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./register.scss";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
@@ -25,8 +25,11 @@ const validate = (values) => {
 };
 
 const Register = () => {
+  const [serverError, setServerError] = useState(null);
+
   const submitFunction = async (values) => {
     try {
+      setServerError(null);
       const data = await fetch("http://localhost:3000/api/v1/user/register", {
         method: "POST",
         body: JSON.stringify(values),
@@ -36,10 +39,15 @@ const Register = () => {
         },
       });
       const jsonData = await data.json();
+      if (data.ok) {
+        console.log(jsonData);
+      } else {
+        setServerError(jsonData.message);
+      }
       formik.setSubmitting(false);
-      console.log(jsonData);
+      formik.resetForm();
     } catch (error) {
-      console.log(error);
+      setServerError(error.message);
     }
   };
 
@@ -107,6 +115,9 @@ const Register = () => {
           >
             {formik.isSubmitting ? "Submitting" : "Sign up"}
           </button>
+          {serverError && (
+            <span className="form-warning center">{serverError}</span>
+          )}
         </form>
         <p>
           Already have account? <Link to="/login">Log in</Link>
