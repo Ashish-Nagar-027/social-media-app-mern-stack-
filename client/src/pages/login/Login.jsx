@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./login.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../features/userSlice";
 
 // for formik errors
 const validate = (values) => {
@@ -22,6 +24,8 @@ const validate = (values) => {
 
 const Register = () => {
   const [serverError, setServerError] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const submitFunction = async (values) => {
     try {
@@ -33,11 +37,13 @@ const Register = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        credentials: "same-origin"
+        credentials: "same-origin",
       });
+
       const jsonData = await data.json();
       if (data.ok) {
-        console.log(jsonData);
+        dispatch(loginUser(jsonData));
+        navigate("/");
       } else {
         setServerError(jsonData.message);
       }

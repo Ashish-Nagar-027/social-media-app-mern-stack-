@@ -1,4 +1,3 @@
-import { useState } from "react";
 import LeftBar from "./components/leftBar/LeftBar";
 import Navbar from "./components/navbar/Navbar";
 import RightBar from "./components/rightBar/RightBar";
@@ -15,9 +14,11 @@ import {
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import "./style.scss";
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/userSlice";
 
 function App() {
-  const [currentUser] = useState(false);
+  const currentUser = useSelector(selectUser);
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {

@@ -63,13 +63,13 @@ const login = async (req, res) => {
     if (!user) {
       throw Error("email not available , try sign up");
     }
-    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 
     // compare password
     const isRealPassword = await bcrypt.compare(password, user.password);
     if (!isRealPassword) {
       throw Error("wrong password");
     }
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 
     user.password = undefined;
 
