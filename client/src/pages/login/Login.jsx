@@ -30,7 +30,7 @@ const Register = () => {
   const submitFunction = async (values) => {
     try {
       setServerError(null);
-      const data = await fetch("http://localhost:3000/api/v1/user/login", {
+      const data = await fetch("http://localhost:3000/api/v1/auth/login", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {

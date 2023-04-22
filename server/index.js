@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 //importing routes
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 //middlewares
 app.use(cors());
@@ -24,7 +25,9 @@ app.get("/", (req, res) => {
 });
 
 // using routes
-app.use("/api/v1/user", authRoutes);
+
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/post", postRoutes);
 
 module.exports = app;
