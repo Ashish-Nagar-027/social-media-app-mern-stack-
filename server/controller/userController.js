@@ -63,12 +63,12 @@ const follow = async (req, res) => {
     const currentUser = await User.findById(req.user.id);
     const followerUser = await User.findById(req.params.id);
 
-    if (!currentUser.followers.includes(req.user.id)) {
+    if (!currentUser.followings.includes(req.user.id)) {
       await currentUser.updateOne({
-        $push: { followers: followerUser.id },
+        $push: { followings: followerUser.id },
       });
       await followerUser.updateOne({
-        $push: { followings: currentUser.id },
+        $push: { followers: currentUser.id },
       });
     } else {
       res.status(403).json("You already follow this user");
@@ -79,9 +79,36 @@ const follow = async (req, res) => {
   }
 };
 
+///======================
+///   unfollow user
+///=====================
+const unfollow = async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.user.id);
+    // user whom to unfollow
+    const followingUser = await User.findById(req.params.id);
+
+    if (currentUser.followings.includes(req.params.id)) {
+      await currentUser.updateOne({
+        $pull: { followings: req.params.id },
+      });
+
+      await followingUser.updateOne({
+        $pull: { followers: req.user.id },
+      });
+    } else {
+      res.status(403).json("You do not follow this user");
+    }
+    res.status(200).json("unfollowing the use");
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getUser,
   updateUser,
   deleteUser,
   follow,
+  unfollow,
 };

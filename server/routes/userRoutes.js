@@ -4,6 +4,7 @@ const {
   updateUser,
   deleteUser,
   follow,
+  unfollow,
 } = require("../controller/userController");
 const verifyToken = require("../middlewares/verifyToken");
 
@@ -20,5 +21,8 @@ router.delete("/find/:id", verifyToken, deleteUser);
 
 // follow user
 router.put("/follow/:id", verifyToken, follow);
+
+// unfollow user
+router.put("/unfollow/:id", verifyToken, unfollow);
 
 module.exports = router;
