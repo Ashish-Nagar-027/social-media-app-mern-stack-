@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const Post = require("../models/Post");
 
 ///======================
 ///   get user
@@ -47,6 +48,7 @@ const deleteUser = async (req, res) => {
   try {
     if (req.user.id === req.params.id) {
       const user = await User.findByIdAndDelete(req.params.id, req.body);
+      const deletePost = await Post.findByIdAndDelete({ owner: req.user.id });
 
       res.status(200).json("user deleted ");
     }
