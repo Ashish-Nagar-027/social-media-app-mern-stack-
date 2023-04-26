@@ -90,9 +90,37 @@ const timeLinePosts = async (req, res) => {
   }
 };
 
+const getUserPosts = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const userPosts = await Post.find({ owner: userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(userPosts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getAllPosts = async (req, res) => {
+  try {
+    const allPosts = await Post.find({}).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(allPosts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   deletePost,
   likeOrUnlike,
   timeLinePosts,
+  getUserPosts,
+  getAllPosts,
 };
