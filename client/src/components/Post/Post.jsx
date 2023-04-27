@@ -18,7 +18,7 @@ const Post = ({ post }) => {
           <div className="userInfo">
             <img src={post.profilePic} alt={post.name} />
             <div className="details">
-              <Link to={`./profile/${post.userId}`}>
+              <Link to={`./profile/${post.owner}`}>
                 <span>{post.name}</span>
                 <span>1 min ago</span>
               </Link>
@@ -27,7 +27,7 @@ const Post = ({ post }) => {
           <MdMoreHoriz />
         </div>
         <div className="content">
-          <p>{post.desc}</p>
+          <p>{post.caption}</p>
           <img src={post.img} alt="" />
         </div>
         <div className="info">

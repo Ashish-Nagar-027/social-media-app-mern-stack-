@@ -7,8 +7,12 @@ const postSchema = new mongoose.Schema({
     url: String,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    name: String,
+    userId: mongoose.Schema.Types.ObjectId,
+    avtar: {
+      public_id: String,
+      url: String,
+    },
   },
   likes: [
     {

@@ -30,14 +30,14 @@ const Register = () => {
   const submitFunction = async (values) => {
     try {
       setServerError(null);
-      const data = await fetch("http://localhost:3000/api/v1/auth/login", {
+      const data = await fetch("/api/v1/auth/login", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        credentials: "same-origin",
+        credentials: "include",
       });
 
       const jsonData = await data.json();

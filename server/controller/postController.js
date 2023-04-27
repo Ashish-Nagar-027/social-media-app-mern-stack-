@@ -4,7 +4,11 @@ const User = require("../models/User");
 const createPost = async (req, res) => {
   try {
     const { caption } = req.body;
-    const owner = req.user.id;
+    const userInfo = await User.findById(req.user.id);
+    const owner = {
+      userId: userInfo.id,
+      name: userInfo.name,
+    };
 
     const post = await Post.create({
       caption,
@@ -12,7 +16,7 @@ const createPost = async (req, res) => {
     });
 
     const user = await User.updateOne(
-      { _id: owner },
+      { _id: userInfo.id },
       {
         $push: { posts: post.id },
       }
