@@ -16,7 +16,7 @@ const Home = () => {
       });
 
       const jsonData = await fetchData.json();
-      console.log(jsonData);
+
       setTimeLinePosts(jsonData);
     };
     if (currentUser) {
@@ -26,7 +26,10 @@ const Home = () => {
 
   return (
     <div className="home">
-      <Posts timeLinePosts={timeLinePosts} />
+      <Posts
+        timeLinePosts={timeLinePosts}
+        setTimeLinePosts={setTimeLinePosts}
+      />
     </div>
   );
 };

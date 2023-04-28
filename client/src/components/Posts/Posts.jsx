@@ -11,7 +11,7 @@ import {
   MdOutlineCancel,
 } from "react-icons/md";
 
-const Posts = ({ timeLinePosts }) => {
+const Posts = ({ timeLinePosts, setTimeLinePosts }) => {
   const posts = [
     {
       id: 1,
@@ -59,7 +59,28 @@ const Posts = ({ timeLinePosts }) => {
     }
   };
 
-  console.log(image);
+  const [captionText, setCaptionText] = useState("");
+
+  const sharePost = async () => {
+    if (captionText) {
+      const postData = await fetch("/api/v1/post", {
+        method: "Post",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ caption: captionText }),
+
+        credentials: "include",
+      });
+
+      const jsonData = await postData.json();
+
+      setTimeLinePosts([jsonData.post, ...timeLinePosts]);
+      setCaptionText("");
+    } else {
+      alert("please write caption");
+    }
+  };
 
   return (
     <>
@@ -74,7 +95,11 @@ const Posts = ({ timeLinePosts }) => {
               />
               <p>{currentUser.name}</p>
             </div>
-            <input placeholder="Write here..." />
+            <input
+              placeholder="Write here..."
+              value={captionText}
+              onChange={(e) => setCaptionText(e.target.value)}
+            />
             {image && (
               <div className="uploaded-img">
                 <MdOutlineCancel
@@ -110,7 +135,7 @@ const Posts = ({ timeLinePosts }) => {
                   />
                 </div>
               </div>
-              <button>
+              <button onClick={sharePost}>
                 Share Post <MdOutlineSend size={20} />
               </button>
             </div>
