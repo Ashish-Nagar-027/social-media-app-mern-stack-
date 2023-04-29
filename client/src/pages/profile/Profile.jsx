@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdFacebook, MdEmail } from "react-icons/md";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  const [userPosts, setUserPost] = useState(null);
+  const userId = useParams();
+
   return (
     <>
       <div className="profile">
