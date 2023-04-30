@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
@@ -5,14 +6,12 @@ const createPost = async (req, res) => {
   try {
     const { caption } = req.body;
     const userInfo = await User.findById(req.user.id);
-    const owner = {
-      userId: userInfo.id,
-      name: userInfo.name,
-    };
+    const owner = req.user.id;
+    // console.log(owner);
 
     const post = await Post.create({
       caption,
-      owner,
+      owner: req.user.id,
     });
 
     const user = await User.updateOne(
@@ -83,6 +82,7 @@ const timeLinePosts = async (req, res) => {
     const currentUser = await User.findById(req.user.id);
     const userPosts = await Post.find({ owner: currentUser.id });
 
+    console.log(userPosts);
     const followersPosts = await Promise.all(
       currentUser.followings.map((followerId) => {
         return Post.find({ owner: followerId });
@@ -98,9 +98,13 @@ const getUserPosts = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const userPosts = await Post.find({ owner: userId }).sort({
-      createdAt: -1,
-    });
+    const user = await User.findById(userId);
+
+    const userPosts = await Promise.all(
+      user.posts.map((postId) => {
+        return Post.findById(postId);
+      })
+    );
 
     res.status(200).json(userPosts);
   } catch (error) {

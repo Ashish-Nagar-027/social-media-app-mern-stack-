@@ -16,6 +16,7 @@ const Home = () => {
       });
 
       const jsonData = await fetchData.json();
+      console.log(jsonData);
 
       setTimeLinePosts(jsonData);
     };
@@ -23,6 +24,8 @@ const Home = () => {
       fetchDataFunction();
     }
   }, [currentUser]);
+
+  console.log(timeLinePosts);
 
   return (
     <div className="home">
