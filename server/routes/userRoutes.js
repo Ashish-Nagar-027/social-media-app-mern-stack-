@@ -11,18 +11,18 @@ const verifyToken = require("../middlewares/verifyToken");
 const router = express.Router();
 
 //update user
-router.patch("/:id", verifyToken, updateUser);
+router.put("/:id", verifyToken, updateUser);
 
 // get user
-router.route("/find/:id").get(getUser);
+router.route("/:id").get(getUser);
 
 // delete user
-router.delete("/find/:id", verifyToken, deleteUser);
+router.delete("/:id", verifyToken, deleteUser);
 
 // follow user
-router.put("/follow/:id", verifyToken, follow);
+router.put("/:id/follow", verifyToken, follow);
 
 // unfollow user
-router.put("/unfollow/:id", verifyToken, unfollow);
+router.put("/:id/unfollow", verifyToken, unfollow);
 
 module.exports = router;

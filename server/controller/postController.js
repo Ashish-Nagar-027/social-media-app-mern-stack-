@@ -2,24 +2,21 @@ const { default: mongoose } = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
+// create new post
 const createPost = async (req, res) => {
   try {
     const { caption } = req.body;
     const userInfo = await User.findById(req.user.id);
-    const owner = req.user.id;
-    // console.log(owner);
+    const userId = req.user.id;
 
     const post = await Post.create({
       caption,
-      owner: req.user.id,
+      userId,
     });
 
-    const user = await User.updateOne(
-      { _id: userInfo.id },
-      {
-        $push: { posts: post.id },
-      }
-    );
+    await userInfo.updateOne({
+      $push: { posts: post.id },
+    });
 
     res.status(200).json({ post });
   } catch (error) {
@@ -27,15 +24,88 @@ const createPost = async (req, res) => {
   }
 };
 
+// Get a Post
+const getPost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    if (!postId) {
+      throw Error("please send post id to get post");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("please send valid post id to get post");
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      res.status(403).json("post not found");
+    }
+
+    if (post.userId.toString() === req.user.id) {
+      res.status(200).json({ post });
+    } else {
+      throw Error({
+        message: "Access Denied! user can only get there own posts",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// update a Post
+const updatePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    if (!postId) {
+      throw Error("please send post id ");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("please send valid post id to update post");
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      res.status(403).json("post not found");
+    }
+
+    if (post.userId.toString() === req.user.id) {
+      const updatePost = await post.updateOne({
+        $set: { caption: req.body.caption, userId: post.userId },
+      });
+
+      res.status(200).json({ message: "Post updated successfully" });
+    } else {
+      throw Error({
+        message: "Action forbidden! Users can only update their own posts ",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// delete post
 const deletePost = async (req, res) => {
   try {
     const postId = req.params.id;
+    if (!postId) {
+      throw Error("please send post id to delete");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("please send valid post id to delete post");
+    }
+
     const post = await Post.findById(postId);
+    if (!post) {
+      res.status(403).json("post not found");
+    }
 
-    if (post.owner.toString() === req.user.id) {
-      const postDelete = await Post.deleteOne({ postId });
+    if (post.userId.toString() === req.user.id) {
+      await post.deleteOne();
 
-      const user = await User.updateOne(
+      await User.updateOne(
         { _id: req.user.id },
         {
           $pull: { posts: post.id },
@@ -44,29 +114,51 @@ const deletePost = async (req, res) => {
 
       res.status(200).json("post has been deleted");
     } else {
-      throw Error({ message: "something is wrong" });
+      throw Error({
+        message: "Actions forbidden ! You can only delete your own posts",
+      });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+///======================
+// like or unlike post
+///=====================
 const likeOrUnlike = async (req, res) => {
   try {
     const postId = req.params.id;
+    const { userId } = req.body;
+    if (!postId) {
+      throw Error("please send post id to like in params");
+    }
+    if (!userId) {
+      throw Error("please send user id who wants to like the post");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("post id is not valid id");
+    }
+    if (!mongoose.isValidObjectId(userId)) {
+      throw Error("userId is not valid");
+    }
 
     const post = await Post.findById(postId);
+    if (!post) {
+      res.status(403).json("post not found");
+    }
 
     let message;
 
-    if (!post.likes.includes(post.id)) {
-      const postLikeOrUnlike = await Post.updateOne({
-        $push: { posts: req.user.id },
+    if (!post.likes.includes(userId)) {
+      await post.updateOne({
+        $push: { likes: userId },
       });
       message = "your like added";
     } else {
-      const postLikeOrUnlike = await Post.updateOne({
-        $pull: { posts: req.user.id },
+      await post.updateOne({
+        $pull: { likes: userId },
       });
       message = "your like removed";
     }
@@ -77,23 +169,34 @@ const likeOrUnlike = async (req, res) => {
   }
 };
 
+///======================
+// Get TimeLine posts
+///=====================
 const timeLinePosts = async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user.id);
-    const userPosts = await Post.find({ owner: currentUser.id });
+    const currentUser = await User.findById(req.params.id);
 
-    console.log(userPosts);
-    const followersPosts = await Promise.all(
+    const userPosts = await Post.find({ userId: currentUser.id });
+
+    const followingsPosts = await Promise.all(
       currentUser.followings.map((followerId) => {
-        return Post.find({ owner: followerId });
+        return Post.find({ userId: followerId });
       })
     );
-    res.status(200).json(userPosts.concat(...followersPosts));
+
+    const posts = userPosts.concat(...followingsPosts).sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
+    console.log(posts);
+    res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+///======================
+// Get user all  posts
+///=====================
 const getUserPosts = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -112,6 +215,9 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+///======================
+// Get all  posts
+///=====================
 const getAllPosts = async (req, res) => {
   try {
     const allPosts = await Post.find({}).sort({
@@ -126,6 +232,8 @@ const getAllPosts = async (req, res) => {
 
 module.exports = {
   createPost,
+  getPost,
+  updatePost,
   deletePost,
   likeOrUnlike,
   timeLinePosts,

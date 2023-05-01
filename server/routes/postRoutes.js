@@ -9,22 +9,30 @@ const {
   timeLinePosts,
   getUserPosts,
   getAllPosts,
+  getPost,
+  updatePost,
 } = require("../controller/postController");
 
 // create post
 router.post("/", verifyToken, createPost);
 
+// get post
+router.get("/:id", verifyToken, getPost);
+
+// update post
+router.put("/:id", verifyToken, updatePost);
+
 // delete post
-router.delete("/delete/:id", verifyToken, deletePost);
+router.delete("/:id", verifyToken, deletePost);
 
 // like or unlike post
-router.put("/like/:id", verifyToken, likeOrUnlike);
+router.put("/:id/like", verifyToken, likeOrUnlike);
 
 // timeline posts
-router.get("/timeline", verifyToken, timeLinePosts);
+router.get("/:id/timeline", verifyToken, timeLinePosts);
 
 // get user posts
-router.get("/user/all/:id", verifyToken, getUserPosts);
+router.get("/:id/user", verifyToken, getUserPosts);
 
 // get all posts
 router.get("/explore", verifyToken, getAllPosts);
