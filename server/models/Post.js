@@ -7,10 +7,20 @@ const postSchema = new mongoose.Schema(
       public_Id: String,
       url: String,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
+    user: {
+      name: {
+        type: String,
+        required: [true, "Please enter a name"],
+      },
+      avtar: {
+        public_id: String,
+        url: String,
+      },
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+      },
     },
     likes: [
       {

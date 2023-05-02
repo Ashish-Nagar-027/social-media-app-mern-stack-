@@ -165,10 +165,48 @@ const unfollow = async (req, res) => {
   }
 };
 
+///======================
+///   suggest user
+///=====================
+const suggestUsers = async (req, res) => {
+  console.log("first");
+
+  try {
+    if (!req.params.id) {
+      throw Error("please send Your Valid Id of User whom you want to follow");
+    }
+
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      throw Error("please send valid user id");
+    }
+
+    const users = await User.find({});
+    if (users) {
+      users.forEach((user) => {
+        user.password = undefined;
+        user.followers = undefined;
+        user.followings = undefined;
+        (user.posts = undefined), (user.updatedAt = undefined);
+        user.email = undefined;
+        user._v = undefined;
+
+        user.createdAt = undefined;
+      });
+
+      res.status(200).json(users);
+    } else {
+      res.status(200).json("User not found");
+    }
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getUser,
   updateUser,
   deleteUser,
   follow,
   unfollow,
+  suggestUsers,
 };

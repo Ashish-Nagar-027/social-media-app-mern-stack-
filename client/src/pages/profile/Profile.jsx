@@ -4,10 +4,23 @@ import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Profile = () => {
-  const [userPosts, setUserPost] = useState(null);
   const userId = useParams();
+  const [profileUser, setProfileUser] = useState(null);
+
+  useEffect(() => {
+    const fetchDataFunction = async () => {
+      const fetchData = await axios.get(
+        `http://localhost:3001/api/v1/user/${userId.id}`
+      );
+
+      setProfileUser(fetchData.data);
+    };
+
+    fetchDataFunction();
+  }, [userId]);
 
   return (
     <>
@@ -39,7 +52,7 @@ const Profile = () => {
               </a>
             </div>
             <div className="center">
-              <span>John Doe</span>
+              <span>{profileUser?.name}</span>
               <button>follow</button>
             </div>
             <div className="right">
@@ -49,7 +62,7 @@ const Profile = () => {
         </div>
       </div>
       <div style={{ marginTop: 10 }}>
-        <Posts />
+        <Posts id={userId.id} />
       </div>
     </>
   );

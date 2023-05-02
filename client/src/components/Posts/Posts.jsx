@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Post from "../Post/Post";
 import "./posts.scss";
 import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 import {
   MdOutlineImage,
@@ -11,7 +12,7 @@ import {
   MdOutlineCancel,
 } from "react-icons/md";
 
-const Posts = ({ timeLinePosts, setTimeLinePosts, userProfilePosts }) => {
+const Posts = ({ id }) => {
   const currentUser = useSelector(selectUser);
 
   const [image, setImage] = useState(null);
@@ -23,35 +24,41 @@ const Posts = ({ timeLinePosts, setTimeLinePosts, userProfilePosts }) => {
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
-      setImage({
-        image: URL.createObjectURL(img),
-      });
+      setImage(img);
     }
   };
 
   const [captionText, setCaptionText] = useState("");
 
+  // post (share) post
   const sharePost = async () => {
     if (captionText) {
-      const postData = await fetch("/api/v1/post", {
-        method: "Post",
-        headers: {
-          "content-Type": "application/json",
-        },
-        body: JSON.stringify({ caption: captionText }),
-
-        credentials: "include",
+      const postData = await axios.post("/api/v1/post", {
+        caption: captionText,
       });
 
-      const jsonData = await postData.json();
-      console.log(jsonData);
-
-      setTimeLinePosts([jsonData.post, ...timeLinePosts]);
+      setTimeLinePosts([postData.data.post, ...timeLinePosts]);
       setCaptionText("");
     } else {
       alert("please write caption");
     }
   };
+
+  // read post
+  const [timeLinePosts, setTimeLinePosts] = useState(null);
+
+  useEffect(() => {
+    const fetchDataFunction = async () => {
+      const fetchData = await axios.get(
+        `http://localhost:3001/api/v1/post/${id}/timeline`
+      );
+
+      setTimeLinePosts(fetchData.data);
+    };
+    if (currentUser) {
+      fetchDataFunction();
+    }
+  }, [currentUser, id]);
 
   return (
     <>
@@ -78,7 +85,7 @@ const Posts = ({ timeLinePosts, setTimeLinePosts, userProfilePosts }) => {
                   className="cancel-upload-img"
                   onClick={() => setImage(null)}
                 />
-                <img src={image.image} alt="" />
+                <img src={URL.createObjectURL(image)} alt="" />
               </div>
             )}
             <div className="upload-items">

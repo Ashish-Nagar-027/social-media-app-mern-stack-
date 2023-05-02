@@ -20,6 +20,7 @@ import { selectUser } from "./features/userSlice";
 function App() {
   const currentUser = useSelector(selectUser);
 
+  console.log(currentUser);
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
       return <Navigate to="/login" />;
@@ -60,7 +61,7 @@ function App() {
           }
         >
           <Route index element={<Home />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

@@ -5,6 +5,7 @@ const {
   deleteUser,
   follow,
   unfollow,
+  suggestUsers,
 } = require("../controller/userController");
 const verifyToken = require("../middlewares/verifyToken");
 
@@ -24,5 +25,8 @@ router.put("/:id/follow", verifyToken, follow);
 
 // unfollow user
 router.put("/:id/unfollow", verifyToken, unfollow);
+
+// get all users
+router.route("/:id/suggestusers").get(suggestUsers);
 
 module.exports = router;

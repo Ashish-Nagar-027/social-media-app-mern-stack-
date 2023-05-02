@@ -7,11 +7,14 @@ const createPost = async (req, res) => {
   try {
     const { caption } = req.body;
     const userInfo = await User.findById(req.user.id);
-    const userId = req.user.id;
 
     const post = await Post.create({
       caption,
-      userId,
+      user: {
+        name: userInfo.name,
+        avtar: userInfo.avtar,
+        userId: userInfo.id,
+      },
     });
 
     await userInfo.updateOne({
@@ -176,18 +179,18 @@ const timeLinePosts = async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.id);
 
-    const userPosts = await Post.find({ userId: currentUser.id });
+    const userPosts = await Post.find({ "user.userId": currentUser.id });
 
     const followingsPosts = await Promise.all(
       currentUser.followings.map((followerId) => {
-        return Post.find({ userId: followerId });
+        return Post.find({ "user.userId": followerId });
       })
     );
 
     const posts = userPosts.concat(...followingsPosts).sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
-    console.log(posts);
+
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
