@@ -12,7 +12,6 @@ import { selectUser } from "../../features/userSlice";
 
 const Navbar = () => {
   const currentUser = useSelector(selectUser);
-  console.log(currentUser.followers.length);
 
   return (
     <div className="navbar">

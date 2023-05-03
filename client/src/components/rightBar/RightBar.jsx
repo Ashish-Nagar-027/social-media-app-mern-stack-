@@ -29,7 +29,7 @@ const RightBar = () => {
           {suggestUsers ? (
             suggestUsers.map((user) => {
               return (
-                <div className="user" key={user._id}>
+                <div className="user" key={user._id + 1242}>
                   <div className="userInfo">
                     <Link className="userInfo" to={`/profile/${user._id}`}>
                       <img alt="profile" src={defaultProfilePic} />

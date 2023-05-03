@@ -14,11 +14,17 @@ export const userSlice = createSlice({
     logoutOut: (s) => {
       return initialState;
     },
+    setFollowings: (state, action) => {
+      state.currentUser.followings = action.payload;
+    },
+    setFollowers: (state, action) => {
+      state.currentUser.followers = action.payload;
+    },
   },
 });
 
-export const { loginUser, logoutOut, defaultPicUrl } = userSlice.actions;
+export const { loginUser, logoutOut, setFollowings, setFollowers } =
+  userSlice.actions;
 export const selectUser = (state) => state.user.currentUser;
-export const profilePic = (state) => state.user.defaultPicUrl;
 
 export default userSlice.reducer;

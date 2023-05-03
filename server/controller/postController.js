@@ -191,7 +191,9 @@ const timeLinePosts = async (req, res) => {
       return b.createdAt - a.createdAt;
     });
 
-    res.status(200).json(posts);
+    const removeDuplicatePostes = [...new Set(posts)];
+
+    res.status(200).json(removeDuplicatePostes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

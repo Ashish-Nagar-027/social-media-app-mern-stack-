@@ -5,10 +5,17 @@ import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import {
+  selectUser,
+  setFollowers,
+  setFollowings,
+} from "../../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
   const userId = useParams();
   const [profileUser, setProfileUser] = useState(null);
+  const currentUser = useSelector(selectUser);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
@@ -21,6 +28,29 @@ const Profile = () => {
 
     fetchDataFunction();
   }, [userId]);
+
+  const dispatch = useDispatch();
+  const followingHandling = async (id) => {
+    const url = "http://localhost:3000/api/v1/user/" + id + "/";
+
+    if (!currentUser.followings.includes(id)) {
+      await axios(url + "follow", {
+        method: "PUT",
+        withCredentials: true,
+      }).then(() => dispatch(setFollowings([...currentUser.followings, id])));
+    } else {
+      const followingsArray = currentUser.followings;
+
+      let newFollowings = followingsArray.filter(
+        (followingId) => followingId !== id
+      );
+
+      await axios(url + "unfollow", {
+        method: "PUT",
+        withCredentials: true,
+      }).then(() => dispatch(setFollowings(newFollowings)));
+    }
+  };
 
   return (
     <>
@@ -53,7 +83,13 @@ const Profile = () => {
             </div>
             <div className="center">
               <span>{profileUser?.name}</span>
-              <button>follow</button>
+              <button onClick={() => followingHandling(profileUser._id)}>
+                {profileUser
+                  ? currentUser?.followings.includes(profileUser._id)
+                    ? "following"
+                    : "follow"
+                  : "follow"}
+              </button>
             </div>
             <div className="right">
               <MdEmail fontSize={24} />

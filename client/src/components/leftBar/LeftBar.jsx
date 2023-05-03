@@ -22,8 +22,8 @@ const LeftBar = () => {
           <span>{currentUser.name}</span>
         </div>
         <div className="user-info">
-          <p>followers : {currentUser.followers.length}</p>
-          <p>follwings : {currentUser.followings.length}</p>
+          <p>followers : {currentUser.followers?.length}</p>
+          <p>follwings : {currentUser.followings?.length}</p>
         </div>
       </div>
     </div>

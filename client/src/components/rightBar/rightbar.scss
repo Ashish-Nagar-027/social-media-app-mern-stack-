@@ -28,11 +28,12 @@
                 display: flex;
                 gap: 5px;
                 flex-direction: column;
-                justify-content: flex-start;
-             
-                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                margin: 15px;
                 border: 1px solid gainsboro;
                 padding: 4px;
+                
 
 
                 .userInfo {
@@ -57,9 +58,12 @@
                 .buttons {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
+
                    position: relative;
                    bottom: 20px;
-                   left: 50px;
+                   left: 40px;
+                   
                     gap: 10px;
 
                     button {
