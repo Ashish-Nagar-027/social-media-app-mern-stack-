@@ -191,7 +191,15 @@ const timeLinePosts = async (req, res) => {
       return b.createdAt - a.createdAt;
     });
 
-    const removeDuplicatePostes = [...new Set(posts)];
+    const removeDuplicatePostes = posts.filter((post, index) => {
+      return (
+        index ===
+        posts.findIndex((obj) => {
+          return JSON.stringify(obj) === JSON.stringify(post);
+        })
+      );
+    });
+    console.log(removeDuplicatePostes);
 
     res.status(200).json(removeDuplicatePostes);
   } catch (error) {
