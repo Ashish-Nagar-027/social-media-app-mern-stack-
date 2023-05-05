@@ -16,11 +16,11 @@ import Profile from "./pages/profile/Profile";
 import "./style.scss";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
+import UserConnections from "./pages/userConnections/UserConnections";
 
 function App() {
   const currentUser = useSelector(selectUser);
 
-  console.log(currentUser);
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
       return <Navigate to="/login" />;
@@ -62,6 +62,7 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="profile/:id" element={<Profile />} />
+          <Route path="profile/:id/connections" element={<UserConnections />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

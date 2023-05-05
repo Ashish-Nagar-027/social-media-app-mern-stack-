@@ -6,6 +6,8 @@ const {
   follow,
   unfollow,
   suggestUsers,
+  getUserFollowers,
+  getUserFollowings,
 } = require("../controller/userController");
 const verifyToken = require("../middlewares/verifyToken");
 
@@ -16,6 +18,12 @@ router.put("/:id", verifyToken, updateUser);
 
 // get user
 router.route("/:id").get(getUser);
+
+// get user followers
+router.route("/:id/getfollowers").get(getUserFollowers);
+
+// get user followings
+router.route("/:id/getfollowings").get(getUserFollowings);
 
 // delete user
 router.delete("/:id", verifyToken, deleteUser);

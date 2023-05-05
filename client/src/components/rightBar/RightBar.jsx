@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./rightbar.scss";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
@@ -10,7 +10,7 @@ const RightBar = () => {
   useEffect(() => {
     const getSuggestUserFunction = async () => {
       const fetchSuggestUser = await axios.get(
-        "api/v1/user/644f4996ec5a858319a9d0e1/suggestusers"
+        "http://localhost:3000/api/v1/user/644f4996ec5a858319a9d0e1/suggestusers"
       );
 
       setSuggestUsers(fetchSuggestUser.data);
@@ -29,7 +29,7 @@ const RightBar = () => {
           {suggestUsers ? (
             suggestUsers.map((user) => {
               return (
-                <div className="user" key={user._id + 1242}>
+                <div className="user" key={user._id}>
                   <div className="userInfo">
                     <Link className="userInfo" to={`/profile/${user._id}`}>
                       <img alt="profile" src={defaultProfilePic} />
@@ -38,7 +38,6 @@ const RightBar = () => {
                   </div>
                   <div className="buttons">
                     <button>follow</button>
-                    <button>dismiss</button>
                   </div>
                 </div>
               );

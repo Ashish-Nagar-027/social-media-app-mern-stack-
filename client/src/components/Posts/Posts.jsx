@@ -46,7 +46,6 @@ const Posts = ({ id }) => {
 
   // read post
   const [timeLinePosts, setTimeLinePosts] = useState(null);
-  console.log(timeLinePosts);
 
   useEffect(() => {
     const fetchDataFunction = async () => {

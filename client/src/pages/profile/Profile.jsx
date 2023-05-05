@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { MdFacebook, MdEmail } from "react-icons/md";
+import { MdFacebook, MdEmail, MdEdit } from "react-icons/md";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  selectUser,
-  setFollowers,
-  setFollowings,
-} from "../../features/userSlice";
+import { selectUser, setFollowings } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  selectProfileUser,
+  setProfileUser,
+} from "../../features/proFileUserSlice";
 
 const Profile = () => {
   const userId = useParams();
-  const [profileUser, setProfileUser] = useState(null);
+
   const currentUser = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  const profileUser = useSelector(selectProfileUser);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
@@ -23,13 +26,12 @@ const Profile = () => {
         `http://localhost:3001/api/v1/user/${userId.id}`
       );
 
-      setProfileUser(fetchData.data);
+      dispatch(setProfileUser(fetchData.data));
     };
 
     fetchDataFunction();
   }, [userId]);
 
-  const dispatch = useDispatch();
   const followingHandling = async (id) => {
     const url = "http://localhost:3000/api/v1/user/" + id + "/";
 
@@ -82,17 +84,34 @@ const Profile = () => {
               </a>
             </div>
             <div className="center">
+              <p>This is some user infomation. Don't write too much here</p>
+              <p className="followers">
+                <Link to="connections" state={{ show: "followers" }}>
+                  Followers : {profileUser?.followers.length}
+                </Link>
+              </p>
+              <p className="followings">
+                <Link to="connections" state={{ show: "followings" }}>
+                  Followings : {profileUser?.followings.length}
+                </Link>
+              </p>
               <span>{profileUser?.name}</span>
-              <button onClick={() => followingHandling(profileUser._id)}>
-                {profileUser
-                  ? currentUser?.followings.includes(profileUser._id)
-                    ? "following"
-                    : "follow"
-                  : "follow"}
-              </button>
+              {currentUser?._id !== profileUser?._id && (
+                <button onClick={() => followingHandling(profileUser._id)}>
+                  {profileUser
+                    ? currentUser?.followings.includes(profileUser._id)
+                      ? "following"
+                      : "follow"
+                    : "follow"}
+                </button>
+              )}
             </div>
             <div className="right">
-              <MdEmail fontSize={24} />
+              <MdEmail className="message-icon" fontSize={24} />
+              <button className="profile-edit-button">
+                Edit profile
+                <MdEdit fontSize={15} />
+              </button>
             </div>
           </div>
         </div>

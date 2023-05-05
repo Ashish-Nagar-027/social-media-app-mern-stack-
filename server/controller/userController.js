@@ -92,6 +92,62 @@ const deleteUser = async (req, res) => {
 };
 
 ///======================
+///   get user followers
+///=====================
+const getUserFollowers = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw Error("please send user id to get user info ");
+    }
+
+    if (!mongoose.isValidObjectId(id)) {
+      throw Error("please send valid user id");
+    }
+
+    const userData = await User.findById(id);
+
+    const followers = await Promise.all(
+      userData.followers.map((userId) => {
+        return User.findById(userId).select("name avtar");
+      })
+    );
+
+    res.status(200).json(followers);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
+///======================
+///   get user followings
+///=====================
+const getUserFollowings = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw Error("please send user id to get user info ");
+    }
+
+    if (!mongoose.isValidObjectId(id)) {
+      throw Error("please send valid user id");
+    }
+
+    const userData = await User.findById(id);
+
+    const followings = await Promise.all(
+      userData.followings.map((userId) => {
+        return User.findById(userId).select("name avtar");
+      })
+    );
+
+    res.status(200).json(followings);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
+///======================
 ///   follow user
 ///=====================
 const follow = async (req, res) => {
@@ -169,8 +225,6 @@ const unfollow = async (req, res) => {
 ///   suggest user
 ///=====================
 const suggestUsers = async (req, res) => {
-  console.log("first");
-
   try {
     if (!req.params.id) {
       throw Error("please send Your Valid Id of User whom you want to follow");
@@ -209,4 +263,6 @@ module.exports = {
   follow,
   unfollow,
   suggestUsers,
+  getUserFollowers,
+  getUserFollowings,
 };
