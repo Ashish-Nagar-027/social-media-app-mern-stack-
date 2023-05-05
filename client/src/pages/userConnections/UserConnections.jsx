@@ -23,14 +23,12 @@ const UserConnections = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const [showFollowers, setShowFollowers] = useState(false);
-
-  if (location.state.show === "followings") {
-    setShowFollowers(false);
-  }
-  if (location.state.show === "followers") {
-    setShowFollowers(true);
-  }
+  const [showFollowers, setShowFollowers] = useState(() => {
+    if (location.state.show) {
+      return location.state.show;
+    }
+    return "followers";
+  });
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -38,13 +36,14 @@ const UserConnections = () => {
         "http://localhost:3000/api/v1/user/" +
         params.id +
         "/get" +
-        location.state.show;
+        showFollowers;
+
       const getUser = await axios.get(url);
 
-      if (showFollowers) {
+      if (showFollowers === "followers") {
         dispatch(setUserFollowers(getUser.data));
       }
-      if (!showFollowers) {
+      if (showFollowers !== "followers") {
         dispatch(setUserFollowings(getUser.data));
       }
     };
@@ -54,9 +53,10 @@ const UserConnections = () => {
   const profileUser = useSelector(selectProfileUser);
   const profileUserFollowings = useSelector(selectProfileUserfollowings);
   const profileUserFollowers = useSelector(selectProfileUserFollowers);
-  const connections = showFollowers
-    ? profileUserFollowers
-    : profileUserFollowings;
+  const connections =
+    showFollowers === "followers"
+      ? profileUserFollowers
+      : profileUserFollowings;
 
   const defaultProfilePic =
     "https://images.pexels.com/photos/15597897/pexels-photo-15597897.jpeg?cs=srgb&dl=pexels-b%E1%BA%A3o-vi%E1%BB%87t-15597897.jpg&fm=jpg&w=640&h=960&_gl=1*qa7fxa*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ1MDk3Mi40LjEuMTY4MDQ1MDk4My4wLjAuMA..";
@@ -70,26 +70,22 @@ const UserConnections = () => {
       <hr />
       <div className="main-div">
         <div className="connections-header">
-          <NavLink
+          <div
             className={`connection-type ${
-              location.state.show === "followings"
-                ? "connection-active-link"
-                : ""
+              showFollowers !== "followers" ? "connection-active-link" : ""
             } `}
-            onClick={() => setShowFollowers(false)}
+            onClick={() => setShowFollowers("followings")}
           >
-            Followings
-          </NavLink>
-          <NavLink
+            Followings ({profileUserFollowings?.length})
+          </div>
+          <div
             className={`connection-type ${
-              location.state.show === "followers"
-                ? "connection-active-link"
-                : ""
+              showFollowers === "followers" ? "connection-active-link" : ""
             } `}
-            onClick={() => setShowFollowers(true)}
+            onClick={() => setShowFollowers("followers")}
           >
-            Followers
-          </NavLink>
+            Followers({profileUserFollowers?.length})
+          </div>
         </div>
         <div className="connections-div">
           {connections?.map((user) => {
