@@ -1,36 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { MdFacebook, MdEmail, MdEdit } from "react-icons/md";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { selectUser, setFollowings } from "../../features/userSlice";
+import {
+  editCurrentUser,
+  selectUser,
+  setEditProfile,
+  setFollowings,
+} from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectProfileUser,
   setProfileUser,
 } from "../../features/proFileUserSlice";
+import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
 
 const Profile = () => {
   const userId = useParams();
-
   const currentUser = useSelector(selectUser);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const profileUser = useSelector(selectProfileUser);
+  const editUserInfo = useSelector(editCurrentUser);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/user/${userId.id}`
       );
-
       dispatch(setProfileUser(fetchData.data));
     };
 
     fetchDataFunction();
-  }, [userId]);
+  }, [userId, dispatch]);
 
   const followingHandling = async (id) => {
     const url = "http://localhost:3000/api/v1/user/" + id + "/";
@@ -56,6 +61,7 @@ const Profile = () => {
 
   return (
     <>
+      {editUserInfo && <EditUserInfo />}
       <div className="profile">
         <div className="images">
           <img
@@ -108,10 +114,15 @@ const Profile = () => {
             </div>
             <div className="right">
               <MdEmail className="message-icon" fontSize={24} />
-              <button className="profile-edit-button">
-                Edit profile
-                <MdEdit fontSize={15} />
-              </button>
+              {currentUser?._id === profileUser?._id && (
+                <button
+                  className="profile-edit-button"
+                  onClick={() => dispatch(setEditProfile())}
+                >
+                  Edit profile
+                  <MdEdit fontSize={15} />
+                </button>
+              )}
             </div>
           </div>
         </div>
