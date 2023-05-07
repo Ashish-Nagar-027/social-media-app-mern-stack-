@@ -72,12 +72,14 @@ const updatePost = async (req, res) => {
       res.status(403).json("post not found");
     }
 
-    if (post.userId.toString() === req.user.id) {
-      const updatePost = await post.updateOne({
-        $set: { caption: req.body.caption, userId: post.userId },
+    if (post.user.userId.toString() === req.user.id) {
+      const updatedPost = await post.updateOne({
+        $set: { caption: req.body.caption, userId: post.user.userId },
       });
 
-      res.status(200).json({ message: "Post updated successfully" });
+      res
+        .status(200)
+        .json({ updatedPost, message: "Post updated successfully" });
     } else {
       throw Error({
         message: "Action forbidden! Users can only update their own posts ",

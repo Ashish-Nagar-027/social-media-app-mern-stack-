@@ -41,8 +41,8 @@ const EditUserInfo = () => {
           withCredentials: true,
           data: values,
         }
-      ).then(() => {
-        dispatch(loginUser(updateCurrentUser.data));
+      ).then((updatedData) => {
+        dispatch(loginUser(updatedData.data));
       });
 
       formik.setSubmitting(false);
@@ -65,7 +65,12 @@ const EditUserInfo = () => {
   });
 
   return (
-    <div className="edit-currentuser">
+    <div
+      className="edit-currentuser"
+      onClick={(e) =>
+        e.target.className === "edit-currentuser" && dispatch(setEditProfile())
+      }
+    >
       <div className="edit-model">
         <div className="model-header">
           <h2>Edit your information</h2>

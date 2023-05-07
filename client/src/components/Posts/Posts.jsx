@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Post from "../Post/Post";
 import "./posts.scss";
 import { selectUser } from "../../features/userSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import {
@@ -11,9 +11,13 @@ import {
   MdOutlineSend,
   MdOutlineCancel,
 } from "react-icons/md";
+import { selectPosts, setPosts } from "../../features/postSlice";
 
 const Posts = ({ id }) => {
   const currentUser = useSelector(selectUser);
+  const dispatch = useDispatch();
+  // const setPosts
+  const timeLinePosts = useSelector(selectPosts);
 
   const [image, setImage] = useState(null);
   const imageRef = useRef();
@@ -37,15 +41,14 @@ const Posts = ({ id }) => {
         caption: captionText,
       });
 
-      setTimeLinePosts([postData.data.post, ...timeLinePosts]);
+      // setTimeLinePosts([postData.data.post, ...timeLinePosts]);
+      dispatch(setPosts([postData.data.post, ...timeLinePosts]));
+
       setCaptionText("");
     } else {
       alert("please write caption");
     }
   };
-
-  // read post
-  const [timeLinePosts, setTimeLinePosts] = useState(null);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
@@ -53,7 +56,8 @@ const Posts = ({ id }) => {
         `http://localhost:3001/api/v1/post/${id}/timeline`
       );
 
-      setTimeLinePosts(fetchData.data);
+      // setTimeLinePosts(fetchData.data);
+      dispatch(setPosts(fetchData.data));
     };
     if (currentUser) {
       fetchDataFunction();
