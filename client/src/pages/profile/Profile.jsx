@@ -17,6 +17,7 @@ import {
   setProfileUser,
 } from "../../features/proFileUserSlice";
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
+import loadingImg from "../../assets/loading.png";
 
 const Profile = () => {
   const userId = useParams();
@@ -58,6 +59,20 @@ const Profile = () => {
       }).then(() => dispatch(setFollowings(newFollowings)));
     }
   };
+
+  if (!profileUser) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img src={loadingImg} alt="loading" />
+      </div>
+    );
+  }
 
   return (
     <>

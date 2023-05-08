@@ -27,7 +27,15 @@ export const postSlice = createSlice({
         }
       });
     },
-    setComments: (state, action) => {},
+    setComments: (state, action) => {
+      const { postId, comment } = action.payload;
+
+      const addComment = state.posts.map((post) => {
+        if (post._id === postId) {
+          post.comments.push(comment);
+        }
+      });
+    },
   },
 });
 

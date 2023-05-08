@@ -11,6 +11,7 @@ const {
   getAllPosts,
   getPost,
   updatePost,
+  addComment,
 } = require("../controller/postController");
 
 // create post
@@ -36,5 +37,8 @@ router.get("/:id/user", verifyToken, getUserPosts);
 
 // get all posts
 router.get("/explore", verifyToken, getAllPosts);
+
+// add comment
+router.put("/:id/comment", verifyToken, addComment);
 
 module.exports = router;

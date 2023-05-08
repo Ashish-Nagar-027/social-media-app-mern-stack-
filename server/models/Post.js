@@ -31,8 +31,19 @@ const postSchema = new mongoose.Schema(
     comments: [
       {
         user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          name: {
+            type: String,
+            required: [true, "Please enter a name"],
+          },
+          avtar: {
+            public_id: String,
+            url: String,
+          },
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "User",
+          },
         },
         comment: {
           type: String,

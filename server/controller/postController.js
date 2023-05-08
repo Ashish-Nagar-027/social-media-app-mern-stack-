@@ -107,7 +107,7 @@ const deletePost = async (req, res) => {
       res.status(403).json("post not found");
     }
 
-    if (post.userId.toString() === req.user.id) {
+    if (post.user._id.toString() === req.user.id) {
       await post.deleteOne();
 
       await User.updateOne(
@@ -245,6 +245,57 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+///======================
+// add comment
+///=====================
+const addComment = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { comment } = req.body;
+    const userInfo = req.user;
+
+    if (!postId) {
+      throw Error("please send post id to like in params");
+    }
+    if (!comment) {
+      throw Error("please send comment text");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("post id is not valid id");
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(403).json("post not found");
+    }
+
+    const commentInfo = {
+      user: {
+        name: userInfo.name,
+        avtar: userInfo.avtar,
+        userId: userInfo.id,
+      },
+      comment,
+    };
+
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $push: { comments: commentInfo } },
+      { new: true }
+    );
+
+    // console.log();
+
+    res.status(200).json({
+      message: "you comment added",
+      comment: updatedPost.comments[updatedPost.comments.length - 1],
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   getPost,
@@ -254,4 +305,5 @@ module.exports = {
   timeLinePosts,
   getUserPosts,
   getAllPosts,
+  addComment,
 };

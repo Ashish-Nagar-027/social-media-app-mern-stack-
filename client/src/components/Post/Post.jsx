@@ -11,8 +11,6 @@ import { selectUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Post = ({ post }) => {
-  const [isPostLiked, setIsPostLiked] = useState(true);
-
   const [showComment, setShowComment] = useState(false);
 
   const currentUser = useSelector(selectUser);
@@ -35,7 +33,7 @@ const Post = ({ post }) => {
 
   const handleLikes = async () => {
     try {
-      const updateCurrentUser = await axios(
+      const LikeOrUnLike = await axios(
         "http://localhost:3000/api/v1/post/" + post._id + "/like",
         {
           method: "PUT",
@@ -44,7 +42,7 @@ const Post = ({ post }) => {
             userId: currentUser._id,
           },
         }
-      ).then((updatedData) => {
+      ).then(() => {
         dispatch(
           setLikes({ postId: post._id, currentUserId: currentUser._id })
         );
@@ -84,13 +82,13 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
-            <span> 12 comments</span>
+            <span> {post.comments.length} comments</span>
           </div>
           <div className="item">
             <MdShare size={20} />
           </div>
         </div>
-        {showComment && <Comments />}
+        {showComment && <Comments postId={post._id} comments={post.comments} />}
       </div>
     </div>
   );

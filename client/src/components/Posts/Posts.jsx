@@ -4,6 +4,7 @@ import "./posts.scss";
 import { selectUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import loadingImg from "../../assets/loading.png";
 
 import {
   MdOutlineImage,
@@ -41,7 +42,6 @@ const Posts = ({ id }) => {
         caption: captionText,
       });
 
-      // setTimeLinePosts([postData.data.post, ...timeLinePosts]);
       dispatch(setPosts([postData.data.post, ...timeLinePosts]));
 
       setCaptionText("");
@@ -50,19 +50,38 @@ const Posts = ({ id }) => {
     }
   };
 
+  const [fetching, setFetching] = useState(false);
   useEffect(() => {
+    console.log("first");
+
     const fetchDataFunction = async () => {
+      setFetching(true);
+
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/post/${id}/timeline`
       );
 
-      // setTimeLinePosts(fetchData.data);
       dispatch(setPosts(fetchData.data));
+      setFetching(false);
     };
     if (currentUser) {
       fetchDataFunction();
     }
   }, [currentUser, id]);
+
+  if (fetching) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img src={loadingImg} alt="loading" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -126,9 +145,19 @@ const Posts = ({ id }) => {
       </div>
 
       <div className="posts">
-        {timeLinePosts?.map((post) => (
-          <Post post={post} key={post._id} />
-        ))}
+        {timeLinePosts ? (
+          timeLinePosts.map((post) => <Post post={post} key={post._id} />)
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img src={loadingImg} alt="loading" />
+          </div>
+        )}
       </div>
     </>
   );
