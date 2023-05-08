@@ -52,8 +52,6 @@ const Posts = ({ id }) => {
 
   const [fetching, setFetching] = useState(false);
   useEffect(() => {
-    console.log("first");
-
     const fetchDataFunction = async () => {
       setFetching(true);
 
