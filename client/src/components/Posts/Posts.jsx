@@ -13,8 +13,11 @@ import {
   MdOutlineCancel,
 } from "react-icons/md";
 import { selectPosts, setPosts } from "../../features/postSlice";
+import { useParams } from "react-router-dom";
 
 const Posts = ({ id }) => {
+  const profileId = useParams();
+
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
   // const setPosts
@@ -95,71 +98,72 @@ const Posts = ({ id }) => {
 
   return (
     <>
-      <div className="create-post">
-        <div className="container">
-          <div className="user">
-            <div className="userInfo" style={{ display: "flex" }}>
-              <img
-                src={defaultProfilePic}
-                alt={currentUser.name}
-                className="profile-pic-img"
-              />
-              <p>{currentUser.name}</p>
-            </div>
-            <input
-              placeholder="Write here..."
-              value={captionText}
-              onChange={(e) => setCaptionText(e.target.value)}
-            />
-            {image && (
-              <div className="uploaded-img">
-                <MdOutlineCancel
-                  size={30}
-                  className="cancel-upload-img"
-                  onClick={() => setImage(null)}
+      {!profileId.id && (
+        <div className="create-post">
+          <div className="container">
+            <div className="user">
+              <div className="userInfo" style={{ display: "flex" }}>
+                <img
+                  src={defaultProfilePic}
+                  alt={currentUser.name}
+                  className="profile-pic-img"
                 />
-                <img src={URL.createObjectURL(image)} alt="" />
+                <p>{currentUser.name}</p>
               </div>
-            )}
-            <div className="upload-items">
-              <div>
-                <div
-                  className="upload-item"
-                  onClick={() => imageRef.current.click()}
-                >
-                  <MdOutlineImage size={20} />
-                  <span>Image</span>
-                </div>
-                <div
-                  className="upload-item"
-                  onClick={() => imageRef.current.click()}
-                >
-                  <MdOutlineVideoFile size={20} />
-                  <span>video</span>
-                </div>
-                <div style={{ display: "none" }}>
-                  <input
-                    type="file"
-                    name="image-input"
-                    ref={imageRef}
-                    onChange={handleImageChange}
+              <input
+                placeholder="Write here..."
+                value={captionText}
+                onChange={(e) => setCaptionText(e.target.value)}
+              />
+              {image && (
+                <div className="uploaded-img">
+                  <MdOutlineCancel
+                    size={30}
+                    className="cancel-upload-img"
+                    onClick={() => setImage(null)}
                   />
+                  <img src={URL.createObjectURL(image)} alt="" />
                 </div>
-              </div>
-              {sharingTime ? (
-                <button disabled>
-                  sharing... <MdOutlineSend size={20} />
-                </button>
-              ) : (
-                <button onClick={sharePost}>
-                  Share Post <MdOutlineSend size={20} />
-                </button>
               )}
+              <div className="upload-items">
+                <div>
+                  <div
+                    className="upload-item"
+                    onClick={() => imageRef.current.click()}
+                  >
+                    <MdOutlineImage size={20} />
+                    <span>Image</span>
+                  </div>
+                  <div
+                    className="upload-item"
+                    onClick={() => imageRef.current.click()}
+                  >
+                    <MdOutlineVideoFile size={20} />
+                    <span>video</span>
+                  </div>
+                  <div style={{ display: "none" }}>
+                    <input
+                      type="file"
+                      name="image-input"
+                      ref={imageRef}
+                      onChange={handleImageChange}
+                    />
+                  </div>
+                </div>
+                {sharingTime ? (
+                  <button disabled>
+                    sharing... <MdOutlineSend size={20} />
+                  </button>
+                ) : (
+                  <button onClick={sharePost}>
+                    Share Post <MdOutlineSend size={20} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
+      )}
       <div className="posts">
         {timeLinePosts ? (
           timeLinePosts.map((post) => <Post post={post} key={post._id} />)
