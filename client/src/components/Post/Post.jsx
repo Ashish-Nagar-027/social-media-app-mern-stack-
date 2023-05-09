@@ -29,20 +29,17 @@ const Post = ({ post }) => {
       return setPathLocation(`/profile/${post.user.userId}`);
     };
     pathName();
-  }, [pathLocation, setPathLocation, location]);
+  }, [pathLocation, setPathLocation, location, post]);
 
   const handleLikes = async () => {
     try {
-      const LikeOrUnLike = await axios(
-        "http://localhost:3000/api/v1/post/" + post._id + "/like",
-        {
-          method: "PUT",
-          withCredentials: true,
-          data: {
-            userId: currentUser._id,
-          },
-        }
-      ).then(() => {
+      await axios("http://localhost:3000/api/v1/post/" + post._id + "/like", {
+        method: "PUT",
+        withCredentials: true,
+        data: {
+          userId: currentUser._id,
+        },
+      }).then(() => {
         dispatch(
           setLikes({ postId: post._id, currentUserId: currentUser._id })
         );
@@ -69,7 +66,11 @@ const Post = ({ post }) => {
         </div>
         <div className="content">
           <p>{post.caption}</p>
-          <img src={post.img} alt="" />
+          {post.imageUrl?.url !== undefined ? (
+            <img src={post.imageUrl.url} alt="" />
+          ) : (
+            ""
+          )}
         </div>
         <div className="info">
           <div className="item">

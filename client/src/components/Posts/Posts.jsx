@@ -34,17 +34,29 @@ const Posts = ({ id }) => {
   };
 
   const [captionText, setCaptionText] = useState("");
+  const [sharingTime, setSharingTime] = useState(false);
 
   // post (share) post
   const sharePost = async () => {
+    const post = new FormData();
+    if (image) {
+      post.append("image", image);
+    }
+    post.append("caption", captionText);
+
     if (captionText) {
-      const postData = await axios.post("/api/v1/post", {
-        caption: captionText,
-      });
+      setSharingTime(true);
 
-      dispatch(setPosts([postData.data.post, ...timeLinePosts]));
+      try {
+        const postData = await axios.post("/api/v1/post", post);
 
-      setCaptionText("");
+        dispatch(setPosts([postData.data.post, ...timeLinePosts]));
+        setCaptionText("");
+        setImage(null);
+      } catch (error) {
+        console.log(error);
+      }
+      setSharingTime(false);
     } else {
       alert("please write caption");
     }
@@ -65,7 +77,7 @@ const Posts = ({ id }) => {
     if (currentUser) {
       fetchDataFunction();
     }
-  }, [currentUser, id]);
+  }, [currentUser, id, dispatch]);
 
   if (fetching) {
     return (
@@ -134,9 +146,15 @@ const Posts = ({ id }) => {
                   />
                 </div>
               </div>
-              <button onClick={sharePost}>
-                Share Post <MdOutlineSend size={20} />
-              </button>
+              {sharingTime ? (
+                <button disabled>
+                  sharing... <MdOutlineSend size={20} />
+                </button>
+              ) : (
+                <button onClick={sharePost}>
+                  Share Post <MdOutlineSend size={20} />
+                </button>
+              )}
             </div>
           </div>
         </div>

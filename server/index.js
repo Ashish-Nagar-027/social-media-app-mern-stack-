@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 
 //importing routes
 const authRoutes = require("./routes/authRoutes");
@@ -11,7 +11,6 @@ const postRoutes = require("./routes/postRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 //middlewares
-
 app.use(
   cors({
     origin: "http://localhost:3001",
@@ -20,6 +19,13 @@ app.use(
 );
 app.use(cookieParser());
 app.use(morgan("tiny"));
+
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 // Using middlewares
 app.use(express.json());
@@ -31,7 +37,6 @@ app.get("/", (req, res) => {
 });
 
 // using routes
-
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/post", postRoutes);

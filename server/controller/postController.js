@@ -2,14 +2,29 @@ const { default: mongoose } = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 
+const cloudinary = require("cloudinary");
+
 // create new post
 const createPost = async (req, res) => {
   try {
+    let result;
+    if (req.files) {
+      let file = req.files.image;
+
+      result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+        folder: "User",
+      });
+    }
+
     const { caption } = req.body;
     const userInfo = await User.findById(req.user.id);
 
     const post = await Post.create({
       caption,
+      imageUrl: {
+        public_Id: result.public_id,
+        url: result.secure_url,
+      },
       user: {
         name: userInfo.name,
         avtar: userInfo.avtar,
@@ -44,7 +59,7 @@ const getPost = async (req, res) => {
       res.status(403).json("post not found");
     }
 
-    if (post.userId.toString() === req.user.id) {
+    if (post.user.userId.toString() === req.user.id) {
       res.status(200).json({ post });
     } else {
       throw Error({

@@ -105,7 +105,7 @@ const Profile = () => {
               </a>
             </div>
             <div className="center">
-              <p>This is some user infomation. Don't write too much here</p>
+              {/* <p>This is some user infomation. Don't write too much here</p> */}
               <p className="followers">
                 <Link to="connections" state={{ show: "followers" }}>
                   Followers : {profileUser?.followers.length}
