@@ -47,15 +47,7 @@
 
         }
 
-        
-        .left {
-            flex: 1;
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-
-
-        }
+      
         .center {
             margin-top: 10px;
             flex: 1;
@@ -63,6 +55,12 @@
             gap: 5px;
             flex-direction: column;
            align-items: center;
+
+           .connections-div {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+           }
 
            p {
             font-weight: 500;

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { MdFacebook, MdEmail, MdEdit } from "react-icons/md";
-import { FaTwitter, FaLinkedin } from "react-icons/fa";
+import { MdEmail, MdEdit } from "react-icons/md";
+
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { Link, useParams } from "react-router-dom";
@@ -93,29 +93,20 @@ const Profile = () => {
         </div>
         <div className="profileContainer">
           <div className="userInfo">
-            <div className="left">
-              <a href="wwww.google.com">
-                <MdFacebook fontSize={25} />
-              </a>
-              <a href="wwww.google.com">
-                <FaLinkedin fontSize={24} />
-              </a>
-              <a href="wwww.google.com">
-                <FaTwitter fontSize={24} />
-              </a>
-            </div>
             <div className="center">
               {/* <p>This is some user infomation. Don't write too much here</p> */}
-              <p className="followers">
-                <Link to="connections" state={{ show: "followers" }}>
-                  Followers : {profileUser?.followers.length}
-                </Link>
-              </p>
-              <p className="followings">
-                <Link to="connections" state={{ show: "followings" }}>
-                  Followings : {profileUser?.followings.length}
-                </Link>
-              </p>
+              <div className="connections-div">
+                <p className="followers">
+                  <Link to="connections" state={{ show: "followers" }}>
+                    Followers : {profileUser?.followers.length}
+                  </Link>
+                </p>
+                <p className="followings">
+                  <Link to="connections" state={{ show: "followings" }}>
+                    Followings : {profileUser?.followings.length}
+                  </Link>
+                </p>
+              </div>
               <span>{profileUser?.name}</span>
               {currentUser?._id !== profileUser?._id && (
                 <button onClick={() => followingHandling(profileUser._id)}>
