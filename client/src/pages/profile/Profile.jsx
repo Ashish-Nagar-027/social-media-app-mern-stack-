@@ -94,7 +94,7 @@ const Profile = () => {
         <div className="profileContainer">
           <div className="userInfo">
             <div className="center">
-              {/* <p>This is some user infomation. Don't write too much here</p> */}
+              <span>{profileUser?.name}</span>
               <div className="connections-div">
                 <p className="followers">
                   <Link to="connections" state={{ show: "followers" }}>
@@ -107,7 +107,6 @@ const Profile = () => {
                   </Link>
                 </p>
               </div>
-              <span>{profileUser?.name}</span>
               {currentUser?._id !== profileUser?._id && (
                 <button onClick={() => followingHandling(profileUser._id)}>
                   {profileUser

@@ -88,7 +88,8 @@ const UserConnections = () => {
             } `}
             onClick={() => setShowFollowers("followings")}
           >
-            Followings ({profileUserFollowings?.length || 0} )
+            Followings (
+            {profileUserFollowings?.length || profileUser.followings.length} )
           </div>
           <div
             className={`connection-type ${
@@ -96,7 +97,8 @@ const UserConnections = () => {
             } `}
             onClick={() => setShowFollowers("followers")}
           >
-            Followers({profileUserFollowers?.length || 0})
+            Followers(
+            {profileUserFollowers?.length || profileUser.followers.length})
           </div>
         </div>
         <div className="connections-div">

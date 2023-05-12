@@ -21,10 +21,10 @@
             border-radius: 50%;
             object-fit: cover;
             position: absolute;
-            left: 0;
-            right: 0;
+            left: 40px;
+            right: 0px;
             top: 200px;
-            margin: auto;
+            // margin: auto;
 
 
         }
@@ -38,7 +38,7 @@
         align-items: center;
         justify-content: space-between;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-        margin-top: 20px;
+        // margin-top: 20px;
 
 
         @include mobile{
@@ -54,25 +54,29 @@
             display: flex;
             gap: 5px;
             flex-direction: column;
-           align-items: center;
+           align-items: flex-start;
 
            .connections-div {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+        
            }
 
-           p {
+           p a{
             font-weight: 500;
+            text-decoration: none;
+            color: gray;
             
            }
 
            .followers:hover  {
             cursor: pointer;
             text-decoration: underline;
+            
            }
 
-           .followings:hover {
+           .followings a:hover {
             cursor: pointer;
             text-decoration: underline;
            }
@@ -80,6 +84,7 @@
            span {
             font-size: 1.3rem;
             font-weight:500 ;
+        
            }
 
            button {

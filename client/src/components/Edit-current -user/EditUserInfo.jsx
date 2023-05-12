@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import "./editUserInfo.scss";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdAddAPhoto } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loginUser,
@@ -28,11 +28,16 @@ const validate = (values) => {
   return errors;
 };
 
+//===========================
+//      main component
+// ==========================
+
 const EditUserInfo = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
 
   const submitFunction = async (values) => {
+    console.log(values);
     try {
       const updateCurrentUser = await axios(
         "http://localhost:3000/api/v1/user/" + currentUser._id,
@@ -57,12 +62,17 @@ const EditUserInfo = () => {
     initialValues: {
       name: currentUser?.name,
       email: currentUser?.email,
+      cover: null,
+      profilePic: null,
     },
     validate,
     onSubmit: (values) => {
       return submitFunction(values);
     },
   });
+
+  const coverPicInputRef = useRef(null);
+  const profilePicInputRef = useRef(null);
 
   return (
     <div
@@ -73,7 +83,7 @@ const EditUserInfo = () => {
     >
       <div className="edit-model">
         <div className="model-header">
-          <h2>Edit your information</h2>
+          <h2>Edit Profile</h2>
           <MdClose
             className="close-model"
             size={24}
@@ -82,8 +92,55 @@ const EditUserInfo = () => {
         </div>
         <div className="user-info-card">
           <div className="card">
-            <h3>Beings Social</h3>
             <form onSubmit={formik.handleSubmit}>
+              <div className="images">
+                <div
+                  className="image-div"
+                  onClick={() => coverPicInputRef.current.click()}
+                >
+                  <img
+                    src={
+                      formik.values.cover
+                        ? URL.createObjectURL(formik.values.cover)
+                        : "https://images.pexels.com/photos/15953937/pexels-photo-15953937.jpeg?cs=srgb&dl=pexels-jaime-reimer-15953937.jpg&fm=jpg&_gl=1*srqdvs*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ5MjAzMi41LjEuMTY4MDQ5MzQ1Ny4wLjAuMA"
+                    }
+                    alt=""
+                    className="cover"
+                  />
+                  <MdAddAPhoto className="add-photo-icon add-photo-icon-top" />
+                </div>
+                <div
+                  className="image-div"
+                  onClick={() => coverPicInputRef.current.click()}
+                >
+                  <img
+                    src={
+                      formik.values.profilePic
+                        ? URL.createObjectURL(formik.values.profilePic)
+                        : "https://images.pexels.com/photos/15656117/pexels-photo-15656117.jpeg?cs=srgb&dl=pexels-aliakbar-nosrati-15656117.jpg&fm=jpg&w=640&h=760&_gl=1*rixznq*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDkyNzY2NC42LjEuMTY4MDkyNzc1My4wLjAuMA.."
+                    }
+                    alt=""
+                    className="profilePic"
+                  />
+                  <MdAddAPhoto className="add-photo-icon add-photo-icon-bottom" />
+                </div>
+              </div>
+              <input
+                hidden
+                ref={coverPicInputRef}
+                type="file"
+                onChange={(event) => {
+                  formik.setFieldValue("cover", event.target.files[0]);
+                }}
+              />
+              <input
+                hidden
+                ref={profilePicInputRef}
+                type="file"
+                onChange={(event) => {
+                  formik.setFieldValue("profilePic", event.target.files[0]);
+                }}
+              />
               <div>
                 <input
                   placeholder="name"

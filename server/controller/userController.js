@@ -37,6 +37,12 @@ const updateUser = async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
 
+    if (req.files) {
+      console.log(req.files);
+      let coverPic = req.files.cover;
+      console.log(coverPic);
+    }
+
     if (!id) {
       throw Error("please send Your Valid Id ");
     }

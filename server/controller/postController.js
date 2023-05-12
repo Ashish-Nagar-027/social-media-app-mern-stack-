@@ -216,7 +216,6 @@ const timeLinePosts = async (req, res) => {
         })
       );
     });
-    console.log(removeDuplicatePostes);
 
     res.status(200).json(removeDuplicatePostes);
   } catch (error) {
@@ -299,8 +298,6 @@ const addComment = async (req, res) => {
       { $push: { comments: commentInfo } },
       { new: true }
     );
-
-    // console.log();
 
     res.status(200).json({
       message: "you comment added",

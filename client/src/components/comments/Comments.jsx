@@ -54,18 +54,20 @@ const Comments = ({ postId, comments }) => {
         <button onClick={handCommentSubmit}>Send</button>
       </div>
       {/* show comments */}
-      {userComments.map((comment) => (
-        <div key={comment._id} className="comment">
-          <div>
-            <img alt="" src={userImg} />
-            <div className="info">
-              <span>{comment.user.name}</span>
-              <p>{comment.comment}</p>
+      <div className="show-comments">
+        {userComments.map((comment) => (
+          <div key={comment._id} className="comment">
+            <div>
+              <img alt="" src={userImg} />
+              <div className="info">
+                <span>{comment.user.name}</span>
+                <p>{comment.comment}</p>
+              </div>
             </div>
+            <span className="date">1 hour ago</span>
           </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
