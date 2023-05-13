@@ -12,7 +12,7 @@ const RightBar = () => {
       const fetchSuggestUser = await axios.get(
         "http://localhost:3000/api/v1/user/644f4996ec5a858319a9d0e1/suggestusers"
       );
-
+      console.log(fetchSuggestUser.data);
       setSuggestUsers(fetchSuggestUser.data);
     };
     getSuggestUserFunction();

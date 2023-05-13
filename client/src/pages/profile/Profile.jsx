@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 
 import "./profile.scss";
@@ -26,17 +26,20 @@ const Profile = () => {
   const dispatch = useDispatch();
   const profileUser = useSelector(selectProfileUser);
   const editUserInfo = useSelector(editCurrentUser);
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
+      setFetching(true);
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/user/${userId.id}`
       );
       dispatch(setProfileUser(fetchData.data));
+      setFetching(false);
     };
 
     fetchDataFunction();
-  }, [userId, dispatch]);
+  }, [userId, dispatch, setFetching]);
 
   const followingHandling = async (id) => {
     const url = "http://localhost:3000/api/v1/user/" + id + "/";
@@ -60,7 +63,7 @@ const Profile = () => {
     }
   };
 
-  if (!profileUser) {
+  if (fetching) {
     return (
       <div
         style={{

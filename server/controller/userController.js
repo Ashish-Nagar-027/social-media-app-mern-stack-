@@ -81,8 +81,6 @@ const updateUser = async (req, res) => {
             }
           );
 
-          console.log("profilePicUploaded ", profilePicUploaded);
-
           updatedItems.profilePic = {
             public_id: profilePicUploaded.public_id,
             url: profilePicUploaded.secure_url,
@@ -149,7 +147,7 @@ const getUserFollowers = async (req, res) => {
 
     const followers = await Promise.all(
       userData.followers.map((userId) => {
-        return User.findById(userId).select("name avtar");
+        return User.findById(userId).select("name profilePic");
       })
     );
 
@@ -274,19 +272,8 @@ const suggestUsers = async (req, res) => {
       throw Error("please send valid user id");
     }
 
-    const users = await User.find({});
+    const users = await User.find({}).select("name , profilePic ");
     if (users) {
-      users.forEach((user) => {
-        user.password = undefined;
-        user.followers = undefined;
-        user.followings = undefined;
-        (user.posts = undefined), (user.updatedAt = undefined);
-        user.email = undefined;
-        user._v = undefined;
-
-        user.createdAt = undefined;
-      });
-
       res.status(200).json(users);
     } else {
       res.status(200).json("User not found");

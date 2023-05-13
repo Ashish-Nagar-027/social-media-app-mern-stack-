@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import axios from "axios";
 import { setComments } from "../../features/postSlice";
+import { Link } from "react-router-dom";
 
 const Comments = ({ postId, comments }) => {
   const userImg =
@@ -55,18 +56,25 @@ const Comments = ({ postId, comments }) => {
       </div>
       {/* show comments */}
       <div className="show-comments">
-        {userComments.map((comment) => (
-          <div key={comment._id} className="comment">
-            <div>
-              <img alt="" src={userImg} />
-              <div className="info">
-                <span>{comment.user.name}</span>
-                <p>{comment.comment}</p>
+        {userComments.map((comment) => {
+          return (
+            <div key={comment._id} className="comment">
+              <div>
+                <Link
+                  className="userInfo"
+                  to={`/profile/${comment.user.userId}`}
+                >
+                  <img alt="" src={userImg} />
+                  <div className="info">
+                    <span>{comment.user.name}</span>
+                    <p>{comment.comment}</p>
+                  </div>
+                </Link>
               </div>
+              <span className="date">1 hour ago</span>
             </div>
-            <span className="date">1 hour ago</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

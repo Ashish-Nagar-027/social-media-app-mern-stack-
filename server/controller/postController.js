@@ -27,7 +27,7 @@ const createPost = async (req, res) => {
       },
       user: {
         name: userInfo.name,
-        avtar: userInfo.avtar,
+        profilePic: userInfo.profilePic,
         userId: userInfo.id,
       },
     });
