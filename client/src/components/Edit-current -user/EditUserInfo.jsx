@@ -37,14 +37,29 @@ const EditUserInfo = () => {
   const currentUser = useSelector(selectUser);
 
   const submitFunction = async (values) => {
-    console.log(values);
+    const { name, email, cover, profilePic } = values;
+
+    const formData = new FormData();
+    if (name) {
+      formData.append("name", name);
+    }
+    if (email) {
+      formData.append("email", email);
+    }
+    if (cover) {
+      formData.append("cover", cover);
+    }
+    if (profilePic) {
+      formData.append("profilePic", profilePic);
+    }
+
     try {
       const updateCurrentUser = await axios(
         "http://localhost:3000/api/v1/user/" + currentUser._id,
         {
           method: "PUT",
           withCredentials: true,
-          data: values,
+          data: formData,
         }
       ).then((updatedData) => {
         dispatch(loginUser(updatedData.data));
@@ -62,8 +77,8 @@ const EditUserInfo = () => {
     initialValues: {
       name: currentUser?.name,
       email: currentUser?.email,
-      cover: null,
-      profilePic: null,
+      cover: currentUser?.coverPic?.url,
+      profilePic: currentUser?.profilePic?.url,
     },
     validate,
     onSubmit: (values) => {
@@ -92,7 +107,7 @@ const EditUserInfo = () => {
         </div>
         <div className="user-info-card">
           <div className="card">
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
               <div className="images">
                 <div
                   className="image-div"
@@ -101,7 +116,9 @@ const EditUserInfo = () => {
                   <img
                     src={
                       formik.values.cover
-                        ? URL.createObjectURL(formik.values.cover)
+                        ? typeof formik.values.cover === "object"
+                          ? URL.createObjectURL(formik.values.cover)
+                          : formik.values.cover
                         : "https://images.pexels.com/photos/15953937/pexels-photo-15953937.jpeg?cs=srgb&dl=pexels-jaime-reimer-15953937.jpg&fm=jpg&_gl=1*srqdvs*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ5MjAzMi41LjEuMTY4MDQ5MzQ1Ny4wLjAuMA"
                     }
                     alt=""
@@ -111,12 +128,14 @@ const EditUserInfo = () => {
                 </div>
                 <div
                   className="image-div"
-                  onClick={() => coverPicInputRef.current.click()}
+                  onClick={() => profilePicInputRef.current.click()}
                 >
                   <img
                     src={
                       formik.values.profilePic
-                        ? URL.createObjectURL(formik.values.profilePic)
+                        ? typeof formik.values.profilePic === "object"
+                          ? URL.createObjectURL(formik.values.profilePic)
+                          : formik.values.profilePic
                         : "https://images.pexels.com/photos/15656117/pexels-photo-15656117.jpeg?cs=srgb&dl=pexels-aliakbar-nosrati-15656117.jpg&fm=jpg&w=640&h=760&_gl=1*rixznq*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDkyNzY2NC42LjEuMTY4MDkyNzc1My4wLjAuMA.."
                     }
                     alt=""
@@ -170,9 +189,10 @@ const EditUserInfo = () => {
 
               <button
                 type="submit"
+                disabled={formik.isSubmitting ? true : false}
                 className={formik.isSubmitting ? "form-submitting" : ""}
               >
-                {formik.isSubmitting ? "saving" : "save info"}
+                {formik.isSubmitting ? "saving..." : "save info"}
               </button>
             </form>
           </div>

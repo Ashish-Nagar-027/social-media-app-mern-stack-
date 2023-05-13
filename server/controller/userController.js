@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const bcrypt = require("bcryptjs");
+const cloudinary = require("cloudinary");
 
 ///======================
 ///   get user
@@ -37,12 +38,6 @@ const updateUser = async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
 
-    if (req.files) {
-      console.log(req.files);
-      let coverPic = req.files.cover;
-      console.log(coverPic);
-    }
-
     if (!id) {
       throw Error("please send Your Valid Id ");
     }
@@ -58,14 +53,53 @@ const updateUser = async (req, res) => {
         req.body.password = hashedPassword;
       }
 
-      const user = await User.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
+      const updatedItems = { ...req.body };
 
-      user.password = undefined;
-      res.status(200).json(user);
-    } else {
-      res.status(403).json("Access Denied ! you can only update your profile");
+      if (req.files) {
+        console.log(req.files);
+        let { cover, profilePic } = req.files;
+
+        if (cover) {
+          let coverPicUploaded = await cloudinary.v2.uploader.upload(
+            cover.tempFilePath,
+            {
+              folder: "User",
+            }
+          );
+
+          updatedItems.coverPic = {
+            public_id: coverPicUploaded.public_id,
+            url: coverPicUploaded.secure_url,
+          };
+        }
+
+        if (profilePic) {
+          let profilePicUploaded = await cloudinary.v2.uploader.upload(
+            profilePic.tempFilePath,
+            {
+              folder: "User",
+            }
+          );
+
+          console.log("profilePicUploaded ", profilePicUploaded);
+
+          updatedItems.profilePic = {
+            public_id: profilePicUploaded.public_id,
+            url: profilePicUploaded.secure_url,
+          };
+        }
+
+        const user = await User.findByIdAndUpdate(id, updatedItems, {
+          new: true,
+        });
+
+        user.password = undefined;
+        res.status(200).json(user);
+      } else {
+        res
+          .status(403)
+          .json("Access Denied ! you can only update your profile");
+      }
     }
   } catch (error) {
     res.status(401).json({ message: error.message });

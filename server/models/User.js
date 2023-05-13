@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avtar: {
+    profilePic: {
+      public_id: String,
+      url: String,
+    },
+    coverPic: {
       public_id: String,
       url: String,
     },
