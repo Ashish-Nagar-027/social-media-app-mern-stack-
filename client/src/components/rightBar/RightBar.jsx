@@ -12,7 +12,7 @@ const RightBar = () => {
       const fetchSuggestUser = await axios.get(
         "http://localhost:3000/api/v1/user/644f4996ec5a858319a9d0e1/suggestusers"
       );
-      console.log(fetchSuggestUser.data);
+
       setSuggestUsers(fetchSuggestUser.data);
     };
     getSuggestUserFunction();
@@ -32,7 +32,14 @@ const RightBar = () => {
                 <div className="user" key={user._id}>
                   <div className="userInfo">
                     <Link className="userInfo" to={`/profile/${user._id}`}>
-                      <img alt="profile" src={defaultProfilePic} />
+                      <img
+                        alt="profile"
+                        src={
+                          user.profilePic
+                            ? user.profilePic.url
+                            : defaultProfilePic
+                        }
+                      />
                       <span>{user.name}</span>
                     </Link>
                   </div>

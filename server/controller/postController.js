@@ -194,9 +194,28 @@ const likeOrUnlike = async (req, res) => {
 ///=====================
 const timeLinePosts = async (req, res) => {
   try {
-    const currentUser = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.params.id).select(
+      "profilePic name followings"
+    );
 
+    const { name, profilePic, id } = currentUser;
     const userPosts = await Post.find({ "user.userId": currentUser.id });
+    const currentUserPosts = userPosts.map((post) => {
+      const { _id, caption, likes, comments, createdAt, updatedAt, imageUrl } =
+        post;
+
+      return {
+        _id,
+        caption,
+        likes,
+        comments,
+        createdAt,
+        updatedAt,
+        imageUrl,
+
+        user: { name, profilePic, id },
+      };
+    });
 
     const followingsPosts = await Promise.all(
       currentUser.followings.map((followerId) => {
@@ -204,7 +223,38 @@ const timeLinePosts = async (req, res) => {
       })
     );
 
-    const posts = userPosts.concat(...followingsPosts).sort((a, b) => {
+    const flattenedArr = [].concat(...followingsPosts);
+    const addUserInPosts = await Promise.all(
+      flattenedArr.map(async (post) => {
+        const postUser = await User.findById(post.user.userId).select(
+          "profilePic name "
+        );
+        const { id, name, profilePic } = postUser;
+
+        const {
+          _id,
+          caption,
+          likes,
+          comments,
+          createdAt,
+          updatedAt,
+          imageUrl,
+        } = post;
+
+        return {
+          _id,
+          caption,
+          likes,
+          comments,
+          createdAt,
+          updatedAt,
+          imageUrl,
+          user: { id, name, profilePic },
+        };
+      })
+    );
+
+    const posts = currentUserPosts.concat(...addUserInPosts).sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
 
