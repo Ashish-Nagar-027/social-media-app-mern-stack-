@@ -6,18 +6,17 @@ import axios from "axios";
 
 import "./post.scss";
 import Comments from "../comments/Comments";
-import { setLikes } from "../../features/postSlice";
+import { selectPosts, setLikes, setPosts } from "../../features/postSlice";
 import { selectUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { CgProfile } from "react-icons/cg";
 
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
+  const [showMoreBtn, setShowMoreBtn] = useState(false);
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
-
-  const defaultProfilePic =
-    "https://images.pexels.com/photos/15597897/pexels-photo-15597897.jpeg?cs=srgb&dl=pexels-b%E1%BA%A3o-vi%E1%BB%87t-15597897.jpg&fm=jpg&w=640&h=960&_gl=1*qa7fxa*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ1MDk3Mi40LjEuMTY4MDQ1MDk4My4wLjAuMA..";
 
   const location = useLocation();
   const [pathLocation, setPathLocation] = useState(null);
@@ -49,19 +48,43 @@ const Post = ({ post }) => {
     }
   };
 
+  const showMoreBtnHandler = () => {
+    setShowMoreBtn(!showMoreBtn);
+  };
+
+  const timeLinePosts = useSelector(selectPosts);
+
+  const deletePostFunction = async () => {
+    try {
+      await axios("http://localhost:3000/api/v1/post/" + post._id, {
+        method: "DELETE",
+        withCredentials: true,
+      }).then((postData) => {
+        console.log("postData", postData);
+        const deletePost = timeLinePosts.filter(
+          (DeletePost) => DeletePost._id !== post._id
+        );
+        dispatch(setPosts(deletePost));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="post">
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img
-              src={
-                post.user.profilePic?.url
-                  ? post.user.profilePic.url
-                  : defaultProfilePic
-              }
-              alt={post.name}
-            />
+            {post.user.profilePic?.url ? (
+              <img
+                className="profile-img"
+                src={post.user.profilePic.url}
+                alt={post.name}
+              />
+            ) : (
+              <CgProfile size={30} />
+            )}
             <div className="details">
               <Link to={pathLocation}>
                 <span>{post.user.name}</span>
@@ -69,7 +92,20 @@ const Post = ({ post }) => {
               </Link>
             </div>
           </div>
-          <MdMoreHoriz />
+          <div className="post-more-btn">
+            {currentUser._id === post.user.userId && (
+              <MdMoreHoriz
+                className="more-btn btn"
+                size={20}
+                onClick={showMoreBtnHandler}
+              />
+            )}
+            {showMoreBtn && (
+              <button className="delete-btn btn" onClick={deletePostFunction}>
+                Delete post
+              </button>
+            )}
+          </div>
         </div>
         <div className="content">
           <p>{post.caption}</p>

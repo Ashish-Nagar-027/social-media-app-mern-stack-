@@ -18,9 +18,9 @@
             align-items: center;
             gap: 1rem;
 
-            img {
-                width: 30px;
-                height: 30px;
+            .profile-img {
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
             }
@@ -41,6 +41,21 @@
                     
                 }
             }
+        }
+        .post-more-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            
+            .btn  {
+                cursor: pointer;
+            }
+
+            .delete-btn {
+                padding: 2px;
+                
+            }
+
         }
     }
 

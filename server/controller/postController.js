@@ -6,31 +6,39 @@ const cloudinary = require("cloudinary");
 
 // create new post
 const createPost = async (req, res) => {
+  console.log("first");
   try {
-    let result;
+    const userInfo = await User.findById(req.user.id);
+    console.log("userInfo", userInfo.name);
+    console.log("userInfo", userInfo.id);
+    console.log("userInfo", userInfo.profilePic);
+    console.log("second");
+
+    let createdPost = {};
+
     if (req.files) {
       let file = req.files.image;
 
-      result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+      let result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
         folder: "User",
       });
+
+      createdPost.imageUrl = {
+        public_Id: result.public_id,
+        url: result.secure_url,
+      };
     }
 
     const { caption } = req.body;
-    const userInfo = await User.findById(req.user.id);
+    createdPost.caption = caption;
 
-    const post = await Post.create({
-      caption,
-      imageUrl: {
-        public_Id: result.public_id,
-        url: result.secure_url,
-      },
-      user: {
-        name: userInfo.name,
-        profilePic: userInfo.profilePic,
-        userId: userInfo.id,
-      },
-    });
+    createdPost.user = {
+      name: userInfo.name,
+      profilePic: userInfo.profilePic,
+      userId: userInfo.id,
+    };
+
+    const post = await Post.create(createdPost);
 
     await userInfo.updateOne({
       $push: { posts: post.id },
@@ -122,7 +130,7 @@ const deletePost = async (req, res) => {
       res.status(403).json("post not found");
     }
 
-    if (post.user._id.toString() === req.user.id) {
+    if (post.user.userId.toString() === req.user.id) {
       await post.deleteOne();
 
       await User.updateOne(
@@ -213,7 +221,7 @@ const timeLinePosts = async (req, res) => {
         updatedAt,
         imageUrl,
 
-        user: { name, profilePic, id },
+        user: { name, profilePic, userId: id },
       };
     });
 
@@ -249,25 +257,30 @@ const timeLinePosts = async (req, res) => {
           createdAt,
           updatedAt,
           imageUrl,
-          user: { id, name, profilePic },
+          user: { userId: id, name, profilePic },
         };
       })
     );
 
-    const posts = currentUserPosts.concat(...addUserInPosts).sort((a, b) => {
+    const posts = currentUserPosts.concat(addUserInPosts).sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
 
-    const removeDuplicatePostes = posts.filter((post, index) => {
-      return (
-        index ===
-        posts.findIndex((obj) => {
-          return JSON.stringify(obj) === JSON.stringify(post);
-        })
-      );
-    });
+    // filtering duplicate posts============
+    const uniqueItems = {};
+    const result = [];
 
-    res.status(200).json(removeDuplicatePostes);
+    for (const item of posts) {
+      const key = item._id;
+      if (!uniqueItems[key]) {
+        uniqueItems[key] = true;
+        result.push(item);
+      }
+    }
+
+    // =====================
+    // res.status(200).json({ length: posts.length, posts });
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -15,6 +15,10 @@
             object-fit: cover;
         }
 
+        .bg-blank-img {
+            background-color: #333639;
+        }
+
         .profilePic {
             width: 200px;
             height:200px;
@@ -24,9 +28,13 @@
             left: 40px;
             right: 0px;
             top: 200px;
-            // margin: auto;
+    
 
 
+        }
+
+        .profile-blank-img {
+            background: #7a7878e8;
         }
 
     }

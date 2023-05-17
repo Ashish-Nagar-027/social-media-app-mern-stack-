@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { CgProfile } from "react-icons/cg";
 import "./rightbar.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -18,9 +18,6 @@ const RightBar = () => {
     getSuggestUserFunction();
   }, [setSuggestUsers]);
 
-  const defaultProfilePic =
-    "https://images.pexels.com/photos/15597897/pexels-photo-15597897.jpeg?cs=srgb&dl=pexels-b%E1%BA%A3o-vi%E1%BB%87t-15597897.jpg&fm=jpg&w=640&h=960&_gl=1*qa7fxa*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ1MDk3Mi40LjEuMTY4MDQ1MDk4My4wLjAuMA..";
-
   return (
     <div className="rightbar">
       <div className="container">
@@ -32,14 +29,15 @@ const RightBar = () => {
                 <div className="user" key={user._id}>
                   <div className="userInfo">
                     <Link className="userInfo" to={`/profile/${user._id}`}>
-                      <img
-                        alt="profile"
-                        src={
-                          user.profilePic
-                            ? user.profilePic.url
-                            : defaultProfilePic
-                        }
-                      />
+                      {user.profilePic?.url ? (
+                        <img
+                          className="profile-img"
+                          src={user.profilePic.url}
+                          alt={user.name}
+                        />
+                      ) : (
+                        <CgProfile size={30} />
+                      )}
                       <span>{user.name}</span>
                     </Link>
                   </div>

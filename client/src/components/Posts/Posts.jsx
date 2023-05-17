@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import loadingImg from "../../assets/loading.png";
 
+import { CgProfile } from "react-icons/cg";
+
 import {
   MdOutlineImage,
   MdOutlineVideoFile,
@@ -20,14 +22,11 @@ const Posts = ({ id }) => {
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
-  // const setPosts
+
   const timeLinePosts = useSelector(selectPosts);
 
   const [image, setImage] = useState(null);
   const imageRef = useRef();
-
-  const defaultProfilePic =
-    "https://images.pexels.com/photos/15597897/pexels-photo-15597897.jpeg?cs=srgb&dl=pexels-b%E1%BA%A3o-vi%E1%BB%87t-15597897.jpg&fm=jpg&w=640&h=960&_gl=1*qa7fxa*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ1MDk3Mi40LjEuMTY4MDQ1MDk4My4wLjAuMA..";
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -41,17 +40,21 @@ const Posts = ({ id }) => {
 
   // post (share) post
   const sharePost = async () => {
-    const post = new FormData();
+    const newPost = new FormData();
     if (image) {
-      post.append("image", image);
+      newPost.append("image", image);
     }
-    post.append("caption", captionText);
+    newPost.append("caption", captionText);
 
     if (captionText) {
       setSharingTime(true);
 
       try {
-        const postData = await axios.post("/api/v1/post", post);
+        const postData = await axios("http://localhost:3000/api/v1/post/", {
+          method: "POST",
+          withCredentials: true,
+          data: newPost,
+        });
 
         dispatch(setPosts([postData.data.post, ...timeLinePosts]));
         setCaptionText("");
@@ -103,11 +106,15 @@ const Posts = ({ id }) => {
           <div className="container">
             <div className="user">
               <div className="userInfo" style={{ display: "flex" }}>
-                <img
-                  src={defaultProfilePic}
-                  alt={currentUser.name}
-                  className="profile-pic-img"
-                />
+                {currentUser.profilePic?.url ? (
+                  <img
+                    className="profile-pic-img"
+                    src={currentUser.profilePic.url}
+                    alt={currentUser.name}
+                  />
+                ) : (
+                  <CgProfile size={30} />
+                )}
                 <p>{currentUser.name}</p>
               </div>
               <input
