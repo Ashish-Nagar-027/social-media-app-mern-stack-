@@ -15,30 +15,32 @@ const Navbar = () => {
   const currentUser = useSelector(selectUser);
 
   return (
-    <div className="navbar">
-      <div className="left-nav">
-        <Link to="/">
-          <span>BeingSocial</span>
-        </Link>
-        <div className="search-input">
-          <input type="text" placeholder="Search" />
-          <MdOutlineSearch fontSize={24} />
+    <>
+      <div className="navbar">
+        <div className="left-nav">
+          <Link to="/">
+            <span>BeingSocial</span>
+          </Link>
+          <div className="search-input">
+            <input type="text" placeholder="Search" />
+            <MdOutlineSearch fontSize={24} />
+          </div>
+        </div>
+        <div className="right-nav">
+          <MdOutlineMessage fontSize={24} className="icon" />
+          <MdGroup fontSize={24} className="icon" />
+          <MdNotificationsNone fontSize={24} className="icon" />
+          <div className="user">
+            {currentUser?.profilePic?.url ? (
+              <img alt="profile" src={currentUser.profilePic.url} />
+            ) : (
+              <CgProfile size={30} />
+            )}
+            <span>{currentUser.name}</span>
+          </div>
         </div>
       </div>
-      <div className="right-nav">
-        <MdOutlineMessage fontSize={24} className="icon" />
-        <MdGroup fontSize={24} className="icon" />
-        <MdNotificationsNone fontSize={24} className="icon" />
-        <div className="user">
-          {currentUser?.profilePic?.url ? (
-            <img alt="profile" src={currentUser.profilePic.url} />
-          ) : (
-            <CgProfile size={30} />
-          )}
-          <span>{currentUser.name}</span>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

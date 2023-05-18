@@ -1,0 +1,38 @@
+.profileModal {
+    max-width: fit-content;
+    background-color: whitesmoke;
+    color: black;
+    padding: 1rem 2rem;
+    position: fixed;
+    right: 1.5rem;
+    top: 3.5rem;
+    z-index: 20;
+    
+
+
+    .links {
+        display: flex; 
+        flex-direction: column;
+         
+        a {
+            text-decoration: none;
+            border-bottom: 1px solid;
+            padding: 5px 0px;
+            display: flex;
+            align-items: center;
+           justify-content: center;
+           color: black;
+           cursor: pointer; gap: 5px;
+        }
+
+
+        .view-profile-link {
+            border: 1px solid blue;
+            border-radius: 30px;
+            padding: 5px 10px;
+            
+        }
+
+
+    }
+}

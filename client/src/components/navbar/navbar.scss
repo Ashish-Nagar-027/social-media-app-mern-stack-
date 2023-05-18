@@ -1,6 +1,8 @@
 @import '../../style.scss';
 
 
+
+
 .navbar {
     height: 50px;
     display: flex;
@@ -61,6 +63,8 @@
         display: flex;
         align-items: center;
         gap: 5px;
+
+        
  
 
         img {
@@ -77,6 +81,13 @@
             }
         }
 
+        &:hover {
+            cursor: pointer;
+            .profile-modal-div {
+                display: flex;
+            }
+        }
+
     }
 
     }
@@ -87,7 +98,6 @@
         }
         
     }
-
-
 }
+
 
