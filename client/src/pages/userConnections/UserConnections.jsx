@@ -12,6 +12,7 @@ import {
 } from "../../features/proFileUserSlice";
 import "./userConnections.scss";
 import loadingImg from "../../assets/loading.png";
+import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
 
 const UserConnections = () => {
   const params = useParams();
@@ -111,7 +112,7 @@ const UserConnections = () => {
                     <span>{user.name}</span>
                   </Link>
                 </div>
-                <button>follow</button>
+                <HandleFollowBtn profileUserId={user._id}  />
               </div>
             );
           })}
