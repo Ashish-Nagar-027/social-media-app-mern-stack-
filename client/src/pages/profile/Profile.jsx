@@ -47,7 +47,7 @@ const Profile = () => {
 
 
 
-  if (fetching) {
+  if (fetching && !currentUser) {
     return (
       <div
         style={{

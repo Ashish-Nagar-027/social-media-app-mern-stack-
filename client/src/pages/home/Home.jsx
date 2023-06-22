@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./home.scss";
 import Posts from "../../components/Posts/Posts";
 import { selectUser } from "../../features/userSlice";

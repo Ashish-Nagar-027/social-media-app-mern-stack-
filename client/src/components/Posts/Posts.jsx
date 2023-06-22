@@ -85,7 +85,7 @@ const Posts = ({ id }) => {
     }
   }, [currentUser, id, dispatch]);
 
-  if (fetching) {
+  if (fetching && !currentUser) {
     return (
       <div
         style={{
