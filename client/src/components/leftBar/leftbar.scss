@@ -9,6 +9,9 @@
     top: 70px;
     min-width: 250px;
     background-color: white;
+    height: 88vh;
+    max-height: fit-content;
+   
    
     @include mobile{
         display: none;
@@ -16,7 +19,21 @@
     @include bigScreens{
         display: none;
     }
+    
 
+    a {
+        text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+           
+           cursor: pointer;
+
+          
+               color: rgb(13, 13, 255);
+           
+
+    }}
 
 
     
@@ -27,6 +44,7 @@
     .user-div {
         position: relative;
         padding-bottom: 2rem;
+        height: 100%;
     }
 
     .user-background-img {
@@ -34,6 +52,10 @@
         margin-bottom: 5rem;
         border-radius: 5%;
         overflow: hidden;
+    }
+
+    .bg-blank-img {
+        background-color: #333639;
     }
 
     .user {
@@ -44,9 +66,6 @@
         position: absolute;
         top: 80px;
         left: 50px;
-        border-bottom: 1px solid gainsboro;
-
-
        
 
         img {
@@ -59,9 +78,108 @@
 
      .user-info{
         padding: 5px;
+        border-top: 1px solid gainsboro;
+        border-bottom: 1px solid gainsboro;
+        width: 80%;
 
         p{
             margin: 5px;
         }
     }
+
+    .navigations {
+        display: grid;
+        align-items: center;
+        justify-content: start;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+
+
+        a {
+        text-decoration: none;
+        display: grid;
+        grid-template-columns: 20px auto;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.1rem;
+        color: #000;
+        padding: 5px 15px;
+       border-radius: 10px;
+       width: fit-content;
+
+
+        .icon {
+            display: flex;
+            align-items: center;
+            svg {
+                width: 20px;
+            }
+
+            
+
+        }
+
+        .react-icon {
+            font-size: 1.085rem;
+        }
+
+        &:hover {
+           text-decoration: underline;
+           background: #E7E7E8;
+           cursor: pointer;
+
+           span {
+               color: rgb(13, 13, 255);
+           }
+        }
+
+        }
+    }
+
+    .user-logout {
+        position: absolute;
+        bottom: 10px;
+       left: 10px;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        align-items: center;
+        gap: 5px;
+        padding: 15px;
+        border-radius: 2rem;
+        width: 90%;
+
+        img {
+        height: 30px;
+        width: 30px;
+        border-radius:50% ;
+        object-fit: cover;
+        }
+
+        span {
+            font-weight: 500;
+            @include mobile{
+                display: none;
+            }
+        }
+
+        div {
+            .icon {
+                height: 40px;
+                width: 40px;
+            }
+        }
+        
+        
+        &:hover {
+            background: #E7E7E8;
+           cursor: pointer;
+          
+            .profile-modal-div {
+                display: flex;
+            }
+        }
+
+    }
+
 }

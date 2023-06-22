@@ -119,8 +119,8 @@ const Profile = () => {
                 <button onClick={() => followingHandling(profileUser._id)}>
                   {profileUser
                     ? currentUser?.followings.includes(profileUser._id)
-                      ? "following"
-                      : "follow"
+                      ? "Unfollow"
+                      : "Follow"
                     : "follow"}
                 </button>
               )}
