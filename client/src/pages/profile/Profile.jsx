@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 
+
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { Link, useParams } from "react-router-dom";
@@ -10,7 +11,6 @@ import {
   editCurrentUser,
   selectUser,
   setEditProfile,
-  setFollowings,
 } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +19,9 @@ import {
 } from "../../features/proFileUserSlice";
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
 import loadingImg from "../../assets/loading.png";
+
+
+import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
 
 const Profile = () => {
   const userId = useParams();
@@ -42,27 +45,7 @@ const Profile = () => {
     fetchDataFunction();
   }, [userId, dispatch, setFetching]);
 
-  const followingHandling = async (id) => {
-    const url = "http://localhost:3000/api/v1/user/" + id + "/";
 
-    if (!currentUser.followings.includes(id)) {
-      await axios(url + "follow", {
-        method: "PUT",
-        withCredentials: true,
-      }).then(() => dispatch(setFollowings([...currentUser.followings, id])));
-    } else {
-      const followingsArray = currentUser.followings;
-
-      let newFollowings = followingsArray.filter(
-        (followingId) => followingId !== id
-      );
-
-      await axios(url + "unfollow", {
-        method: "PUT",
-        withCredentials: true,
-      }).then(() => dispatch(setFollowings(newFollowings)));
-    }
-  };
 
   if (fetching) {
     return (
@@ -116,13 +99,7 @@ const Profile = () => {
                 </p>
               </div>
               {currentUser?._id !== profileUser?._id && (
-                <button onClick={() => followingHandling(profileUser._id)}>
-                  {profileUser
-                    ? currentUser?.followings.includes(profileUser._id)
-                      ? "Unfollow"
-                      : "Follow"
-                    : "follow"}
-                </button>
+                <HandleFollowBtn profileUserId={profileUser._id}  />
               )}
             </div>
             <div className="right">

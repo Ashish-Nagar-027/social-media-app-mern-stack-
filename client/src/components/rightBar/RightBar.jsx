@@ -3,6 +3,7 @@ import { CgProfile } from "react-icons/cg";
 import "./rightbar.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import HandleFollowBtn from "../following Button/HandleFollowBtn";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
@@ -38,11 +39,11 @@ const RightBar = () => {
                       ) : (
                         <CgProfile size={30} />
                       )}
-                      <span>{user.name}</span>
+                      <span>{user.name} </span>
                     </Link>
                   </div>
                   <div className="buttons">
-                    <button>follow</button>
+                  <HandleFollowBtn profileUserId={user._id}  />
                   </div>
                 </div>
               );
