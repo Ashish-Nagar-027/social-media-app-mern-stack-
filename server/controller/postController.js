@@ -279,8 +279,7 @@ const timeLinePosts = async (req, res) => {
       }
     }
 
-    // =====================
-    // res.status(200).json({ length: posts.length, posts });
+
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -310,7 +309,7 @@ const getUserPosts = async (req, res) => {
 
 
 
-// /xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 
 ///======================
 //  add Bookmark post
@@ -376,9 +375,6 @@ const getUserBookmarkedPosts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// /xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
 
 
 
