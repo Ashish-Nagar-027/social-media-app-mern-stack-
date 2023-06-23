@@ -18,7 +18,7 @@ const getUser = async (req, res) => {
       throw Error("please send valid user id");
     }
 
-    const userData = await User.findById(id);
+    const userData = await User.findById(id).select(" -bookmarkedPosts ");
     if (userData) {
       userData.password = undefined;
       res.status(200).json(userData);
