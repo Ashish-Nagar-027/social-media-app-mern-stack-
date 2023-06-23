@@ -12,6 +12,8 @@ const {
   getPost,
   updatePost,
   addComment,
+  bookmarkPost,
+  getUserBookmarkedPosts
 } = require("../controller/postController");
 
 // create post
@@ -28,6 +30,12 @@ router.delete("/:id", verifyToken, deletePost);
 
 // like or unlike post
 router.put("/:id/like", verifyToken, likeOrUnlike);
+
+// add bookmark post
+router.put("/:id/bookmark", verifyToken, bookmarkPost);
+
+// add get post
+router.get("/:id/bookmarks", verifyToken,  getUserBookmarkedPosts);
 
 // timeline posts
 router.get("/:id/timeline", verifyToken, timeLinePosts);

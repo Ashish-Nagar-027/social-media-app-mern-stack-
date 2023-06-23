@@ -197,6 +197,7 @@ const likeOrUnlike = async (req, res) => {
   }
 };
 
+
 ///======================
 // Get TimeLine posts
 ///=====================
@@ -307,6 +308,80 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+
+
+// /xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+///======================
+//  add Bookmark post
+///=====================
+const bookmarkPost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    
+    if (!postId) {
+      throw Error("please send post id to like in params");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("post id is not valid id");
+    }
+   
+
+    const post = await Post.findById(postId);
+    const user = await User.findById(req.user.id);
+    if (!post) {
+      res.status(403).json("post not found");
+    }
+
+    let message;
+
+    if (!user.bookmarkedPosts.includes(postId)) {
+      await user.updateOne({
+        $push: { bookmarkedPosts: postId },
+      });
+      message = "Post bookmarked added";
+    } else {
+      await user.updateOne({
+        $pull: { bookmarkedPosts: postId },
+      });
+      message = "post bookmarked removed";
+    }
+
+    res.status(200).json(message);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+///======================
+// Get user bookmarked posts
+///=====================
+const getUserBookmarkedPosts = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId);
+
+    const userPosts = await Promise.all(
+      user.bookmarkedPosts.map((postId) => {
+        return Post.findById(postId);
+      })
+    );
+
+    res.status(200).json(userPosts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// /xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
 ///======================
 // Get all  posts
 ///=====================
@@ -381,4 +456,6 @@ module.exports = {
   getUserPosts,
   getAllPosts,
   addComment,
+  bookmarkPost,
+  getUserBookmarkedPosts 
 };
