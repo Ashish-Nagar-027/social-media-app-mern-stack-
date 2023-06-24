@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
 import { Link } from 'react-router-dom'
-import { FaRegBookmark } from "react-icons/fa";
+import { MdOutlineBookmarks } from "react-icons/md";
 
 
 const LeftBar = () => {
@@ -55,7 +55,7 @@ const LeftBar = () => {
             <span>Home</span>
           </Link>
           <Link className="left-nav-link" to='/bookmarks' >
-            <FaRegBookmark className='icon react-icon' />
+            <MdOutlineBookmarks className='icon react-icon' size={20} />
             <span>Bookmark</span>
           </Link>
           <Link className="left-nav-link" to='/messages'>
