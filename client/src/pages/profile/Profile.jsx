@@ -67,7 +67,7 @@ const Profile = () => {
       <div className="profile">
         <div className="images">
           {profileUser?.coverPic?.url ? (
-            <img src={profileUser.coverPic.url} alt="" className="cover" />
+            <img src={profileUser?.coverPic.url} alt="" className="cover" />
           ) : (
             <div className="cover bg-blank-img"></div>
           )}
@@ -99,7 +99,7 @@ const Profile = () => {
                 </p>
               </div>
               {currentUser?._id !== profileUser?._id && (
-                <HandleFollowBtn profileUserId={profileUser._id}  />
+                <HandleFollowBtn profileUserId={profileUser?._id}  />
               )}
             </div>
             <div className="right">
