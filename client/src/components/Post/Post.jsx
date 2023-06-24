@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { MdMoreHoriz, MdShare, MdOutlineMessage } from "react-icons/md";
+import {MdFavoriteBorder, MdFavorite, MdMoreHoriz, MdShare, MdOutlineMessage,MdBookmarkBorder } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
-import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import axios from "axios";
 
 import "./post.scss";
@@ -130,6 +129,9 @@ const Post = ({ post }) => {
           </div>
           <div className="item">
             <MdShare size={20} />
+          </div>
+          <div className="item">
+            <MdBookmarkBorder size={22} />
           </div>
         </div>
         {showComment && <Comments postId={post._id} comments={post.comments} />}
