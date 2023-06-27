@@ -3,6 +3,7 @@ import Navbar from "./components/navbar/Navbar";
 import RightBar from "./components/rightBar/RightBar";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import Bookmarked from "./components/Bookmarked posts/Bookmarked"
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -61,6 +62,7 @@ function App() {
           }
         >
           <Route index element={<Home />} />
+          <Route path="bookmarks"  element={<Bookmarked />} />
           <Route path="profile/:id" element={<Profile />} />
           <Route path="profile/:id/connections" element={<UserConnections />} />
         </Route>
