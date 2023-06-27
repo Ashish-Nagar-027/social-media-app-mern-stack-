@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const currentUser = useSelector(selectUser);
+ 
 
   return (
     <div className="home">

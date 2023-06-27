@@ -21,8 +21,6 @@ const Posts = ({ id }) => {
 
   const location = useLocation();
 
- 
-
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
 
