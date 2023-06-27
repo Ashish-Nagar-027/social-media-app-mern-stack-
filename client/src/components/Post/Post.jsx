@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {MdFavoriteBorder, MdFavorite, MdMoreHoriz, MdShare, MdOutlineMessage,MdBookmarkBorder } from "react-icons/md";
+import {MdFavoriteBorder, MdFavorite, MdMoreHoriz, MdShare, MdOutlineMessage,MdBookmarkBorder,MdBookmark } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 import "./post.scss";
 import Comments from "../comments/Comments";
 import { selectPosts, setLikes, setPosts } from "../../features/postSlice";
-import { selectUser } from "../../features/userSlice";
+import { selectUser, setBookmarks } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
 
@@ -47,6 +47,22 @@ const Post = ({ post }) => {
     }
   };
 
+  const handleBookmarkedPost = async () => {
+    try {
+      await axios("http://localhost:3000/api/v1/post/" + post._id + "/bookmark", {
+        method: "PUT",
+        withCredentials: true,
+      }).then(() => {
+        dispatch(
+          setBookmarks({ postId: post._id })
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   const showMoreBtnHandler = () => {
     setShowMoreBtn(!showMoreBtn);
   };
@@ -70,12 +86,14 @@ const Post = ({ post }) => {
     }
   };
 
+
+
   return (
     <div className="post">
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            {post.user.profilePic?.url ? (
+            {post?.user?.profilePic?.url ? (
               <img
                 className="profile-img"
                 src={post.user.profilePic.url}
@@ -130,8 +148,11 @@ const Post = ({ post }) => {
           <div className="item">
             <MdShare size={20} />
           </div>
-          <div className="item">
-            <MdBookmarkBorder size={22} />
+          <div className="item" onClick={handleBookmarkedPost}>
+          { 
+          currentUser.bookmarkedPosts.includes(post._id) ?  <MdBookmark size={22} /> :
+           <MdBookmarkBorder size={22} />
+          }
           </div>
         </div>
         {showComment && <Comments postId={post._id} comments={post.comments} />}
