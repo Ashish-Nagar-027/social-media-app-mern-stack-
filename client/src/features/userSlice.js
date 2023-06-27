@@ -24,6 +24,16 @@ export const userSlice = createSlice({
     setEditProfile: (state) => {
       state.editUser = !state.editUser;
     },
+    setBookmarks: (state, action) => {
+      const { postId} = action.payload;
+      if(state.currentUser.bookmarkedPosts.includes(postId)){
+        console.log(postId)
+        state.currentUser.bookmarkedPosts =  state.currentUser.bookmarkedPosts.filter(id => id !== postId)
+      }
+      else(
+        state.currentUser.bookmarkedPosts.push(postId)
+      )
+    },
   },
 });
 
@@ -33,6 +43,7 @@ export const {
   setFollowings,
   setFollowers,
   setEditProfile,
+  setBookmarks
 } = userSlice.actions;
 export const selectUser = (state) => state.user.currentUser;
 export const editCurrentUser = (state) => state.user.editUser;
