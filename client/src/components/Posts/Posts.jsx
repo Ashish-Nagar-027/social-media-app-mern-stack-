@@ -15,10 +15,13 @@ import {
   MdOutlineCancel,
 } from "react-icons/md";
 import { selectPosts, setPosts } from "../../features/postSlice";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Posts = ({ id }) => {
-  const profileId = useParams();
+
+  const location = useLocation();
+
+ 
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -38,7 +41,7 @@ const Posts = ({ id }) => {
   const [captionText, setCaptionText] = useState("");
   const [sharingTime, setSharingTime] = useState(false);
 
-  // post (share) post
+  // post (share/adding new post) post
   const sharePost = async () => {
     const newPost = new FormData();
     if (image) {
@@ -68,24 +71,32 @@ const Posts = ({ id }) => {
     }
   };
 
-  const [fetching, setFetching] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   useEffect(() => {
+     
+    let neededData = `${id}/timeline`
+     
+    if(location.pathname === '/bookmarks'){
+      neededData = `${currentUser._id}/bookmarks`
+    }
+
+
     const fetchDataFunction = async () => {
-      setFetching(true);
+      setLoadingData(true);
 
       const fetchData = await axios.get(
-        `http://localhost:3001/api/v1/post/${id}/timeline`
+        `http://localhost:3001/api/v1/post/${neededData}`
       );
 
       dispatch(setPosts(fetchData.data));
-      setFetching(false);
+      setLoadingData(false);
     };
     if (currentUser) {
       fetchDataFunction();
     }
-  }, [currentUser, id, dispatch]);
+  }, [currentUser, id, dispatch, location]);
 
-  if (fetching && !currentUser) {
+  if (loadingData && !timeLinePosts) {
     return (
       <div
         style={{
@@ -99,9 +110,12 @@ const Posts = ({ id }) => {
     );
   }
 
+
+ 
+
   return (
     <>
-      {!profileId.id && (
+      {location.pathname === '/' && (
         <div className="create-post">
           <div className="container">
             <div className="user">
