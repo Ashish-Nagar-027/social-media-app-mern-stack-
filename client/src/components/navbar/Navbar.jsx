@@ -36,7 +36,7 @@ const Navbar = () => {
             ) : (
               <CgProfile size={30} />
             )}
-            <span>{currentUser.name}</span>
+            <span>{currentUser?.name}</span>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      <Posts id={currentUser._id} />
+      <Posts id={currentUser?._id} />
     </div>
   );
 };

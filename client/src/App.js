@@ -7,25 +7,61 @@ import Bookmarked from "./components/Bookmarked posts/Bookmarked"
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Navigate,
+
   Outlet,
   Route,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import "./style.scss";
-import { useSelector } from "react-redux";
-import { selectUser } from "./features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, selectUser } from "./features/userSlice";
 import UserConnections from "./pages/userConnections/UserConnections";
+import { useEffect } from "react";
+
+
+
 
 function App() {
   const currentUser = useSelector(selectUser);
-
+  
   const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />;
-    }
+    const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  
+        useEffect(() => {
+         
+          const checkUser = async () => {
+            try {
+              const data = await fetch("/api/v1/auth/getuser", {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+              });
+              const jsonData = await data.json();
+    
+              if (data.ok) { 
+             
+                dispatch(loginUser(jsonData));
+               return navigate("/");
+              } else {
+                return navigate('/login')
+              }
+            } catch (error) {
+        console.log(error)
+            }
+          }
+          if (!currentUser) {
+            checkUser()
+        }
+        }, [])
+
     return children;
   };
 
@@ -62,7 +98,7 @@ function App() {
           }
         >
           <Route index element={<Home />} />
-          <Route path="bookmarks"  element={<Bookmarked />} />
+          <Route path="bookmarks" element={<Bookmarked />} />
           <Route path="profile/:id" element={<Profile />} />
           <Route path="profile/:id/connections" element={<UserConnections />} />
         </Route>

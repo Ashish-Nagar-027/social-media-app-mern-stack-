@@ -15,7 +15,7 @@ import {
   MdOutlineCancel,
 } from "react-icons/md";
 import { selectPosts, setPosts } from "../../features/postSlice";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Posts = ({ id }) => {
 
@@ -23,6 +23,7 @@ const Posts = ({ id }) => {
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const timeLinePosts = useSelector(selectPosts);
 
@@ -78,14 +79,19 @@ const Posts = ({ id }) => {
       neededData = `${currentUser._id}/bookmarks`
     }
 
-
     const fetchDataFunction = async () => {
       setLoadingData(true);
 
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/post/${neededData}`
-      );
-
+      )
+      .catch((error) => {
+        console.log(error)
+          if(error.statusText = "Unauthorized"){
+            navigate("/login");
+          }
+      })
+      
       dispatch(setPosts(fetchData.data));
       setLoadingData(false);
     };
@@ -107,8 +113,6 @@ const Posts = ({ id }) => {
       </div>
     );
   }
-
-
  
 
   return (
@@ -118,16 +122,16 @@ const Posts = ({ id }) => {
           <div className="container">
             <div className="user">
               <div className="userInfo" style={{ display: "flex" }}>
-                {currentUser.profilePic?.url ? (
+                {currentUser?.profilePic?.url ? (
                   <img
                     className="profile-pic-img"
-                    src={currentUser.profilePic.url}
-                    alt={currentUser.name}
+                    src={currentUser?.profilePic.url}
+                    alt={currentUser?.name}
                   />
                 ) : (
                   <CgProfile size={30} />
                 )}
-                <p>{currentUser.name}</p>
+                <p>{currentUser?.name}</p>
               </div>
               <input
                 placeholder="Write here..."
