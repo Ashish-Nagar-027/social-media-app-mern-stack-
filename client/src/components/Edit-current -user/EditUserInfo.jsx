@@ -113,17 +113,18 @@ const EditUserInfo = () => {
                   className="image-div"
                   onClick={() => coverPicInputRef.current.click()}
                 >
-                  <img
-                    src={
-                      formik.values.cover
-                        ? typeof formik.values.cover === "object"
+                  {formik.values.cover
+                    ? <img
+                      src={
+                        typeof formik.values.cover === "object"
                           ? URL.createObjectURL(formik.values.cover)
                           : formik.values.cover
-                        : "https://images.pexels.com/photos/15953937/pexels-photo-15953937.jpeg?cs=srgb&dl=pexels-jaime-reimer-15953937.jpg&fm=jpg&_gl=1*srqdvs*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ5MjAzMi41LjEuMTY4MDQ5MzQ1Ny4wLjAuMA"
-                    }
-                    alt=""
-                    className="cover"
-                  />
+                      }
+                      alt=""
+                      className="cover"
+                    />
+                    : <div className="cover bg-blank-img"></div>
+                  }
                   <MdAddAPhoto className="add-photo-icon add-photo-icon-top" />
                 </div>
                 <div
