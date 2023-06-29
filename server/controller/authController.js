@@ -96,7 +96,36 @@ const logout = async (req, res) => {
     .json("User has been logOut");
 };
 
+///====================
+//         get current User
+///=====================
+const getCurrentUser = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      return res.status(401).json({ message: "please Login first" });
+    }
+
+    const decode = jwt.verify(token, process.env.SECRET_KEY);
+    if (!decode) {
+      return res.status(401).json({ message: "Token is invalid" });
+    }
+
+    const user = await User.findById(decode.id);
+    req.user = user;
+    req.user.password = undefined
+    
+    res.status(200).json(user);
+
+    
+  } catch (error) {
+    res.status(403).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
+  getCurrentUser,
   register,
   login,
   logout,
