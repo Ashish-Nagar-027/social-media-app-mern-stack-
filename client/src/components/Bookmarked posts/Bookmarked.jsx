@@ -6,13 +6,13 @@ import Posts from "../Posts/Posts";
 
 
 const Bookmarked = () => {
-  const currentUser = useSelector(selectUser);
+  const currentUserId = useSelector(selectUser)?.id;
  
 
   return (
     <div className="bookmarked">
       <h2>Your Bookmarked Posts</h2>
-      <Posts id={currentUser._id} />
+      <Posts id={currentUserId} />
     </div>
   );
 };
