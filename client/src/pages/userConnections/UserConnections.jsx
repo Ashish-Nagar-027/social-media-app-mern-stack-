@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
@@ -7,6 +7,7 @@ import {
   selectProfileUser,
   selectProfileUserFollowers,
   selectProfileUserfollowings,
+  setProfileUser,
   setUserFollowers,
   setUserFollowings,
 } from "../../features/proFileUserSlice";
@@ -21,34 +22,56 @@ const UserConnections = () => {
   const dispatch = useDispatch();
   const [fetching, setFetching] = useState(false);
 
-  const [showFollowers, setShowFollowers] = useState(() => {
-    if (location.state.show) {
-      return location.state.show;
+
+  const [showFollowers, setShowFollowers] = useState(location.hash.slice(1));
+
+  const handleClick = (path) => {
+    navigate("#"+path)
+  }
+
+ 
+
+  const fetchDataFunction = useCallback(async () => {
+    const fetchData = await axios.get(
+      `http://localhost:3000/api/v1/user/${params.id}`
+    );
+    dispatch(setProfileUser(fetchData.data));
+  }, [dispatch, params.id]);
+
+
+  const getUserInfo = useCallback(async () => {
+    setFetching(true);
+    const url =
+      "http://localhost:3000/api/v1/user/" +
+      params.id +
+      "/get" +
+      showFollowers;
+
+    const getUser = await axios.get(url);
+
+    if (showFollowers === "followers") {
+      dispatch(setUserFollowers(getUser.data));
     }
-    return "followers";
-  });
+    if (showFollowers !== "followers") {
+      dispatch(setUserFollowings(getUser.data));
+    }
+    setFetching(false);
+  },[dispatch, params.id,showFollowers])
+
+
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      setFetching(true);
-      const url =
-        "http://localhost:3000/api/v1/user/" +
-        params.id +
-        "/get" +
-        showFollowers;
+    if (location.hash === '#followers') {
+      setShowFollowers('followers')
+   }
+   if (location.hash === '#followings') {
+     setShowFollowers('followings')
+   }
+  
+      getUserInfo();
+     fetchDataFunction()
+  }, [showFollowers, location.hash,getUserInfo, fetchDataFunction]);
 
-      const getUser = await axios.get(url);
-
-      if (showFollowers === "followers") {
-        dispatch(setUserFollowers(getUser.data));
-      }
-      if (showFollowers !== "followers") {
-        dispatch(setUserFollowings(getUser.data));
-      }
-      setFetching(false);
-    };
-    getUserInfo();
-  }, [showFollowers]);
 
   const profileUser = useSelector(selectProfileUser);
   const profileUserFollowings = useSelector(selectProfileUserfollowings);
@@ -83,23 +106,21 @@ const UserConnections = () => {
       <hr />
       <div className="main-div">
         <div className="connections-header">
-          <div
-            className={`connection-type ${
-              showFollowers !== "followers" ? "connection-active-link" : ""
-            } `}
-            onClick={() => setShowFollowers("followings")}
-          >
+          <div onClick={() => handleClick("followings")} className={`connection-type ${
+                showFollowers !== "followers" ? "connection-active-link" : ""
+              } `}>
+              
+             
             Followings (
-            {profileUserFollowings?.length || profileUser.followings.length} )
+            {profileUserFollowings?.length || profileUser?.followings?.length || 0} )
           </div>
-          <div
-            className={`connection-type ${
-              showFollowers === "followers" ? "connection-active-link" : ""
-            } `}
-            onClick={() => setShowFollowers("followers")}
-          >
+          <div onClick={() => handleClick("followers")} className={`connection-type ${
+                showFollowers === "followers" ? "connection-active-link" : ""
+              } `}>
+              
+            
             Followers(
-            {profileUserFollowers?.length || profileUser.followers.length})
+            {profileUserFollowers?.length || profileUser?.followers?.length || 0})
           </div>
         </div>
         <div className="connections-div">

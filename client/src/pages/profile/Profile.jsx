@@ -88,12 +88,12 @@ const Profile = () => {
               <span>{profileUser?.name}</span>
               <div className="connections-div">
                 <p className="followers">
-                  <Link to="connections" state={{ show: "followers" }}>
+                  <Link to="connections#followers">
                     Followers : {profileUser?.followers.length}
                   </Link>
                 </p>
                 <p className="followings">
-                  <Link to="connections" state={{ show: "followings" }}>
+                  <Link to="connections#followings">
                     Followings : {profileUser?.followings.length}
                   </Link>
                 </p>
