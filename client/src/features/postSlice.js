@@ -13,27 +13,32 @@ export const postSlice = createSlice({
     },
     setLikes: (state, action) => {
       const { postId, currentUserId } = action.payload;
-      const addLike = state.posts.map((post) => {
+      state.posts.map((post) => {
         if (post._id === postId) {
           if (post.likes.includes(currentUserId)) {
             const index = post.likes.indexOf(currentUserId);
             if (index > -1) {
               // only splice array when item is found
               post.likes.splice(index, 1); // 2nd parameter means remove one item only
+              return post
             }
+            return post
           } else {
-            post.likes.push(currentUserId);
+            post.likes.push(currentUserId); 
+            return post
           }
         }
+        return post
       });
     },
     setComments: (state, action) => {
       const { postId, comment } = action.payload;
 
-      const addComment = state.posts.map((post) => {
+       state.posts.map((post) => {
         if (post._id === postId) {
-          post.comments.push(comment);
+         return post.comments.push(comment);
         }
+        return post
       });
     },
   },
