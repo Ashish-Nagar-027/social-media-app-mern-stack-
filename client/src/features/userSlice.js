@@ -27,12 +27,11 @@ export const userSlice = createSlice({
     setBookmarks: (state, action) => {
       const { postId} = action.payload;
       if(state.currentUser.bookmarkedPosts.includes(postId)){
-        console.log(postId)
-        state.currentUser.bookmarkedPosts =  state.currentUser.bookmarkedPosts.filter(id => id !== postId)
+         state.currentUser.bookmarkedPosts = state.currentUser.bookmarkedPosts.filter((id) => id !== postId)
+      } else {
+        state.currentUser.bookmarkedPosts.push(postId);
       }
-      else(
-        state.currentUser.bookmarkedPosts.push(postId)
-      )
+    
     },
   },
 });
