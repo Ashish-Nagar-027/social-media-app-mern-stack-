@@ -19,6 +19,9 @@ const Post = ({ post }) => {
 
   const location = useLocation();
   const [pathLocation, setPathLocation] = useState(null);
+
+
+
   useEffect(() => {
     const pathName = () => {
       if (!location.pathname.split("/")[1] === "profile") {
@@ -27,7 +30,8 @@ const Post = ({ post }) => {
       return setPathLocation(`/profile/${post.user.userId}`);
     };
     pathName();
-  }, [pathLocation, setPathLocation, location, post]);
+  }, [ location.pathname, post?.user]);
+ 
 
   const handleLikes = async () => {
     try {
@@ -52,7 +56,8 @@ const Post = ({ post }) => {
       await axios("http://localhost:3000/api/v1/post/" + post._id + "/bookmark", {
         method: "PUT",
         withCredentials: true,
-      }).then(() => {
+      }).then((d) => {
+    
         dispatch(
           setBookmarks({ postId: post._id })
         );
@@ -61,6 +66,8 @@ const Post = ({ post }) => {
       console.log(error);
     }
   };
+
+
 
 
   const showMoreBtnHandler = () => {
@@ -74,8 +81,8 @@ const Post = ({ post }) => {
       await axios("http://localhost:3000/api/v1/post/" + post._id, {
         method: "DELETE",
         withCredentials: true,
-      }).then((postData) => {
-        console.log("postData", postData);
+      }).then(() => {
+        
         const deletePost = timeLinePosts.filter(
           (DeletePost) => DeletePost._id !== post._id
         );
@@ -104,13 +111,13 @@ const Post = ({ post }) => {
             )}
             <div className="details">
               <Link to={pathLocation}>
-                <span>{post.user.name}</span>
+                <span>{post?.user?.name}</span>
                 <span>1 min ago</span>
               </Link>
             </div>
           </div>
           <div className="post-more-btn">
-            {currentUser._id === post.user.userId && (
+            {currentUser._id === post?.user?.userId && (
               <MdMoreHoriz
                 className="more-btn btn"
                 size={20}
@@ -134,23 +141,23 @@ const Post = ({ post }) => {
         </div>
         <div className="info">
           <div className="item">
-            {post.likes.includes(currentUser._id) ? (
+            {post?.likes?.includes(currentUser._id) ? (
               <MdFavorite size={20} onClick={handleLikes} />
             ) : (
               <MdFavoriteBorder onClick={handleLikes} size={20} />
             )}
-            <span>{post.likes.length}</span>
+            <span>{post.likes?.length}</span>
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
-            <span> {post.comments.length} comments</span>
+            <span> {post.comments?.length} comments</span>
           </div>
           <div className="item">
             <MdShare size={20} />
           </div>
           <div className="item" onClick={handleBookmarkedPost}>
           { 
-          currentUser.bookmarkedPosts.includes(post._id) ?  <MdBookmark size={22} /> :
+          currentUser.bookmarkedPosts?.includes(post?._id) ?  <MdBookmark size={22} /> :
            <MdBookmarkBorder size={22} />
           }
           </div>
