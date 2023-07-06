@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./comments.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
+import { useDispatch } from "react-redux";
+
 import axios from "axios";
 import { setComments } from "../../features/postSlice";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ const Comments = ({ postId, comments }) => {
   const handCommentSubmit = async () => {
     if (commentInputValue !== "") {
       try {
-        const addComment = await axios(
+         await axios(
           "http://localhost:3000/api/v1/post/" + postId + "/comment",
           {
             method: "PUT",
