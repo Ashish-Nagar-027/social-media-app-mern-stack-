@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import "./editUserInfo.scss";
 import { MdClose, MdAddAPhoto } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,8 @@ import {
   selectUser,
   setEditProfile,
 } from "../../features/userSlice";
+import { CgProfile } from "react-icons/cg";
+
 
 import { useFormik } from "formik";
 import axios from "axios";
@@ -54,7 +56,7 @@ const EditUserInfo = () => {
     }
 
     try {
-      const updateCurrentUser = await axios(
+      await axios(
         "http://localhost:3000/api/v1/user/" + currentUser._id,
         {
           method: "PUT",
@@ -131,17 +133,19 @@ const EditUserInfo = () => {
                   className="image-div"
                   onClick={() => profilePicInputRef.current.click()}
                 >
+                 {
+                  formik.values.profilePic ?
                   <img
                     src={
-                      formik.values.profilePic
-                        ? typeof formik.values.profilePic === "object"
+                       typeof formik.values.profilePic === "object"
                           ? URL.createObjectURL(formik.values.profilePic)
                           : formik.values.profilePic
-                        : "https://images.pexels.com/photos/15656117/pexels-photo-15656117.jpeg?cs=srgb&dl=pexels-aliakbar-nosrati-15656117.jpg&fm=jpg&w=640&h=760&_gl=1*rixznq*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDkyNzY2NC42LjEuMTY4MDkyNzc1My4wLjAuMA.."
                     }
                     alt=""
                     className="profilePic"
-                  />
+                  /> : 
+                  <CgProfile className="profilePic profile-blank-img" />
+                  }
                   <MdAddAPhoto className="add-photo-icon add-photo-icon-bottom" />
                 </div>
               </div>
