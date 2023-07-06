@@ -33,12 +33,12 @@ const LeftBar = () => {
         </div>
         <div className="user-info">
           <p>
-            <Link to={`/profile/${currentUser?._id}/connections`} state={{ show: "followers" }}>
+            <Link to={`/profile/${currentUser?._id}/connections#followers`} >
                     Followers : {currentUser?.followers.length}
             </Link>
             </p>
           <p>
-          <Link to={`/profile/${currentUser?._id}/connections`} state={{ show: "followings" }}>
+          <Link to={`/profile/${currentUser?._id}/connections#followings`} >
           follwings : {currentUser?.followings?.length}
             </Link>
             
