@@ -43,7 +43,7 @@ const RightBar = () => {
                     </Link>
                   </div>
                   <div className="buttons">
-                  <HandleFollowBtn profileUserId={user._id}  />
+                    <HandleFollowBtn profileUserId={user._id} />
                   </div>
                 </div>
               );

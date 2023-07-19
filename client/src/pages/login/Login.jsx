@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import "./login.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -44,18 +44,15 @@ const Register = () => {
       if (data.ok) {
         dispatch(loginUser(jsonData));
         navigate("/");
+        formik.resetForm();
       } else {
         setServerError(jsonData.message);
       }
       formik.setSubmitting(false);
-      formik.resetForm();
     } catch (error) {
       setServerError(error.message);
     }
   };
-
- 
-  
 
   // formik here
   const formik = useFormik({
