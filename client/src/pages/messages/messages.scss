@@ -1,0 +1,19 @@
+.container  {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    .serach_component{
+       
+    }
+    .user-msg-profile {
+        border: 1px solid gainsboro;
+        padding: 1rem;
+
+        &:hover {
+            background-color: gainsboro;
+            cursor: pointer;
+        }
+    }
+}
