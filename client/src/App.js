@@ -14,6 +14,8 @@ import "./style.scss";
 import UserConnections from "./pages/userConnections/UserConnections";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout/Layout";
+import Messages from "./pages/messages/Messages";
+import UserMessages from "./components/MessagesContainer.jsx/UserMessages";
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="bookmarks" element={<Bookmarked />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="messages/:id" element={<UserMessages />} />
           <Route path="profile/:id" element={<Profile />} />
           <Route path="profile/:id/connections" element={<UserConnections />} />
         </Route>
