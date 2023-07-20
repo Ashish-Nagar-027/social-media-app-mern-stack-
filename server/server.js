@@ -1,8 +1,37 @@
 const connectDB = require("./db/connect");
-const app = require("./index");
-const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
+const app = require("./index");
+const http = require('http')
+const server = http.createServer(app)
 require("dotenv").config();
+const cors = require("cors");
+
+
+
+const { Server }  = require('socket.io')
+
+const io = new Server(server, {
+  cors : {
+    origin: "http://localhost:3001",
+    methods: ["GET","POST"]
+  }
+})
+
+io.on("connection", (socket) => {
+  console.log('connection id ',socket.id)
+
+  socket.on("join_room", (data) => {
+    socket.join(data)
+    console.log('user with id: '+ socket.id + "joined room : "+ data)
+  })
+
+  socket.on("disconnet", () => {
+    console.log("user Disconnected", socket.id)
+  })
+})
+ 
+
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,7 +48,7 @@ const start = async () => {
     await connectDB(process.env.MONGO_URI);
 
     // start the app
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log("server is listening at port " + PORT);
     });
   } catch (error) {

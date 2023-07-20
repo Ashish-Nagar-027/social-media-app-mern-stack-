@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./UserMessages.scss";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
+import io from "socket.io-client";
 
 const UserMessages = () => {
   const navigate = useNavigate();
   const params = useParams();
+  console.log(params.id);
+
+  const socket = io.connect("http://localhost:3000");
+
+  useEffect(() => {
+    console.log("connect to room " + params.id);
+    // return () => {}
+    socket.emit("join_room", params.id);
+  }, []);
 
   return (
     <div className="messages-container">
@@ -85,15 +95,15 @@ const UserMessages = () => {
         <div className="svg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-mood-smile-beam"
+            className="icon icon-tabler icon-tabler-mood-smile-beam"
             width="44"
             height="44"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="#00abfb"
             fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M12 21a9 9 0 1 1 0 -18a9 9 0 0 1 0 18z" />
@@ -106,15 +116,15 @@ const UserMessages = () => {
         <div className="svg send_svg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-send"
+            className="icon icon-tabler icon-tabler-send"
             width="44"
             height="44"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="#00abfb"
             fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 14l11 -11" />

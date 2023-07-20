@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 
-
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { Link, useParams } from "react-router-dom";
@@ -19,7 +18,6 @@ import {
 } from "../../features/proFileUserSlice";
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
 import loadingImg from "../../assets/loading.png";
-
 
 import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
 
@@ -44,8 +42,6 @@ const Profile = () => {
 
     fetchDataFunction();
   }, [userId, dispatch, setFetching]);
-
-
 
   if (fetching && !currentUser) {
     return (
@@ -99,11 +95,15 @@ const Profile = () => {
                 </p>
               </div>
               {currentUser?._id !== profileUser?._id && (
-                <HandleFollowBtn profileUserId={profileUser?._id}  />
+                <HandleFollowBtn profileUserId={profileUser?._id} />
               )}
             </div>
             <div className="right">
-              <MdEmail className="message-icon" fontSize={24} />
+              {currentUser?._id !== profileUser?._id && (
+                <Link to={`/messages/${currentUser?._id}-${profileUser?._id}`}>
+                  <MdEmail className="message-icon" fontSize={24} />
+                </Link>
+              )}
               {currentUser?._id === profileUser?._id && (
                 <button
                   className="profile-edit-button"
