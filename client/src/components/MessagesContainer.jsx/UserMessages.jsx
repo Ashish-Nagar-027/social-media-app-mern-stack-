@@ -1,21 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./UserMessages.scss";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 const UserMessages = () => {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params.id);
+  const scrollRef = useRef();
+  const currentUser = useSelector(selectUser);
+  const [msgInput, setMessageInput] = useState("");
+  const [msgList, setMsgList] = useState([]);
 
   const socket = io.connect("http://localhost:3000");
 
   useEffect(() => {
-    console.log("connect to room " + params.id);
     // return () => {}
     socket.emit("join_room", params.id);
+  }, [socket]);
+
+  const sendMessage = async () => {
+    if (msgInput !== "") {
+      const messageData = {
+        room: params.id,
+        message: msgInput,
+        author: currentUser.name,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+      };
+
+      await socket.emit("send_message", messageData);
+      setMsgList((data) => [...data, messageData]);
+      setMessageInput("");
+    }
+  };
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMsgList((prevMsgList) => [...prevMsgList, data]);
+    });
   }, []);
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [msgList]);
 
   return (
     <div className="messages-container">
@@ -89,6 +123,22 @@ const UserMessages = () => {
               molestiae modi accusamus explicabo!
             </div>
           </li>
+          {msgList.map((msgData, index) => {
+            console.log("data ", msgData);
+            if (msgData.author === currentUser.name && msgData.message !== "") {
+              return (
+                <li className="its_me" key={index} ref={scrollRef}>
+                  <div className="message_wrapper">{msgData.message}</div>
+                </li>
+              );
+            } else {
+              return (
+                <li key={index} ref={scrollRef}>
+                  <div className="message_wrapper">{msgData.message}</div>
+                </li>
+              );
+            }
+          })}
         </ul>
       </div>
       <div className="msg_input">
@@ -112,8 +162,13 @@ const UserMessages = () => {
             <path d="M14.5 15a3.5 3.5 0 0 1 -5 0" />
           </svg>
         </div>
-        <input type="text" placeholder="Start typing here" />
-        <div className="svg send_svg">
+        <input
+          type="text"
+          placeholder="Start typing here"
+          onChange={(e) => setMessageInput(e.target.value)}
+          value={msgInput}
+        />
+        <button className="svg send_svg" onClick={sendMessage}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="icon icon-tabler icon-tabler-send"
@@ -130,7 +185,7 @@ const UserMessages = () => {
             <path d="M10 14l11 -11" />
             <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
           </svg>
-        </div>
+        </button>
       </div>
     </div>
   );
