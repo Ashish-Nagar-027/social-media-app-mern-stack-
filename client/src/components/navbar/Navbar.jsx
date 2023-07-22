@@ -27,8 +27,12 @@ const Navbar = () => {
           </div>
         </div>
         <div className="right-nav">
-          <MdOutlineMessage fontSize={24} className="icon" />
-          <MdGroup fontSize={24} className="icon" />
+          <Link to={"/messages"}>
+            <MdOutlineMessage fontSize={24} className="icon" />
+          </Link>
+          <Link to={`/profile/${currentUser?._id}/connections#followings`}>
+            <MdGroup fontSize={24} className="icon" />
+          </Link>
           <MdNotificationsNone fontSize={24} className="icon" />
           <div className="user">
             {currentUser?.profilePic?.url ? (
