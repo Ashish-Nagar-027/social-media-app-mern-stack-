@@ -43,7 +43,7 @@ const UserMessages = () => {
     socket.on("receive_message", (data) => {
       setMsgList((prevMsgList) => [...prevMsgList, data]);
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({
@@ -124,14 +124,16 @@ const UserMessages = () => {
             </div>
           </li>
           {msgList.map((msgData, index) => {
-            console.log("data ", msgData);
-            if (msgData.author === currentUser.name && msgData.message !== "") {
+            // console.log("data ", msgData);
+            if (msgData.author === currentUser.name) {
+              console.log("if statemment");
               return (
                 <li className="its_me" key={index} ref={scrollRef}>
                   <div className="message_wrapper">{msgData.message}</div>
                 </li>
               );
             } else {
+              console.log("else statemment");
               return (
                 <li key={index} ref={scrollRef}>
                   <div className="message_wrapper">{msgData.message}</div>
