@@ -4,20 +4,24 @@ import "./rightbar.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import HandleFollowBtn from "../following Button/HandleFollowBtn";
+import { selectUser } from "../../features/userSlice";
+import { useSelector } from "react-redux";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
+  const currentUser = useSelector(selectUser);
 
   useEffect(() => {
     const getSuggestUserFunction = async () => {
-      const fetchSuggestUser = await axios.get(
-        "http://localhost:3000/api/v1/user/644f4996ec5a858319a9d0e1/suggestusers"
-      );
-
-      setSuggestUsers(fetchSuggestUser.data);
+      if (currentUser?._id) {
+        const fetchSuggestUser = await axios.get(
+          `http://localhost:3000/api/v1/user/${currentUser?._id}/suggestusers`
+        );
+        setSuggestUsers(fetchSuggestUser.data);
+      }
     };
     getSuggestUserFunction();
-  }, [setSuggestUsers]);
+  }, [setSuggestUsers, currentUser?._id]);
 
   return (
     <div className="rightbar">
