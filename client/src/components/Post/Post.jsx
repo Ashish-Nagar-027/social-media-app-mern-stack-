@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {MdFavoriteBorder, MdFavorite, MdMoreHoriz, MdShare, MdOutlineMessage,MdBookmarkBorder,MdBookmark } from "react-icons/md";
+import {
+  MdFavoriteBorder,
+  MdFavorite,
+  MdMoreHoriz,
+  MdShare,
+  MdOutlineMessage,
+  MdBookmarkBorder,
+  MdBookmark,
+} from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -13,14 +21,13 @@ import { CgProfile } from "react-icons/cg";
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
   const [showMoreBtn, setShowMoreBtn] = useState(false);
+  const [comments, setComments] = useState(post?.comments);
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const location = useLocation();
   const [pathLocation, setPathLocation] = useState(null);
-
-
 
   useEffect(() => {
     const pathName = () => {
@@ -30,8 +37,7 @@ const Post = ({ post }) => {
       return setPathLocation(`/profile/${post.user.userId}`);
     };
     pathName();
-  }, [ location.pathname, post?.user]);
- 
+  }, [location.pathname, post?.user]);
 
   const handleLikes = async () => {
     try {
@@ -51,24 +57,27 @@ const Post = ({ post }) => {
     }
   };
 
+  // useEffect(() => {
+  //   post.comments.map((comment) => {
+  //     setComments({ postId: post?._id, comment: comment?.data?.comment });
+  //   });
+  // }, []);
+
   const handleBookmarkedPost = async () => {
     try {
-      await axios("http://localhost:3000/api/v1/post/" + post._id + "/bookmark", {
-        method: "PUT",
-        withCredentials: true,
-      }).then((d) => {
-    
-        dispatch(
-          setBookmarks({ postId: post._id })
-        );
+      await axios(
+        "http://localhost:3000/api/v1/post/" + post._id + "/bookmark",
+        {
+          method: "PUT",
+          withCredentials: true,
+        }
+      ).then((d) => {
+        dispatch(setBookmarks({ postId: post._id }));
       });
     } catch (error) {
       console.log(error);
     }
   };
-
-
-
 
   const showMoreBtnHandler = () => {
     setShowMoreBtn(!showMoreBtn);
@@ -82,7 +91,6 @@ const Post = ({ post }) => {
         method: "DELETE",
         withCredentials: true,
       }).then(() => {
-        
         const deletePost = timeLinePosts.filter(
           (DeletePost) => DeletePost._id !== post._id
         );
@@ -92,8 +100,6 @@ const Post = ({ post }) => {
       console.log(error);
     }
   };
-
-
 
   return (
     <div className="post">
@@ -150,19 +156,26 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
-            <span> {post.comments?.length} comments</span>
+            <span> {comments?.length} comments</span>
           </div>
           <div className="item">
             <MdShare size={20} />
           </div>
           <div className="item" onClick={handleBookmarkedPost}>
-          { 
-          currentUser.bookmarkedPosts?.includes(post?._id) ?  <MdBookmark size={22} /> :
-           <MdBookmarkBorder size={22} />
-          }
+            {currentUser.bookmarkedPosts?.includes(post?._id) ? (
+              <MdBookmark size={22} />
+            ) : (
+              <MdBookmarkBorder size={22} />
+            )}
           </div>
         </div>
-        {showComment && <Comments postId={post._id} comments={post.comments} />}
+        {showComment && (
+          <Comments
+            postId={post._id}
+            userComments={comments}
+            setComments={setComments}
+          />
+        )}
       </div>
     </div>
   );
