@@ -442,6 +442,49 @@ const addComment = async (req, res) => {
   }
 };
 
+///======================
+// delete comment
+///=====================
+const deleteComment = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { commentId } = req.body;
+    if (!postId) {
+      throw Error("please send post id to like in params");
+    }
+    if (!commentId) {
+      throw Error("please send comment text");
+    }
+
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("post id is not valid id");
+    }
+    if (!mongoose.isValidObjectId(commentId)) {
+      throw Error("post id is not valid id");
+    }
+
+  console.log('postId ',postId)
+  console.log('commentId ',commentId)
+
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(403).json("post not found");
+    }
+
+    await post.comments.pull(commentId);
+
+     await post.save();
+
+    res.status(200).json({
+      message: "you comment deleted",
+      commentId: commentId
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   getPost,
@@ -453,5 +496,7 @@ module.exports = {
   getAllPosts,
   addComment,
   bookmarkPost,
-  getUserBookmarkedPosts 
+  getUserBookmarkedPosts ,
+  deleteComment
+
 };
