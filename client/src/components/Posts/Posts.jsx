@@ -18,7 +18,6 @@ import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Posts = ({ id }) => {
-
   const location = useLocation();
 
   const currentUser = useSelector(selectUser);
@@ -70,54 +69,64 @@ const Posts = ({ id }) => {
     }
   };
 
-  const [path, setPath] = useState()
-  const [loadingData, setLoadingData] = useState(false)
+  const [path, setPath] = useState();
+  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
-      
-    let neededData = `${id}/timeline`
-    if(location.pathname === '/bookmarks'){
-      neededData = `${currentUser?._id}/bookmarks`
+    let neededData = `${id}/timeline`;
+    if (location.pathname === "/bookmarks") {
+      neededData = `${currentUser?._id}/bookmarks`;
     }
-    
-    const fetchDataFunction = async (neededData) => {  
-      if(path !== location.pathname){
-        setLoadingData(true)
-        setPath(location.pathname)
+
+    const fetchDataFunction = async (neededData) => {
+      if (path !== location.pathname) {
+        setLoadingData(true);
+        setPath(location.pathname);
       }
-      const fetchData = await axios.get(
-        `http://localhost:3001/api/v1/post/${neededData}`
-      )
-      .catch((error) => {
-        console.log(error)
-          if(error.statusText === "Unauthorized"){
+      const fetchData = await axios
+        .get(`http://localhost:3001/api/v1/post/${neededData}`)
+        .catch((error) => {
+          console.log(error);
+          if (error.statusText === "Unauthorized") {
             navigate("/login");
           }
-      })
+        });
       dispatch(setPosts(fetchData.data));
-      setLoadingData(false)
-    } 
-    if(currentUser?._id){
-      fetchDataFunction(neededData)
+
+      setLoadingData(false);
+    };
+    if (currentUser?._id) {
+      fetchDataFunction(neededData);
     }
-  }, [ currentUser?._id , id, location, dispatch, navigate,currentUser?.bookmarkedPosts,path]);
+  }, [
+    currentUser?._id,
+    id,
+    location,
+    dispatch,
+    navigate,
+    currentUser?.bookmarkedPosts,
+    path,
+  ]);
 
-
-  if (location.pathname === '/bookmarks'){
-    if(currentUser?.bookmarkedPosts?.length === 0) {
-    
-      return (<h2  style={{
-        display: "flex",
-        padding: "1rem",
-        textAlign: 'center'
-      }}>you don't have any bookmarked post 😅</h2>)
+  if (location.pathname === "/bookmarks") {
+    if (currentUser?.bookmarkedPosts?.length === 0) {
+      return (
+        <h2
+          style={{
+            display: "flex",
+            padding: "1rem",
+            textAlign: "center",
+          }}
+        >
+          you don't have any bookmarked post 😅
+        </h2>
+      );
     }
   }
- 
 
   return (
     <>
-      {location.pathname === '/' && (
+      {location.pathname === "/" && (
         <div className="create-post">
           <div className="container">
             <div className="user">
@@ -187,27 +196,24 @@ const Posts = ({ id }) => {
           </div>
         </div>
       )}
-      {
-        loadingData && 
-           (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img src={loadingImg} alt="loading" />
-            </div>
-          )
-      }
+      {loadingData && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img src={loadingImg} alt="loading" />
+        </div>
+      )}
       <div className="posts">
-        {timeLinePosts && !loadingData && (
-          timeLinePosts?.map((post) => <Post post={post} key={post?._id} />)
-        ) }
+        {timeLinePosts &&
+          !loadingData &&
+          timeLinePosts?.map((post) => <Post post={post} key={post?._id} />)}
       </div>
     </>
   );
 };
 
-export default Posts
+export default Posts;

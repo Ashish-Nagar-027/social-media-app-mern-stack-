@@ -41,10 +41,11 @@ export const postSlice = createSlice({
         return post
       });
     },
+  
   },
 });
 
-export const { setPosts, setLikes, setComments } = postSlice.actions;
+export const { setPosts, setLikes, setComments,deleteComments } = postSlice.actions;
 export const selectPosts = (state) => state.posts.posts;
 
 export default postSlice.reducer;
