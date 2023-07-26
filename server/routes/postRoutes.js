@@ -13,7 +13,8 @@ const {
   updatePost,
   addComment,
   bookmarkPost,
-  getUserBookmarkedPosts
+  getUserBookmarkedPosts,
+  deleteComment
 } = require("../controller/postController");
 
 // create post
@@ -48,5 +49,8 @@ router.get("/explore", verifyToken, getAllPosts);
 
 // add comment
 router.put("/:id/comment", verifyToken, addComment);
+
+// delete comment
+router.delete("/:id/comment", verifyToken, deleteComment);
 
 module.exports = router;
