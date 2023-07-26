@@ -1,25 +1,23 @@
 import React, { useState } from "react";
 import "./comments.scss";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
-import { setComments } from "../../features/postSlice";
-import { Link } from "react-router-dom";
 
-const Comments = ({ postId, comments }) => {
-  const userImg =
-    "https://images.pexels.com/photos/15597897/pexels-photo-15597897.jpeg?cs=srgb&dl=pexels-b%E1%BA%A3o-vi%E1%BB%87t-15597897.jpg&fm=jpg&w=640&h=960&_gl=1*qa7fxa*_ga*MTk5NDIxNjk4Ni4xNjc1NjU4Mzkw*_ga_8JE65Q40S6*MTY4MDQ1MDk3Mi40LjEuMTY4MDQ1MDk4My4wLjAuMA..";
+import { Link } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
+import { selectUser } from "../../features/userSlice";
+import { MdDelete } from "react-icons/md";
+
+const Comments = ({ postId, userComments, setComments }) => {
+  const currentUser = useSelector(selectUser);
 
   const [commentInputValue, setCommentInputValue] = useState("");
-
-  const dispatch = useDispatch();
-
-  const userComments = comments;
 
   const handCommentSubmit = async () => {
     if (commentInputValue !== "") {
       try {
-         await axios(
+        await axios(
           "http://localhost:3000/api/v1/post/" + postId + "/comment",
           {
             method: "PUT",
@@ -29,15 +27,33 @@ const Comments = ({ postId, comments }) => {
             },
           }
         ).then((comment) => {
-          dispatch(
-            setComments({ postId: postId, comment: comment.data.comment })
-          );
+          setComments((prevComments) => [
+            ...prevComments,
+            comment.data.comment,
+          ]);
         });
       } catch (error) {
         console.log(error);
       }
-
       setCommentInputValue("");
+    }
+  };
+
+  const deleteComment = async (id) => {
+    try {
+      await axios("http://localhost:3000/api/v1/post/" + postId + "/comment", {
+        method: "Delete",
+        withCredentials: true,
+        data: {
+          commentId: id,
+        },
+      }).then((msg) => {
+        setComments((prevComment) => {
+          return prevComment.filter((comment) => comment._id !== id);
+        });
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -45,7 +61,11 @@ const Comments = ({ postId, comments }) => {
     <div className="comments">
       {/* add comments input*/}
       <div className="write-comment">
-        <img src={userImg} alt="" />
+        {currentUser?.profilePic?.url ? (
+          <img alt="profile" src={currentUser.profilePic.url} />
+        ) : (
+          <CgProfile size={30} />
+        )}
         <input
           type="text"
           placeholder="write a comment"
@@ -56,20 +76,31 @@ const Comments = ({ postId, comments }) => {
       </div>
       {/* show comments */}
       <div className="show-comments">
-        {userComments.map((comment) => {
+        {userComments?.map((comment) => {
           return (
             <div key={comment._id} className="comment">
-              <div>
+              <div className="link_div">
                 <Link
                   className="userInfo"
                   to={`/profile/${comment.user.userId}`}
                 >
-                  <img alt="" src={userImg} />
+                  {currentUser?.profilePic?.url ? (
+                    <img alt="profile" src={currentUser.profilePic.url} />
+                  ) : (
+                    <CgProfile size={30} />
+                  )}
                   <div className="info">
                     <span>{comment.user.name}</span>
                     <p>{comment.comment}</p>
                   </div>
                 </Link>
+                {currentUser._id === comment.user.userId && (
+                  <MdDelete
+                    onClick={() => deleteComment(comment._id)}
+                    className="delete_comment"
+                    size={20}
+                  />
+                )}
               </div>
               <span className="date">1 hour ago</span>
             </div>
