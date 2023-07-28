@@ -6,13 +6,10 @@ const cloudinary = require("cloudinary");
 
 // create new post
 const createPost = async (req, res) => {
-  console.log("first");
+
   try {
     const userInfo = await User.findById(req.user.id);
-    console.log("userInfo", userInfo.name);
-    console.log("userInfo", userInfo.id);
-    console.log("userInfo", userInfo.profilePic);
-    console.log("second");
+ 
 
     let createdPost = {};
 
