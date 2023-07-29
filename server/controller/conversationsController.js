@@ -13,12 +13,19 @@ const createConversation = async (req,res) => {
    
      res.status(200).json({message:'conversation created', conversation})
     } catch (error) {
-        
+        res.status(500).json({ message: error.message });
     }
 }
 //get user conversation
 const getConversation = async (req,res) => {
-    console.log('get conversation')
+    try {
+        const conversation = await Conversation.find({
+            members: { $in: [req.params.userId] }
+        })
+        res.status(200).json(conversation)
+    } catch (error) {
+          res.status(500).json({ message: error.message });
+    }
 }
 
 module.exports = {
