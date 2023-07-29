@@ -2,11 +2,12 @@ const Conversation = require('../models/Conversations')
 
 //create conversation
 const createConversation = async (req,res) => {
-     console.log('create conversation')
-    
-   
+ 
     try {
     const { id_1, id_2 } = req.body
+    if(!id_1 || !id_2) {
+        res.status().json({message: 'please send ids of both users'})
+    }
    
     const members =  [id_1, id_2]
     const conversation = Conversation.create({members})
