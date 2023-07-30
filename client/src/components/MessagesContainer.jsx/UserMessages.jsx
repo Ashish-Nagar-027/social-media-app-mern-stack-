@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { selectConversationUser } from "../../features/conversationSlice";
+import axios from "axios";
 
 const UserMessages = () => {
   const navigate = useNavigate();
@@ -13,37 +15,39 @@ const UserMessages = () => {
   const currentUser = useSelector(selectUser);
   const [msgInput, setMessageInput] = useState("");
   const [msgList, setMsgList] = useState([]);
-
-  const socket = io.connect("http://localhost:3000");
+  const conversationsUser = useSelector(selectConversationUser);
 
   useEffect(() => {
-    // return () => {}
-    socket.emit("join_room", params.id);
-  }, [socket]);
+    const fetchDataFunction = async () => {
+      const fetchData = await axios.get(
+        `http://localhost:3001/api/v1/messages/${params.id}`
+      );
+
+      setMsgList(fetchData.data);
+    };
+    fetchDataFunction();
+  }, []);
 
   const sendMessage = async () => {
-    if (msgInput !== "") {
-      const messageData = {
-        room: params.id,
-        message: msgInput,
-        author: currentUser.name,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-      };
+    try {
+      const postMsg = await axios("http://localhost:3000/api/v1/messages/", {
+        method: "POST",
+        withCredentials: true,
+        data: {
+          conversationId: params.id,
+          sender: currentUser._id,
+          text: msgInput,
+        },
+      });
+      setMsgList((data) => [...data, postMsg.data.msg]);
 
-      await socket.emit("send_message", messageData);
-      setMsgList((data) => [...data, messageData]);
-      setMessageInput("");
+      console.log(postMsg.data);
+    } catch (error) {
+      console.log(error.msg);
+      sendMessage();
     }
+    setMessageInput("");
   };
-
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMsgList((prevMsgList) => [...prevMsgList, data]);
-    });
-  }, [socket]);
 
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({
@@ -51,92 +55,47 @@ const UserMessages = () => {
     });
   }, [msgList]);
 
+  function formatTimestamp(timestamp) {
+    const dateObj = new Date(timestamp);
+
+    const formattedDate = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(dateObj);
+
+    const formattedTime = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(dateObj);
+
+    return `${formattedDate}, ${formattedTime}`;
+  }
+
   return (
     <div className="messages-container">
       <div className="user-msg-top">
         <h2>
           <MdArrowBack className="back-icon" onClick={() => navigate(-1)} />{" "}
-          {"Elon musk"}
+          {conversationsUser.name}
         </h2>
       </div>
       <div className="messages_here">
         <ul>
-          <li>
-            <div className="message_wrapper">Lorem ipsum dolor sit amet.</div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci,
-              nesciunt.
-            </div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
-              porro, dolorum exercitationem perferendis cupiditate quaerat
-              beatae voluptatibus provident quidem tempore iste eligendi.
-              Sapiente nobis, ipsam vero impedit nemo maiores nulla?
-            </div>
-          </li>
-          <li>
-            <div className="message_wrapper">Lorem ipsum dolor sit amet.</div>
-          </li>
-          <li>
-            <div className="message_wrapper">Lorem, ipsum.</div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Error,
-              fuga. Nemo assumenda molestias eos. Natus reiciendis qui minima
-              eius voluptatibus officia tenetur, vel neque nesciunt quos,
-              molestiae modi accusamus explicabo!
-            </div>
-          </li>
-          <li>
-            <div className="message_wrapper">Lorem ipsum dolor sit amet.</div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci,
-              nesciunt.
-            </div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
-              porro, dolorum exercitationem perferendis cupiditate quaerat
-              beatae voluptatibus provident quidem tempore iste eligendi.
-              Sapiente nobis, ipsam vero impedit nemo maiores nulla?
-            </div>
-          </li>
-          <li>
-            <div className="message_wrapper">Lorem ipsum dolor sit amet.</div>
-          </li>
-          <li>
-            <div className="message_wrapper">Lorem, ipsum.</div>
-          </li>
-          <li className="its_me">
-            <div className="message_wrapper">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Error,
-              fuga. Nemo assumenda molestias eos. Natus reiciendis qui minima
-              eius voluptatibus officia tenetur, vel neque nesciunt quos,
-              molestiae modi accusamus explicabo!
-            </div>
-          </li>
-          {msgList.map((msgData, index) => {
-            // console.log("data ", msgData);
-            if (msgData.author === currentUser.name) {
-              console.log("if statemment");
+          {msgList.map((msgData) => {
+            if (msgData.sender === currentUser._id) {
               return (
-                <li className="its_me" key={index} ref={scrollRef}>
-                  <div className="message_wrapper">{msgData.message}</div>
+                <li className="its_me" key={msgData._id} ref={scrollRef}>
+                  <div className="message_wrapper">{msgData.text}</div>
+                  <p>{formatTimestamp(msgData.createdAt)}</p>
                 </li>
               );
             } else {
-              console.log("else statemment");
               return (
-                <li key={index} ref={scrollRef}>
-                  <div className="message_wrapper">{msgData.message}</div>
+                <li key={msgData._id} ref={scrollRef}>
+                  <div className="message_wrapper">{msgData.text}</div>
+                  <p>{formatTimestamp(msgData.createdAt)}</p>
                 </li>
               );
             }
