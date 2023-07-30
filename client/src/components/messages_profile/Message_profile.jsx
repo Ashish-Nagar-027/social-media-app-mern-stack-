@@ -3,8 +3,12 @@ import { CgProfile } from "react-icons/cg";
 
 import "./message_profile.scss";
 import { selectUser } from "../../features/userSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import {
+  selectConversationUser,
+  setConversationUser,
+} from "../../features/conversationSlice";
 
 const Message_profile = ({ user }) => {
   // console.log(user);
@@ -13,33 +17,35 @@ const Message_profile = ({ user }) => {
     (userId) => userId !== currentUser._id
   );
 
-  const [msgUser, setMsgUser] = useState();
+  const dispatch = useDispatch();
+  const conversationsUser = useSelector(selectConversationUser);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/user/${otherUserId[0]}`
       );
-      setMsgUser(fetchData.data);
+
+      dispatch(setConversationUser(fetchData.data));
     };
     fetchDataFunction();
   }, []);
 
-  if (msgUser) {
+  if (conversationsUser) {
     return (
       <div className="msg-profile-user">
         <div className="userInfo">
           <div className="userInfo">
-            {msgUser.profilePic?.url ? (
+            {conversationsUser.profilePic?.url ? (
               <img
                 className="profile-img"
-                src={msgUser.profilePic.url}
-                alt={msgUser.name}
+                src={conversationsUser.profilePic.url}
+                alt={conversationsUser.name}
               />
             ) : (
               <CgProfile size={30} />
             )}
-            <span>{msgUser.name} </span>
+            <span>{conversationsUser.name} </span>
           </div>
         </div>
       </div>
