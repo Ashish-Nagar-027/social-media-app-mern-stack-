@@ -6,8 +6,6 @@ const server = http.createServer(app)
 require("dotenv").config();
 const cors = require("cors");
 
-
-
 const { Server }  = require('socket.io')
 
 const io = new Server(server, {
@@ -18,7 +16,7 @@ const io = new Server(server, {
 })
 
 io.on("connection", (socket) => {
-
+    console.log(' a user connected')
 
   socket.on("join_room", (data) => {
     socket.join(data)
