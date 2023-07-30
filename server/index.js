@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
 const userRoutes = require("./routes/userRoutes");
 const conversationRoutes = require('./routes/conversationsRoutes')
+const messagesRoutes = require('./routes/messagesRoutes')
 
 //middlewares
 app.use(
@@ -42,5 +43,6 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/post", postRoutes);
 app.use("/api/v1/conversations", conversationRoutes);
+app.use("/api/v1/messages", messagesRoutes);
 
 module.exports = app;
