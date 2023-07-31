@@ -78,7 +78,7 @@ const UserMessages = () => {
       <div className="user-msg-top">
         <h2>
           <MdArrowBack className="back-icon" onClick={() => navigate(-1)} />{" "}
-          {conversationsUser.name}
+          {conversationsUser?.name}
         </h2>
       </div>
       <div className="messages_here">
@@ -86,7 +86,7 @@ const UserMessages = () => {
           {msgList.map((msgData) => {
             if (msgData.sender === currentUser._id) {
               return (
-                <li className="its_me" key={msgData._id} ref={scrollRef}>
+                <li className="its_me" key={msgData?._id} ref={scrollRef}>
                   <div className="message_wrapper">{msgData.text}</div>
                   <p>{formatTimestamp(msgData.createdAt)}</p>
                 </li>

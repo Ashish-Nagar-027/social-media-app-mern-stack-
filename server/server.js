@@ -18,18 +18,6 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     console.log(' a user connected')
 
-  socket.on("join_room", (data) => {
-    socket.join(data)
-    console.log('user with id: '+ socket.id + "joined room : "+ data)
-  })
-
-  socket.on("send_message", (data)=> {
-    io.to(data.room).emit('receive_message',{data})
-  })
-
-  socket.on("disconnet", () => {
-    console.log("user Disconnected", socket.id)
-  })
 })
  
 
@@ -43,6 +31,7 @@ cloudinary.config({
   api_key: process.env.ClOUDINARY_API_KEY,
   api_secret: process.env.ClOUDINARY_API_SECRET,
 });
+
 
 const start = async () => {
   try {
@@ -61,3 +50,5 @@ const start = async () => {
 };
 
 start();
+
+
