@@ -17,6 +17,11 @@ const UserMessages = () => {
   const [msgList, setMsgList] = useState([]);
   const conversationsUser = useSelector(selectConversationUser);
 
+  let socket;
+  useEffect(() => {
+    socket = io("http://localhost:3000");
+  }, []);
+
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
