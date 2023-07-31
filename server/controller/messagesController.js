@@ -21,8 +21,7 @@ const addMessage = async (req, res) => {
 
 // get all messages
 const getMessages = async (req, res) => {
-    console.log('get all messages')
-    
+
     try {
         if(!req.params.conversationId || !mongoose.isValidObjectId(req.params.conversationId)){
          throw Error("please send valid conversationId id to get post");
