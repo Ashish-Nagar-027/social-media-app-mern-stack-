@@ -4,14 +4,15 @@ import { MdClose, MdAddAPhoto } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loginUser,
+  logoutOut,
   selectUser,
   setEditProfile,
 } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
 
-
 import { useFormik } from "formik";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // for formik errors
 const validate = (values) => {
@@ -37,6 +38,7 @@ const validate = (values) => {
 const EditUserInfo = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
+  const navigate = useNavigate();
 
   const submitFunction = async (values) => {
     const { name, email, cover, profilePic } = values;
@@ -56,14 +58,11 @@ const EditUserInfo = () => {
     }
 
     try {
-      await axios(
-        "http://localhost:3000/api/v1/user/" + currentUser._id,
-        {
-          method: "PUT",
-          withCredentials: true,
-          data: formData,
-        }
-      ).then((updatedData) => {
+      await axios("http://localhost:3000/api/v1/user/" + currentUser._id, {
+        method: "PUT",
+        withCredentials: true,
+        data: formData,
+      }).then((updatedData) => {
         dispatch(loginUser(updatedData.data));
       });
 
@@ -87,6 +86,17 @@ const EditUserInfo = () => {
       return submitFunction(values);
     },
   });
+
+  async function logoutUserFunction() {
+    console.log("clicked logout");
+    await axios("http://localhost:3000/api/v1/auth/logout/", {
+      method: "POST",
+      withCredentials: true,
+    }).then(() => {
+      dispatch(logoutOut);
+      navigate("/login");
+    });
+  }
 
   const coverPicInputRef = useRef(null);
   const profilePicInputRef = useRef(null);
@@ -115,8 +125,8 @@ const EditUserInfo = () => {
                   className="image-div"
                   onClick={() => coverPicInputRef.current.click()}
                 >
-                  {formik.values.cover
-                    ? <img
+                  {formik.values.cover ? (
+                    <img
                       src={
                         typeof formik.values.cover === "object"
                           ? URL.createObjectURL(formik.values.cover)
@@ -125,27 +135,28 @@ const EditUserInfo = () => {
                       alt=""
                       className="cover"
                     />
-                    : <div className="cover bg-blank-img"></div>
-                  }
+                  ) : (
+                    <div className="cover bg-blank-img"></div>
+                  )}
                   <MdAddAPhoto className="add-photo-icon add-photo-icon-top" />
                 </div>
                 <div
                   className="image-div"
                   onClick={() => profilePicInputRef.current.click()}
                 >
-                 {
-                  formik.values.profilePic ?
-                  <img
-                    src={
-                       typeof formik.values.profilePic === "object"
+                  {formik.values.profilePic ? (
+                    <img
+                      src={
+                        typeof formik.values.profilePic === "object"
                           ? URL.createObjectURL(formik.values.profilePic)
                           : formik.values.profilePic
-                    }
-                    alt=""
-                    className="profilePic"
-                  /> : 
-                  <CgProfile className="profilePic profile-blank-img" />
-                  }
+                      }
+                      alt=""
+                      className="profilePic"
+                    />
+                  ) : (
+                    <CgProfile className="profilePic profile-blank-img" />
+                  )}
                   <MdAddAPhoto className="add-photo-icon add-photo-icon-bottom" />
                 </div>
               </div>
@@ -199,7 +210,9 @@ const EditUserInfo = () => {
               >
                 {formik.isSubmitting ? "saving..." : "save info"}
               </button>
+              <p>or</p>
             </form>
+            <button onClick={logoutUserFunction}>Logout User</button>
           </div>
         </div>
       </div>
