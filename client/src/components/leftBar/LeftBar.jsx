@@ -1,13 +1,14 @@
 import React from "react";
 import "./leftbar.scss";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setEditProfile } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { MdOutlineBookmarks } from "react-icons/md";
 
 const LeftBar = () => {
   const currentUser = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   return (
     <div className="leftbar">
@@ -90,7 +91,7 @@ const LeftBar = () => {
             <span>Messages</span>
           </Link>
         </nav>
-        <div className="user-logout">
+        <div className="user-logout" onClick={() => dispatch(setEditProfile())}>
           {currentUser?.profilePic?.url ? (
             <img alt="profile" src={currentUser.profilePic.url} />
           ) : (

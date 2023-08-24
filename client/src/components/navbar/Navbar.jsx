@@ -7,12 +7,13 @@ import {
   MdNotificationsNone,
   MdOutlineSearch,
 } from "react-icons/md";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setEditProfile } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
 
 const Navbar = () => {
   const currentUser = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -34,7 +35,7 @@ const Navbar = () => {
             <MdGroup fontSize={24} className="icon" />
           </Link>
           <MdNotificationsNone fontSize={24} className="icon" />
-          <div className="user">
+          <div className="user" onClick={() => dispatch(setEditProfile())}>
             {currentUser?.profilePic?.url ? (
               <img alt="profile" src={currentUser.profilePic.url} />
             ) : (
