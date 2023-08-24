@@ -27,8 +27,8 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const profileUser = useSelector(selectProfileUser);
-  const editUserInfo = useSelector(editCurrentUser);
   const [fetching, setFetching] = useState(false);
+  const editUserInfo = useSelector(editCurrentUser);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
