@@ -88,14 +88,15 @@ const EditUserInfo = () => {
   });
 
   async function logoutUserFunction() {
-    console.log("clicked logout");
-    await axios("http://localhost:3000/api/v1/auth/logout/", {
-      method: "POST",
-      withCredentials: true,
-    }).then(() => {
-      dispatch(logoutOut);
-      navigate("/login");
-    });
+    if (confirm("Are you sure you wanna logout ?")) {
+      await axios("http://localhost:3000/api/v1/auth/logout/", {
+        method: "POST",
+        withCredentials: true,
+      }).then(() => {
+        dispatch(logoutOut);
+        navigate("/login");
+      });
+    }
   }
 
   const coverPicInputRef = useRef(null);
