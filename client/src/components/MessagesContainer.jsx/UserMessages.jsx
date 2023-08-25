@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import "./UserMessages.scss";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { selectUser } from "../../features/userSlice";
 import { selectConversationUser } from "../../features/conversationSlice";
 import axios from "axios";
 
+var socket;
 const UserMessages = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -17,9 +18,13 @@ const UserMessages = () => {
   const [msgList, setMsgList] = useState([]);
   const conversationsUser = useSelector(selectConversationUser);
 
-  let socket;
   useEffect(() => {
-    socket = io("http://localhost:3000");
+    socket = io("http://localhost:3001");
+
+    // Clean up the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -27,29 +32,31 @@ const UserMessages = () => {
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/messages/${params.id}`
       );
-
       setMsgList(fetchData.data);
+      socket.emit("join_chat", params.id);
     };
     fetchDataFunction();
   }, []);
 
   const sendMessage = async () => {
+    const msg = {
+      conversationId: params.id,
+      sender: currentUser._id,
+      text: msgInput,
+    };
+
     try {
       const postMsg = await axios("http://localhost:3000/api/v1/messages/", {
         method: "POST",
         withCredentials: true,
-        data: {
-          conversationId: params.id,
-          sender: currentUser._id,
-          text: msgInput,
-        },
+        data: msg,
       });
-      setMsgList((data) => [...data, postMsg.data.msg]);
 
-      console.log(postMsg.data);
+      // setMsgList((data) => [...data, ]);
+      await socket.emit("new_message", postMsg.data.msg);
     } catch (error) {
-      console.log(error.msg);
-      sendMessage();
+      console.log(error);
+      // sendMessage();
     }
     setMessageInput("");
   };
@@ -78,6 +85,12 @@ const UserMessages = () => {
     return `${formattedDate}, ${formattedTime}`;
   }
 
+  useEffect(() => {
+    socket.on("recieve_message", (data) => {
+      setMsgList((msgs) => [...msgs, data]);
+    });
+  }, [setMsgList]);
+
   return (
     <div className="messages-container">
       <div className="user-msg-top">
@@ -96,14 +109,14 @@ const UserMessages = () => {
                   <p>{formatTimestamp(msgData.createdAt)}</p>
                 </li>
               );
-            } else {
-              return (
-                <li key={msgData._id} ref={scrollRef}>
-                  <div className="message_wrapper">{msgData.text}</div>
-                  <p>{formatTimestamp(msgData.createdAt)}</p>
-                </li>
-              );
             }
+
+            return (
+              <li key={msgData._id} ref={scrollRef}>
+                <div className="message_wrapper">{msgData.text}</div>
+                <p>{formatTimestamp(msgData.createdAt)}</p>
+              </li>
+            );
           })}
         </ul>
       </div>
