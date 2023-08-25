@@ -6,9 +6,11 @@ const server = http.createServer(app)
 require("dotenv").config();
 const cors = require("cors");
 
-const { Server }  = require('socket.io')
+const { Server }  = require('socket.io');
+const { log } = require("console");
 
 const io = new Server(server, {
+  pingTimeout: 60000,
   cors : {
     origin: "http://localhost:3001",
     methods: ["GET","POST"]
@@ -16,13 +18,27 @@ const io = new Server(server, {
 })
 
 io.on("connection", (socket) => {
-    console.log(' a user connected')
+  console.log('connected to socket id', socket.id)
 
-    socket.on('setup',(userData) => {
-      socket.join(userData._id),
-       console.log(userData._id);
-      socket.emit("connected")
+    // socket.on('setup',(userData) => {
+    //   socket.join(userData._id),
+    //    console.log(userData._id);
+    //   socket.emit("connected")
+    // })
+
+    socket.on('join_chat', (room) => {
+      socket.join(room)
+      console.log('user joined room: ', room)
     })
+
+    socket.on('new_message', (message) => {
+       io.to(message.conversationId).emit('recieve_message', message);
+    })
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected  ", socket.id)
+    })
+
 })
  
 
