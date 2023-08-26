@@ -102,7 +102,7 @@ const Comments = ({ postId, userComments, setComments }) => {
                   />
                 )}
               </div>
-              <span className="date">1 hour ago</span>
+              <span className="date">1 min</span>
             </div>
           );
         })}
