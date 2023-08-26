@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { selectConversationUser } from "../../features/conversationSlice";
 import axios from "axios";
+import useDateHandler from "../../hooks/useDateHandler";
 
 var socket;
 const UserMessages = () => {
@@ -17,6 +18,7 @@ const UserMessages = () => {
   const [msgInput, setMessageInput] = useState("");
   const [msgList, setMsgList] = useState([]);
   const conversationsUser = useSelector(selectConversationUser);
+  const { formatTimestamp } = useDateHandler();
 
   useEffect(() => {
     socket = io("http://localhost:3001");
@@ -65,41 +67,40 @@ const UserMessages = () => {
     });
   }, [msgList]);
 
-  //new one
-  function formatTimestamp(timestamp) {
-    const now = new Date();
-    const dateObj = new Date(timestamp);
+  // function formatTimestamp(timestamp) {
+  //   const now = new Date();
+  //   const dateObj = new Date(timestamp);
 
-    const timeDifference = now - dateObj;
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-    const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+  //   const timeDifference = now - dateObj;
+  //   const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+  //   const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
 
-    if (minutesDifference < 1) {
-      return "just now";
-    } else if (hoursDifference < 1) {
-      return `${minutesDifference} minutes ago`;
-    } else if (hoursDifference < 24) {
-      if (hoursDifference === 1) {
-        return "1 hour ago";
-      } else {
-        return `${hoursDifference} hours ago`;
-      }
-    } else {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(dateObj);
+  //   if (minutesDifference < 1) {
+  //     return "just now";
+  //   } else if (hoursDifference < 1) {
+  //     return `${minutesDifference} minutes ago`;
+  //   } else if (hoursDifference < 24) {
+  //     if (hoursDifference === 1) {
+  //       return "1 hour ago";
+  //     } else {
+  //       return `${hoursDifference} hours ago`;
+  //     }
+  //   } else {
+  //     const formattedDate = new Intl.DateTimeFormat("en-US", {
+  //       year: "numeric",
+  //       month: "short",
+  //       day: "numeric",
+  //     }).format(dateObj);
 
-      const formattedTime = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }).format(dateObj);
+  //     const formattedTime = new Intl.DateTimeFormat("en-US", {
+  //       hour: "numeric",
+  //       minute: "numeric",
+  //       hour12: true,
+  //     }).format(dateObj);
 
-      return `${formattedDate}, ${formattedTime}`;
-    }
-  }
+  //     return `${formattedDate}, ${formattedTime}`;
+  //   }
+  // }
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
