@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Message_profile from "../../components/messages_profile/Message_profile";
+import MessageProfile from "../../components/messages_profile/Messageprofile";
 import "./messages.scss";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,7 @@ const Messages = () => {
     };
 
     fetchConnections();
-  }, [currentUser?._id]);
+  }, [currentUser?._id, dispatch]);
 
   return (
     <div className="container">
@@ -51,7 +51,7 @@ const Messages = () => {
               className="user-msg-profile"
               to={"/messages/" + conversation._id}
             >
-              <Message_profile user={conversation} />
+              <MessageProfile user={conversation} />
             </Link>
           );
         })
