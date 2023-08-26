@@ -17,6 +17,7 @@ import { selectPosts, setLikes, setPosts } from "../../features/postSlice";
 import { selectUser, setBookmarks } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
+import useDateHandler from "../../hooks/useDateHandler";
 
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
@@ -28,6 +29,8 @@ const Post = ({ post }) => {
 
   const location = useLocation();
   const [pathLocation, setPathLocation] = useState(null);
+
+  const { formatTimestamp } = useDateHandler();
 
   useEffect(() => {
     const pathName = () => {
@@ -56,12 +59,6 @@ const Post = ({ post }) => {
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   post.comments.map((comment) => {
-  //     setComments({ postId: post?._id, comment: comment?.data?.comment });
-  //   });
-  // }, []);
 
   const handleBookmarkedPost = async () => {
     try {
@@ -118,7 +115,7 @@ const Post = ({ post }) => {
             <div className="details">
               <Link to={pathLocation}>
                 <span>{post?.user?.name}</span>
-                <span>1 min ago</span>
+                <span>{formatTimestamp(post.createdAt)}</span>
               </Link>
             </div>
           </div>
