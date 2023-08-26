@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./UserMessages.scss";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,7 +36,7 @@ const UserMessages = () => {
       socket.emit("join_chat", params.id);
     };
     fetchDataFunction();
-  }, []);
+  }, [params.id]);
 
   const sendMessage = async () => {
     const msg = {
@@ -52,11 +52,9 @@ const UserMessages = () => {
         data: msg,
       });
 
-      // setMsgList((data) => [...data, ]);
       await socket.emit("new_message", postMsg.data.msg);
     } catch (error) {
       console.log(error);
-      // sendMessage();
     }
     setMessageInput("");
   };
@@ -67,22 +65,40 @@ const UserMessages = () => {
     });
   }, [msgList]);
 
+  //new one
   function formatTimestamp(timestamp) {
+    const now = new Date();
     const dateObj = new Date(timestamp);
 
-    const formattedDate = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }).format(dateObj);
+    const timeDifference = now - dateObj;
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+    const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
 
-    const formattedTime = new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    }).format(dateObj);
+    if (minutesDifference < 1) {
+      return "just now";
+    } else if (hoursDifference < 1) {
+      return `${minutesDifference} minutes ago`;
+    } else if (hoursDifference < 24) {
+      if (hoursDifference === 1) {
+        return "1 hour ago";
+      } else {
+        return `${hoursDifference} hours ago`;
+      }
+    } else {
+      const formattedDate = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }).format(dateObj);
 
-    return `${formattedDate}, ${formattedTime}`;
+      const formattedTime = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }).format(dateObj);
+
+      return `${formattedDate}, ${formattedTime}`;
+    }
   }
 
   useEffect(() => {
