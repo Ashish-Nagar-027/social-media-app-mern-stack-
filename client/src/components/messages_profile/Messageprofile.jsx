@@ -15,7 +15,7 @@ const MessageProfile = ({ user }) => {
   const currentUser = useSelector(selectUser);
   const otherUserId = user?.members.filter(
     (userId) => userId !== currentUser._id
-  );
+  )[0];
 
   const dispatch = useDispatch();
   const conversationsUser = useSelector(selectConversationUser);
@@ -23,7 +23,7 @@ const MessageProfile = ({ user }) => {
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
-        `http://localhost:3001/api/v1/user/${otherUserId[0]}`
+        `http://localhost:3001/api/v1/user/${otherUserId}`
       );
 
       dispatch(setConversationUser(fetchData.data));
