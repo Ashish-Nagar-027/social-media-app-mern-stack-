@@ -18,24 +18,26 @@ import Messages from "./pages/messages/Messages";
 import UserMessages from "./components/MessagesContainer.jsx/UserMessages";
 
 
+
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route
-          path="/"
-          element={
+        <Route path="/"  element={
             <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
-          }
-        >
+          }  >
           <Route index element={<Home />} />
           <Route path="bookmarks" element={<Bookmarked />} />
           <Route path="messages" element={<Messages />} />
           <Route path="messages/:id" element={<UserMessages />} />
           <Route path="profile/:id" element={<Profile />} />
           <Route path="profile/:id/connections" element={<UserConnections />} />
+          <Route path="profile/:id/connections" element={<UserConnections />} >
+            <Route path="followings" element={<UserConnections />} />
+            <Route path="followers" element={<UserConnections/> }/>
+          </Route>
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
