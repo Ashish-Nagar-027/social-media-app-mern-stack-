@@ -11,7 +11,6 @@ import {
 } from "../../features/conversationSlice";
 
 const MessageProfile = ({ user }) => {
-  // console.log(user);
   const currentUser = useSelector(selectUser);
   const otherUserId = user?.members.filter(
     (userId) => userId !== currentUser._id
@@ -25,7 +24,7 @@ const MessageProfile = ({ user }) => {
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/user/${otherUserId}`
       );
-
+      console.log(fetchData.data);
       dispatch(setConversationUser(fetchData.data));
     };
     fetchDataFunction();
