@@ -36,13 +36,13 @@ const LeftBar = () => {
         </div>
         <div className="user-info">
           <p>
-            <Link to={`/profile/${currentUser?._id}/connections#followers`}>
-              Followers : {currentUser?.followers.length}
+            <Link to={`/profile/${currentUser?._id}/connections/followers`}>
+              Followers : {currentUser?.followers?.length}
             </Link>
           </p>
           <p>
-            <Link to={`/profile/${currentUser?._id}/connections#followings`}>
-              follwings : {currentUser?.followings?.length}
+            <Link to={`/profile/${currentUser?._id}/connections/followings`}>
+              followings : {currentUser?.followings?.length}
             </Link>
           </p>
         </div>
