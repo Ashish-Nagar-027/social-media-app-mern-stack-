@@ -24,7 +24,6 @@ const MessageProfile = ({ user }) => {
       const fetchData = await axios.get(
         `http://localhost:3001/api/v1/user/${otherUserId}`
       );
-      console.log(fetchData.data);
       dispatch(setConversationUser(fetchData.data));
     };
     fetchDataFunction();
