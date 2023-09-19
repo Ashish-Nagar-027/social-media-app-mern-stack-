@@ -30,7 +30,7 @@ const LeftBar = () => {
               className="profilePic"
             />
           ) : (
-            <CgProfile className="profilePic profile-blank-img" />
+            <CgProfile size={50} className="profilePic profile-blank-img" />
           )}
           <span>{currentUser?.name}</span>
         </div>
