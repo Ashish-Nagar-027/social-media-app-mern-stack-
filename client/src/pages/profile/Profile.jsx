@@ -18,7 +18,6 @@ import {
 } from "../../features/proFileUserSlice";
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
 import loadingImg from "../../assets/loading.png";
-
 import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
 
 const Profile = () => {
@@ -84,12 +83,12 @@ const Profile = () => {
               <span>{profileUser?.name}</span>
               <div className="connections-div">
                 <p className="followers">
-                  <Link to="connections#followers">
+                  <Link to="connections/followers">
                     Followers : {profileUser?.followers.length}
                   </Link>
                 </p>
                 <p className="followings">
-                  <Link to="connections#followings">
+                  <Link to="connections/followings">
                     Followings : {profileUser?.followings.length}
                   </Link>
                 </p>
