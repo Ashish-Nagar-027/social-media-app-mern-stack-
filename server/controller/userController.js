@@ -175,7 +175,7 @@ const getUserFollowings = async (req, res) => {
 
     const followings = await Promise.all(
       userData.followings.map((userId) => {
-        return User.findById(userId).select("name avtar");
+        return User.findById(userId).select("name profilePic");
       })
     );
 
