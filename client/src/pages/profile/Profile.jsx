@@ -17,17 +17,21 @@ import {
   setProfileUser,
 } from "../../features/proFileUserSlice";
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
-import loadingImg from "../../assets/loading.png";
 import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
+import LoadingData from "../../components/LoadingData";
 
 const Profile = () => {
   const userId = useParams();
   const currentUser = useSelector(selectUser);
-
   const dispatch = useDispatch();
   const profileUser = useSelector(selectProfileUser);
   const [fetching, setFetching] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const editUserInfo = useSelector(editCurrentUser);
+
+  useEffect(() => {
+    userId.id === currentUser._id ? setIsAdmin(true) : setIsAdmin(false);
+  }, [userId, currentUser, setIsAdmin]);
 
   useEffect(() => {
     const fetchDataFunction = async () => {
@@ -39,21 +43,15 @@ const Profile = () => {
       setFetching(false);
     };
 
-    fetchDataFunction();
-  }, [userId, dispatch, setFetching]);
+    if (isAdmin) {
+      setProfileUser(currentUser);
+    } else {
+      fetchDataFunction();
+    }
+  }, [userId, dispatch, setFetching, isAdmin]);
 
   if (fetching && !currentUser) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <img src={loadingImg} alt="loading" />
-      </div>
-    );
+    return <LoadingData />;
   }
 
   return (
