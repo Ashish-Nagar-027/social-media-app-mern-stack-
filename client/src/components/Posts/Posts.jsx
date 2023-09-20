@@ -78,6 +78,10 @@ const Posts = ({ id }) => {
       neededData = `${currentUser?._id}/bookmarks`;
     }
 
+    if (location.pathname.includes("/profile/")) {
+      neededData = `${id}/user`;
+    }
+
     const fetchDataFunction = async (neededData) => {
       if (path !== location.pathname) {
         setLoadingData(true);
