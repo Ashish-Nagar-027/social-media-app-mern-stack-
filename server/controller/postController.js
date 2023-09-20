@@ -204,6 +204,12 @@ const timeLinePosts = async (req, res) => {
       "profilePic name followings"
     );
 
+    if(currentUser.followings.length === 0) {
+     const userPosts = await Post.find();
+     return  res.status(200).json(userPosts);
+    }
+    
+
     const { name, profilePic, id } = currentUser;
     const userPosts = await Post.find({ "user.userId": currentUser.id });
     const currentUserPosts = userPosts.map((post) => {
