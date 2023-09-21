@@ -16,6 +16,7 @@ import {
 } from "react-icons/md";
 import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import LoadingData from "../LoadingData";
 
 const Posts = ({ id }) => {
   const location = useLocation();
@@ -200,17 +201,7 @@ const Posts = ({ id }) => {
           </div>
         </div>
       )}
-      {loadingData && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img src={loadingImg} alt="loading" />
-        </div>
-      )}
+      {loadingData && <LoadingData />}
       <div className="posts">
         {timeLinePosts &&
           !loadingData &&
