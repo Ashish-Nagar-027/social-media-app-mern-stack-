@@ -205,7 +205,30 @@ const Posts = ({ id }) => {
       <div className="posts">
         {timeLinePosts &&
           !loadingData &&
-          timeLinePosts?.map((post) => <Post post={post} key={post?._id} />)}
+          (timeLinePosts?.length > 0 ? (
+            timeLinePosts?.map((post) => <Post post={post} key={post?._id} />)
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "centers",
+                height: "300px",
+                border: "1px solid gray",
+              }}
+            >
+              <h2
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                User has No Posts
+              </h2>
+            </div>
+          ))}
       </div>
     </>
   );
