@@ -66,7 +66,7 @@ const UserConnections = () => {
         <div className="connections-div">
           {fetching ? (
             <LoadingData />
-          ) : (
+          ) : connections?.length > 0 ? (
             connections?.map((user) => {
               return (
                 <div className="user" key={user._id}>
@@ -88,6 +88,28 @@ const UserConnections = () => {
                 </div>
               );
             })
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "centers",
+                height: "70vh",
+                border: "1px solid gray",
+                marginTop: "1rem",
+              }}
+            >
+              <h2
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                User has No {showFollowers}
+              </h2>
+            </div>
           )}
         </div>
       </div>
