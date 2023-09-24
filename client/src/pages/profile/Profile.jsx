@@ -30,7 +30,7 @@ const Profile = () => {
   const editUserInfo = useSelector(editCurrentUser);
 
   useEffect(() => {
-    userId.id === currentUser._id ? setIsAdmin(true) : setIsAdmin(false);
+    userId?.id === currentUser?._id ? setIsAdmin(true) : setIsAdmin(false);
   }, [userId, currentUser, setIsAdmin]);
 
   useEffect(() => {
