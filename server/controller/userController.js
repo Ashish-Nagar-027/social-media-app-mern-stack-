@@ -209,12 +209,13 @@ const follow = async (req, res) => {
     }
 
     // restriction for self following
-    if (currentUser.id === followUser) {
+    if (currentUser.id === followUser.id) {
       res.status(403).json("Action forbidden");
     }
 
+
     // follow user now
-    if (!currentUser.followings.includes(req.user.id)) {
+    if (!currentUser.followings.includes(req.params.id)) {
       await currentUser.updateOne({
         $push: { followings: followUser.id },
       });
@@ -223,7 +224,7 @@ const follow = async (req, res) => {
       });
       res.status(200).json("You are now following " + followUser.name);
     } else {
-      res.status(403).json("You already follow this user");
+      res.status(403).json("You already follow this user "+followUser.name);
     }
   } catch (error) {
     res.status(401).json({ message: error.message });
