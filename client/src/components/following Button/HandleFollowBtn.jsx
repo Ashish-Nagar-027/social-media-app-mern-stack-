@@ -1,25 +1,22 @@
-
-
-import React from 'react'
+import React, { memo } from "react";
 import useHandleFollowing from "../../hooks/useHandleFollowing";
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/userSlice';
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
+const HandleFollowBtn = ({ profileUserId }) => {
+  const currentUser = useSelector(selectUser);
 
-const HandleFollowBtn = ({profileUserId}) => {
-    const currentUser = useSelector(selectUser);
-    
-    const {followingHandling} = useHandleFollowing()
+  const { followingHandling } = useHandleFollowing();
 
   return (
     <button onClick={() => followingHandling(profileUserId)}>
-    {profileUserId
-      ? currentUser?.followings.includes(profileUserId)
-        ? "Unfollow"
-        : "Follow"
-      : "follow"}
-  </button>
-  )
-}
+      {profileUserId
+        ? currentUser?.followings?.includes(profileUserId)
+          ? "Unfollow"
+          : "Follow"
+        : "follow"}
+    </button>
+  );
+};
 
-export default HandleFollowBtn
+export default memo(HandleFollowBtn);
