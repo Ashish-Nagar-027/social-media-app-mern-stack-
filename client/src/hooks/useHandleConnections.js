@@ -30,7 +30,7 @@ import axios from "axios";
       dispatch(setUserFollowings(getUser.data));
     }
     setFetching(false);
-  }, [dispatch,showFollowers]);
+  }, [dispatch,showFollowers,params?.id]);
 
 
     const fetchDataFunction = useCallback(async () => {
