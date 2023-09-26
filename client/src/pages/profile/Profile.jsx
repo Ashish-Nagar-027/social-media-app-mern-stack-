@@ -48,7 +48,7 @@ const Profile = () => {
     } else {
       fetchDataFunction();
     }
-  }, [userId, dispatch, setFetching, isAdmin]);
+  }, [userId, dispatch, setFetching, isAdmin, currentUser]);
 
   if (fetching && !currentUser) {
     return <LoadingData />;
