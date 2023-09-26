@@ -4,10 +4,7 @@ import "./posts.scss";
 import { selectUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import loadingImg from "../../assets/loading.png";
-
 import { CgProfile } from "react-icons/cg";
-
 import {
   MdOutlineImage,
   MdOutlineVideoFile,
