@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 import Post from "../Post/Post";
 import "./posts.scss";
 import { selectUser } from "../../features/userSlice";
@@ -231,4 +231,4 @@ const Posts = ({ id }) => {
   );
 };
 
-export default Posts;
+export default memo(Posts);

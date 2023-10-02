@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./home.scss";
 import Posts from "../../components/Posts/Posts";
 import { editCurrentUser, selectUser } from "../../features/userSlice";
@@ -17,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

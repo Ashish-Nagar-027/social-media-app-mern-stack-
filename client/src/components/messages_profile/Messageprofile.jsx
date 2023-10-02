@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 
 import "./message_profile.scss";
@@ -51,4 +51,4 @@ const MessageProfile = ({ user }) => {
   }
 };
 
-export default MessageProfile;
+export default memo(MessageProfile);
