@@ -14,8 +14,6 @@ import {
 const Messages = () => {
   const currentUser = useSelector(selectUser);
 
-  console.log("rendering");
-
   const [fetching, setFetching] = useState(false);
 
   const dispatch = useDispatch();
