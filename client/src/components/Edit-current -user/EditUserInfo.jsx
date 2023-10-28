@@ -89,7 +89,7 @@ const EditUserInfo = () => {
   });
 
   async function logoutUserFunction() {
-    if (confirm("Are you sure you wanna logout ?")) {
+    if (window.confirm("Are you sure you wanna logout ?")) {
       await axios(getBaseUrl + "/api/v1/auth/logout/", {
         method: "POST",
         withCredentials: true,
