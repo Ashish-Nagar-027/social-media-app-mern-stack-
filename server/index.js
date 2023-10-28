@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //
 app.get("/", (req, res) => {
-  res.send("home");
+  res.send("server is working");
 });
 
 // using routes
