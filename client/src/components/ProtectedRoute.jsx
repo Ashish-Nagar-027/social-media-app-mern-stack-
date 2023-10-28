@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { loginUser, selectUser } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getBaseUrl } from "../utility/utility";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();

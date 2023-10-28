@@ -7,7 +7,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 const { Server }  = require('socket.io');
-const { log } = require("console");
+
 
 const io = new Server(server, {
   pingTimeout: 60000,

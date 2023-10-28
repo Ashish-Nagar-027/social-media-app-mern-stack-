@@ -9,6 +9,7 @@ import {
   selectConversationUser,
   setConversationUser,
 } from "../../features/conversationSlice";
+import { getBaseUrl } from "../../utility/utility";
 
 const MessageProfile = ({ user }) => {
   const currentUser = useSelector(selectUser);
@@ -22,7 +23,7 @@ const MessageProfile = ({ user }) => {
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
-        `http://localhost:3001/api/v1/user/${otherUserId}`
+        ` ${getBaseUrl}/api/v1/user/${otherUserId}`
       );
       dispatch(setConversationUser(fetchData.data));
     };

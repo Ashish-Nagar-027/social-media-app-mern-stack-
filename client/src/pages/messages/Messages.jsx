@@ -10,6 +10,7 @@ import {
   selectConversation,
   setConversation,
 } from "../../features/conversationSlice";
+import { getBaseUrl } from "../../utility/utility";
 
 const Messages = () => {
   const currentUser = useSelector(selectUser);
@@ -23,7 +24,7 @@ const Messages = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       setFetching(true);
-      let url = `http://localhost:3001/api/v1/conversations/${currentUser._id}`;
+      let url = `${getBaseUrl}/api/v1/conversations/${currentUser._id}`;
       const fetchData = await axios.get(url);
 
       dispatch(setConversation(fetchData.data));

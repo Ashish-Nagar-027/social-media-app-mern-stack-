@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { selectUser } from "../../features/userSlice";
 import { MdDelete } from "react-icons/md";
+import { getBaseUrl } from "../../utility/utility";
 
 const Comments = ({ postId, userComments, setComments }) => {
   const currentUser = useSelector(selectUser);
@@ -17,16 +18,13 @@ const Comments = ({ postId, userComments, setComments }) => {
   const handCommentSubmit = async () => {
     if (commentInputValue !== "") {
       try {
-        await axios(
-          "http://localhost:3000/api/v1/post/" + postId + "/comment",
-          {
-            method: "PUT",
-            withCredentials: true,
-            data: {
-              comment: commentInputValue,
-            },
-          }
-        ).then((comment) => {
+        await axios(getBaseUrl + "/api/v1/post/" + postId + "/comment", {
+          method: "PUT",
+          withCredentials: true,
+          data: {
+            comment: commentInputValue,
+          },
+        }).then((comment) => {
           setComments((prevComments) => [
             ...prevComments,
             comment.data.comment,
@@ -41,7 +39,7 @@ const Comments = ({ postId, userComments, setComments }) => {
 
   const deleteComment = async (id) => {
     try {
-      await axios("http://localhost:3000/api/v1/post/" + postId + "/comment", {
+      await axios(getBaseUrl + "/api/v1/post/" + postId + "/comment", {
         method: "Delete",
         withCredentials: true,
         data: {

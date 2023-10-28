@@ -19,6 +19,7 @@ import {
 import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
 import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
 import LoadingData from "../../components/LoadingData";
+import { getBaseUrl } from "../../utility/utility";
 
 const Profile = () => {
   const userId = useParams();
@@ -37,7 +38,7 @@ const Profile = () => {
     const fetchDataFunction = async () => {
       setFetching(true);
       const fetchData = await axios.get(
-        `http://localhost:3001/api/v1/user/${userId.id}`
+        `${getBaseUrl}/api/v1/user/${userId.id}`
       );
       dispatch(setProfileUser(fetchData.data));
       setFetching(false);

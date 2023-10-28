@@ -14,6 +14,7 @@ import {
 import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingData from "../LoadingData";
+import { getBaseUrl } from "../../utility/utility";
 
 const Posts = ({ id }) => {
   const location = useLocation();
@@ -49,7 +50,7 @@ const Posts = ({ id }) => {
       setSharingTime(true);
 
       try {
-        const postData = await axios("http://localhost:3000/api/v1/post/", {
+        const postData = await axios(`${getBaseUrl}/api/v1/post/`, {
           method: "POST",
           withCredentials: true,
           data: newPost,
@@ -86,7 +87,7 @@ const Posts = ({ id }) => {
         setPath(location.pathname);
       }
       const fetchData = await axios
-        .get(`http://localhost:3001/api/v1/post/${neededData}`)
+        .get(` ${getBaseUrl}/api/v1/post/${neededData}`)
         .catch((error) => {
           console.log(error);
           if (error.statusText === "Unauthorized") {

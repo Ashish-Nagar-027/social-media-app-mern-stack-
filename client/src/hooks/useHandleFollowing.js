@@ -6,6 +6,7 @@ import {
 } from "../features/userSlice";
 
 import axios from 'axios'
+import { getBaseUrl } from "../utility/utility";
 
 const useHandleFollowing = (id) => {
     const currentUser = useSelector(selectUser);
@@ -13,7 +14,8 @@ const useHandleFollowing = (id) => {
     
 
     const followingHandling = async (id) => {
-        const url = "http://localhost:3000/api/v1/user/" + id + "/";
+        const url = getBaseUrl + "/api/v1/user/" + id + "/";
+       
     
         if (!currentUser.followings.includes(id)) {
           await axios(url + "follow", {
