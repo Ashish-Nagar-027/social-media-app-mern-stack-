@@ -1,2 +1,2 @@
 
-export const getBaseUrl =  'http://localhost:3001'
+export const getBaseUrl =  'https://social-mern-server-hmfn.onrender.com'
