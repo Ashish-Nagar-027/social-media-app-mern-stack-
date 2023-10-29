@@ -15,7 +15,7 @@ const messagesRoutes = require('./routes/messagesRoutes')
 //middlewares
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: ["http://localhost:3001","https://social-media-app-mern-stack.vercel.app"],
     credentials: true,
   })
 );
