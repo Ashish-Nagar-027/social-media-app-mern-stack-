@@ -87,7 +87,10 @@ const Posts = ({ id }) => {
         setPath(location.pathname);
       }
       const fetchData = await axios
-        .get(` ${getBaseUrl}/api/v1/post/${neededData}`)
+        .get(` ${getBaseUrl}/api/v1/post/${neededData}`, {
+          method: "PUT",
+          withCredentials: true,
+        })
         .catch((error) => {
           console.log(error);
           if (error.statusText === "Unauthorized") {
