@@ -16,6 +16,8 @@ const verifyToken = async (req, res, next) => {
 
     const user = await User.findById(decode.id);
     req.user = user;
+  
+
 
     next();
   } catch (error) {

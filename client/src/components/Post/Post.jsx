@@ -104,8 +104,8 @@ const Post = ({ post }) => {
             {post?.user?.profilePic?.url ? (
               <img
                 className="profile-img"
-                src={post.user.profilePic.url}
-                alt={post.name}
+                src={post?.user?.profilePic.url}
+                alt={post?.name}
               />
             ) : (
               <CgProfile size={30} />
@@ -113,7 +113,9 @@ const Post = ({ post }) => {
             <div className="details">
               <Link to={pathLocation}>
                 <span>{post?.user?.name}</span>
-                <span>{formatTimestamp(post.createdAt)}</span>
+                {post?.createdAt && (
+                  <span>{formatTimestamp(post?.createdAt)}</span>
+                )}
               </Link>
             </div>
           </div>
@@ -133,9 +135,9 @@ const Post = ({ post }) => {
           </div>
         </div>
         <div className="content">
-          <p>{post.caption}</p>
-          {post.imageUrl?.url !== undefined ? (
-            <img src={post.imageUrl.url} alt="" />
+          <p>{post?.caption}</p>
+          {post?.imageUrl?.url !== undefined ? (
+            <img src={post?.imageUrl.url} alt="" />
           ) : (
             ""
           )}
@@ -147,7 +149,7 @@ const Post = ({ post }) => {
             ) : (
               <MdFavoriteBorder onClick={handleLikes} size={20} />
             )}
-            <span>{post.likes?.length}</span>
+            <span>{post?.likes?.length}</span>
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
@@ -166,7 +168,7 @@ const Post = ({ post }) => {
         </div>
         {showComment && (
           <Comments
-            postId={post._id}
+            postId={post?._id}
             userComments={comments}
             setComments={setComments}
           />

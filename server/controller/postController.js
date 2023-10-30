@@ -200,11 +200,13 @@ const likeOrUnlike = async (req, res) => {
 ///=====================
 const timeLinePosts = async (req, res) => {
   try {
+
     const currentUser = await User.findById(req.params.id).select(
       "profilePic name followings"
     );
+    
 
-    if(currentUser.followings.length === 0) {
+    if(currentUser?.followings.length === 0) {
      const userPosts = await Post.find();
      return  res.status(200).json(userPosts);
     }
