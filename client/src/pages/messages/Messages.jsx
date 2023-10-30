@@ -24,8 +24,11 @@ const Messages = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       setFetching(true);
-      let url = `${getBaseUrl}/api/v1/conversations/${currentUser._id}`;
-      const fetchData = await axios.get(url);
+      let url = `${getBaseUrl}/api/v1/conversations/${currentUser?._id}`;
+      const fetchData = await axios.get(url, {
+        method: "PUT",
+        withCredentials: true,
+      });
 
       dispatch(setConversation(fetchData.data));
       setFetching(false);
