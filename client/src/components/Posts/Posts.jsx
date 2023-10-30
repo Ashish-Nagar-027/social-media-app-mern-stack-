@@ -87,8 +87,8 @@ const Posts = ({ id }) => {
         setPath(location.pathname);
       }
       const fetchData = await axios
-        .get(` ${getBaseUrl}/api/v1/post/${neededData}`, {
-          method: "PUT",
+        .get(`${getBaseUrl}/api/v1/post/${neededData}`, {
+          method: "GET",
           withCredentials: true,
         })
         .catch((error) => {
