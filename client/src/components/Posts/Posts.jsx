@@ -97,7 +97,8 @@ const Posts = ({ id }) => {
             navigate("/login");
           }
         });
-      dispatch(setPosts(fetchData.data));
+
+      dispatch(setPosts(fetchData.data.filter((post) => post !== null)));
 
       setLoadingData(false);
     };
