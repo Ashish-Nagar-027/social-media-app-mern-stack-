@@ -38,7 +38,11 @@ const Profile = () => {
     const fetchDataFunction = async () => {
       setFetching(true);
       const fetchData = await axios.get(
-        `${getBaseUrl}/api/v1/user/${userId.id}`
+        `${getBaseUrl}/api/v1/user/${userId.id}`,
+        {
+          method: "GET",
+          withCredentials: true,
+        }
       );
       dispatch(setProfileUser(fetchData.data));
       setFetching(false);
