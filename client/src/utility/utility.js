@@ -1,2 +1,2 @@
 
-export const getBaseUrl =  'http://localhost:3000'
+export const getBaseUrl =  'https://social-media-app-mern-stack-server.vercel.app'
