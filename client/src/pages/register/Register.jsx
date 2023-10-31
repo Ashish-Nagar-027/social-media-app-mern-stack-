@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/userSlice";
-import { getBaseUrl } from "../../utility/utility";
 
 // for formik errors
 const validate = (values) => {
@@ -35,7 +34,7 @@ const Register = () => {
   const submitFunction = async (values) => {
     try {
       setServerError(null);
-      const data = await fetch(getBaseUrl + "/api/v1/auth/register", {
+      const data = await fetch("/api/v1/auth/register", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {

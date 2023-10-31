@@ -13,7 +13,6 @@ import { CgProfile } from "react-icons/cg";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getBaseUrl } from "../../utility/utility";
 
 // for formik errors
 const validate = (values) => {
@@ -59,7 +58,7 @@ const EditUserInfo = () => {
     }
 
     try {
-      await axios(getBaseUrl + "/api/v1/user/" + currentUser._id, {
+      await axios("/api/v1/user/" + currentUser._id, {
         method: "PUT",
         withCredentials: true,
         data: formData,
@@ -90,7 +89,7 @@ const EditUserInfo = () => {
 
   async function logoutUserFunction() {
     if (window.confirm("Are you sure you wanna logout ?")) {
-      await axios(getBaseUrl + "/api/v1/auth/logout/", {
+      await axios("/api/v1/auth/logout/", {
         method: "POST",
         withCredentials: true,
       }).then(() => {

@@ -18,7 +18,6 @@ import { selectUser, setBookmarks } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
 import useDateHandler from "../../hooks/useDateHandler";
-import { getBaseUrl } from "../../utility/utility";
 
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
@@ -45,7 +44,7 @@ const Post = ({ post }) => {
 
   const handleLikes = async () => {
     try {
-      await axios(getBaseUrl + "/api/v1/post/" + post._id + "/like", {
+      await axios("/api/v1/post/" + post._id + "/like", {
         method: "PUT",
         withCredentials: true,
         data: {
@@ -63,7 +62,7 @@ const Post = ({ post }) => {
 
   const handleBookmarkedPost = async () => {
     try {
-      await axios(getBaseUrl + "/api/v1/post/" + post._id + "/bookmark", {
+      await axios("/api/v1/post/" + post._id + "/bookmark", {
         method: "PUT",
         withCredentials: true,
       }).then((d) => {
@@ -82,7 +81,7 @@ const Post = ({ post }) => {
 
   const deletePostFunction = async () => {
     try {
-      await axios(getBaseUrl + "/api/v1/post/" + post._id, {
+      await axios("/api/v1/post/" + post._id, {
         method: "DELETE",
         withCredentials: true,
       }).then(() => {

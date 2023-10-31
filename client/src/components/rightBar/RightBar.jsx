@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import HandleFollowBtn from "../following Button/HandleFollowBtn";
 import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
-import { getBaseUrl } from "../../utility/utility";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
@@ -16,7 +15,7 @@ const RightBar = () => {
     const getSuggestUserFunction = async () => {
       if (currentUser?._id) {
         const fetchSuggestUser = await axios.get(
-          `${getBaseUrl}/api/v1/user/${currentUser?._id}/suggestusers`
+          `/api/v1/user/${currentUser?._id}/suggestusers`
         );
         setSuggestUsers(fetchSuggestUser.data);
       }
