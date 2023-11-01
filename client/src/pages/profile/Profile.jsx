@@ -87,12 +87,12 @@ const Profile = () => {
               <div className="connections-div">
                 <p className="followers">
                   <Link to="connections/followers">
-                    Followers : {profileUser?.followers.length}
+                    Followers : {profileUser?.followers?.length}
                   </Link>
                 </p>
                 <p className="followings">
                   <Link to="connections/followings">
-                    Followings : {profileUser?.followings.length}
+                    Followings : {profileUser?.followings?.length}
                   </Link>
                 </p>
               </div>

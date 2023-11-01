@@ -8,6 +8,7 @@ import { selectUser } from "../../features/userSlice";
 import { selectConversationUser } from "../../features/conversationSlice";
 import axios from "axios";
 import useDateHandler from "../../hooks/useDateHandler";
+import { getBaseUrl } from "../../utility/utility";
 
 var socket;
 const UserMessages = () => {
@@ -31,7 +32,9 @@ const UserMessages = () => {
 
   useEffect(() => {
     const fetchDataFunction = async () => {
-      const fetchData = await axios.get(`/api/v1/messages/${params.id}`);
+      const fetchData = await axios.get(
+        getBaseUrl + `/api/v1/messages/${params.id}`
+      );
       setMsgList(fetchData.data);
       socket.emit("join_chat", params.id);
     };
@@ -46,7 +49,7 @@ const UserMessages = () => {
     };
 
     try {
-      const postMsg = await axios("/api/v1/messages/", {
+      const postMsg = await axios(getBaseUrl + "/api/v1/messages/", {
         method: "POST",
         withCredentials: true,
         data: msg,
