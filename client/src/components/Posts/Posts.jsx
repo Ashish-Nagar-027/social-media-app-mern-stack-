@@ -14,6 +14,7 @@ import {
 import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingData from "../LoadingData";
+import { getBaseUrl } from "../../utility/utility";
 
 const Posts = ({ id }) => {
   const location = useLocation();
