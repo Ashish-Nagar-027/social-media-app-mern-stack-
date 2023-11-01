@@ -6,6 +6,7 @@ import {
 } from "../features/userSlice";
 
 import axios from 'axios'
+import { getBaseUrl } from "../utility/utility";
 
 
 const useHandleFollowing = (id) => {

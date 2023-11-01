@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import HandleFollowBtn from "../following Button/HandleFollowBtn";
 import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
+import { getBaseUrl } from "../../utility/utility";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
