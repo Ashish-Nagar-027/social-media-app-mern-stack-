@@ -16,12 +16,12 @@ import { getBaseUrl } from "../utility/utility";
 
   const dispatch = useDispatch();
   const [fetching, setFetching] = useState(false);
-
+  
   const getUserInfo = useCallback(async () => {
     setFetching(true);
-
+    
+    
     const url = getBaseUrl + "/api/v1/user/" + params.id + "/get" + showFollowers;
-
     const getUser = await axios.get(url);
   
     if (showFollowers === "followers") {
@@ -39,7 +39,7 @@ import { getBaseUrl } from "../utility/utility";
       getBaseUrl + `/api/v1/user/${params.id}`
     );
     dispatch(setProfileUser(fetchData.data));
-  }, [params.id,dispatch]);
+  }, [params?.id,dispatch]);
 
   
   useEffect(() => {

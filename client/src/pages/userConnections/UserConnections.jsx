@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import {
@@ -14,6 +14,7 @@ import useHandleConnections from "../../hooks/useHandleConnections";
 
 const UserConnections = () => {
   const navigate = useNavigate();
+  const params = useParams();
 
   const { fetching, showFollowers } = useHandleConnections();
 
@@ -39,7 +40,7 @@ const UserConnections = () => {
               showFollowers !== "followers" ? "connection-active-link" : ""
             } `}
           >
-            <Link to={`/profile/${profileUser?._id}/connections/followings`}>
+            <Link to={`/profile/${params.id}/connections/followings`}>
               Followings (
               {profileUserFollowings?.length ||
                 profileUser?.followings?.length ||
@@ -53,7 +54,7 @@ const UserConnections = () => {
               showFollowers === "followers" ? "connection-active-link" : ""
             } `}
           >
-            <Link to={`/profile/${profileUser?._id}/connections/followers`}>
+            <Link to={`/profile/${params.id}/connections/followers`}>
               Followers(
               {profileUserFollowers?.length ||
                 profileUser?.followers?.length ||
