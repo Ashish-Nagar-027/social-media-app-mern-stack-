@@ -30,6 +30,7 @@ const ProtectedRoute = ({ children }) => {
         }
       } catch (error) {
         console.log(error);
+        console.log(error);
       }
     };
     if (!currentUser) {

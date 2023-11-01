@@ -50,6 +50,7 @@ const Register = () => {
       }
       formik.setSubmitting(false);
     } catch (error) {
+      console.log(error);
       setServerError(error.message);
     }
   };
