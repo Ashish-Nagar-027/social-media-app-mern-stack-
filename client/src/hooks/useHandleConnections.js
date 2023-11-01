@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { setProfileUser, setUserFollowers, setUserFollowings } from "../features/proFileUserSlice";
 import axios from "axios";
+import { getBaseUrl } from "../utility/utility";
 
 
  const useHandleConnections = () => {
@@ -19,7 +20,7 @@ import axios from "axios";
   const getUserInfo = useCallback(async () => {
     setFetching(true);
 
-    const url = "/api/v1/user/" + params.id + "/get" + showFollowers;
+    const url = getBaseUrl + "/api/v1/user/" + params.id + "/get" + showFollowers;
 
     const getUser = await axios.get(url);
   

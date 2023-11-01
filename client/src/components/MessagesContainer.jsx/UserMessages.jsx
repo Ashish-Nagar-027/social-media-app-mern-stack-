@@ -21,7 +21,7 @@ const UserMessages = () => {
   const { formatTimestamp } = useDateHandler();
 
   useEffect(() => {
-    socket = io("/");
+    socket = io(getBaseUrl);
 
     // Clean up the socket connection when the component unmounts
     return () => {
