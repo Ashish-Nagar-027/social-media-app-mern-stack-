@@ -36,7 +36,7 @@ import { getBaseUrl } from "../utility/utility";
 
     const fetchDataFunction = useCallback(async () => {
     const fetchData = await axios.get(
-      `/api/v1/user/${params.id}`
+      getBaseUrl + `/api/v1/user/${params.id}`
     );
     dispatch(setProfileUser(fetchData.data));
   }, [params.id,dispatch]);
