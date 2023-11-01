@@ -30,15 +30,18 @@ const Register = () => {
   const submitFunction = async (values) => {
     try {
       setServerError(null);
-      const data = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const data = await fetch(
+        "https://social-media-app-mern-stack-server.vercel.app/api/v1/auth/login",
+        {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       const jsonData = await data.json();
       if (data.ok) {
