@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { loginUser, selectUser } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getBaseUrl } from "../utility/utility";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -12,17 +13,14 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const data = await fetch(
-          "https://social-media-app-mern-stack-server.vercel.app/api/v1/auth/getuser",
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const data = await fetch(getBaseUrl + "/api/v1/auth/getuser", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
         const jsonData = await data.json();
 
         if (data.ok) {

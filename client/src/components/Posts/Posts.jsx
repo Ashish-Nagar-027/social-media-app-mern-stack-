@@ -49,7 +49,7 @@ const Posts = ({ id }) => {
       setSharingTime(true);
 
       try {
-        const postData = await axios(`/api/v1/post/`, {
+        const postData = await axios(`${getBaseUrl}/api/v1/post/`, {
           method: "POST",
           withCredentials: true,
           data: newPost,
@@ -86,7 +86,7 @@ const Posts = ({ id }) => {
         setPath(location.pathname);
       }
 
-      const fetchData = await axios(`/api/v1/post/${neededData}`, {
+      const fetchData = await axios(`${getBaseUrl}/api/v1/post/${neededData}`, {
         method: "GET",
         withCredentials: true,
         credentials: "include",
