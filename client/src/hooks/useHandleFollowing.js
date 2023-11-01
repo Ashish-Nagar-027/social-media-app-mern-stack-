@@ -14,7 +14,7 @@ const useHandleFollowing = (id) => {
     
 
     const followingHandling = async (id) => {
-        const url = "/api/v1/user/" + id + "/";
+        const url = getBaseUrl+"/api/v1/user/" + id + "/";
        
     
         if (!currentUser.followings.includes(id)) {

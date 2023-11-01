@@ -15,7 +15,7 @@ const RightBar = () => {
     const getSuggestUserFunction = async () => {
       if (currentUser?._id) {
         const fetchSuggestUser = await axios.get(
-          `/api/v1/user/${currentUser?._id}/suggestusers`
+          `${getBaseUrl}/api/v1/user/${currentUser?._id}/suggestusers`
         );
         setSuggestUsers(fetchSuggestUser.data);
       }
