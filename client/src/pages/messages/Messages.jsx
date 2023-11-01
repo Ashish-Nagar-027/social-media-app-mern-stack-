@@ -26,7 +26,7 @@ const Messages = () => {
       setFetching(true);
       let url = getBaseUrl + `/api/v1/conversations/${currentUser?._id}`;
       const fetchData = await axios.get(url, {
-        method: "PUT",
+        method: "GET",
         withCredentials: true,
       });
 
