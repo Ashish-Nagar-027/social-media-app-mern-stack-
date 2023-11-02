@@ -29,12 +29,14 @@ const validate = (values) => {
 
 const Register = () => {
   const [serverError, setServerError] = useState(null);
+  const [btnDisabled, setBtnDisabled] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitFunction = async (values) => {
     try {
       setServerError(null);
+      setBtnDisabled("disabled");
       const data = await fetch(getBaseUrl + "/api/v1/auth/register", {
         method: "POST",
         body: JSON.stringify(values),
@@ -54,6 +56,34 @@ const Register = () => {
       formik.setSubmitting(false);
       formik.resetForm();
     } catch (error) {
+      setServerError(error.message);
+    }
+  };
+
+  const LoginAsGuestFunction = async () => {
+    try {
+      setServerError(null);
+      setBtnDisabled("disabled");
+      formik.setSubmitting(true);
+      const data = await fetch(getBaseUrl + "/api/v1/auth/guestlogin", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const jsonData = await data.json();
+      if (data.ok) {
+        dispatch(loginUser(jsonData));
+        navigate("/");
+      } else {
+        setServerError(jsonData.message);
+        setBtnDisabled("");
+      }
+    } catch (error) {
+      console.log(error);
       setServerError(error.message);
     }
   };
@@ -118,7 +148,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className={formik.isSubmitting ? "form-submitting" : ""}
+            className={formik.isSubmitting ? "form-submitting disabled" : ""}
           >
             {formik.isSubmitting ? "Submitting" : "Sign up"}
           </button>
@@ -126,6 +156,9 @@ const Register = () => {
             <span className="form-warning center">{serverError}</span>
           )}
         </form>
+        <button className={btnDisabled} onClick={() => LoginAsGuestFunction()}>
+          {btnDisabled === "disabled" ? "Submitting" : "Login As Guest"}
+        </button>
         <p>
           Already have account? <Link to="/login">Log in</Link>
         </p>
