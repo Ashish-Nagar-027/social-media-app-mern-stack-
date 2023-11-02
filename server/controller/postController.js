@@ -241,7 +241,7 @@ const timeLinePosts = async (req, res) => {
     const addUserInPosts = await Promise.all(
       flattenedArr.map(async (post) => {
         const postUser = await User.findById(post.user.userId).select(
-          "profilePic name "
+          "profilePic name id"
         );
         const { id, name, profilePic } = postUser;
 
