@@ -26,6 +26,7 @@ const UserMessages = () => {
 
     // Clean up the socket connection when the component unmounts
     return () => {
+      console.log("cloesd component");
       socket.disconnect();
     };
   }, []);
