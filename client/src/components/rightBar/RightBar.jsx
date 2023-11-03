@@ -7,6 +7,7 @@ import HandleFollowBtn from "../following Button/HandleFollowBtn";
 import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
 import { getBaseUrl } from "../../utility/utility";
+import { RightbarSkeleton } from "../skeletons/skeletons";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
@@ -48,13 +49,17 @@ const RightBar = () => {
                     </Link>
                   </div>
                   <div className="buttons">
-                    <HandleFollowBtn profileUserId={user._id} />
+                    {user ? (
+                      <HandleFollowBtn profileUserId={user._id} />
+                    ) : (
+                      <RightbarSkeleton />
+                    )}
                   </div>
                 </div>
               );
             })
           ) : (
-            <p>fetching Suggestions ...</p>
+            <RightbarSkeleton items={5} />
           )}
         </div>
       </div>
