@@ -43,7 +43,7 @@ const RightBar = () => {
                           alt={user.name}
                         />
                       ) : (
-                        <CgProfile size={30} />
+                        <CgProfile size={32} />
                       )}
                       <span>{user.name} </span>
                     </Link>

@@ -273,7 +273,8 @@ const suggestUsers = async (req, res) => {
       throw Error("please send valid user id");
     }
 
-    const users = await User.find({}).select("name , profilePic, _id ");
+    const users = await User.find({}).select("name , profilePic , _id ");
+
     if (users) {
       let suggestUsers = users.filter((user) => user.id !== req.params.id)
       res.status(200).json(suggestUsers);
