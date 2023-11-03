@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "./profile.scss";
 import Posts from "../../components/Posts/Posts";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  editCurrentUser,
-  selectUser,
-  setEditProfile,
-} from "../../features/userSlice";
+import { selectUser, setEditProfile } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectProfileUser,
   setProfileUser,
 } from "../../features/proFileUserSlice";
-import EditUserInfo from "../../components/Edit-current -user/EditUserInfo";
+
 import HandleFollowBtn from "../../components/following Button/HandleFollowBtn";
-import LoadingData from "../../components/LoadingData";
 import { getBaseUrl } from "../../utility/utility";
 
 const Profile = () => {
@@ -28,7 +24,6 @@ const Profile = () => {
   const profileUser = useSelector(selectProfileUser);
   const [fetching, setFetching] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const editUserInfo = useSelector(editCurrentUser);
 
   useEffect(() => {
     userId?.id === currentUser?._id ? setIsAdmin(true) : setIsAdmin(false);
@@ -55,13 +50,8 @@ const Profile = () => {
     }
   }, [userId, dispatch, setFetching, isAdmin, currentUser]);
 
-  if (fetching && !currentUser) {
-    return <LoadingData />;
-  }
-
   return (
     <>
-      {editUserInfo && <EditUserInfo />}
       <div className="profile">
         <div className="images">
           {profileUser?.coverPic?.url ? (
@@ -70,7 +60,7 @@ const Profile = () => {
             <div className="cover bg-blank-img"></div>
           )}
 
-          {profileUser?.profilePic?.url ? (
+          {!fetching && profileUser?.profilePic?.url ? (
             <img
               src={profileUser?.profilePic?.url}
               alt=""
@@ -83,28 +73,52 @@ const Profile = () => {
         <div className="profileContainer">
           <div className="userInfo">
             <div className="center">
-              <span>{profileUser?.name}</span>
+              <span>
+                {fetching ? (
+                  <Skeleton height={"1rem"} width={"5rem"} />
+                ) : (
+                  profileUser?.name
+                )}
+              </span>
               <div className="connections-div">
                 <p className="followers">
-                  <Link to="connections/followers">
-                    Followers : {profileUser?.followers?.length}
-                  </Link>
+                  {fetching ? (
+                    <Skeleton height={"1rem"} width={"5rem"} />
+                  ) : (
+                    <Link to="connections/followers">
+                      Followers : {profileUser?.followers?.length}
+                    </Link>
+                  )}
                 </p>
                 <p className="followings">
-                  <Link to="connections/followings">
-                    Followings : {profileUser?.followings?.length}
-                  </Link>
+                  {fetching ? (
+                    <Skeleton height={"1rem"} width={"5rem"} />
+                  ) : (
+                    <Link to="connections/followings">
+                      Followings : {profileUser?.followings?.length}
+                    </Link>
+                  )}
                 </p>
               </div>
-              {currentUser?._id !== profileUser?._id && (
-                <HandleFollowBtn profileUserId={profileUser?._id} />
+              {fetching ? (
+                <Skeleton height={"2rem"} width={"6rem"} />
+              ) : (
+                currentUser?._id !== profileUser?._id && (
+                  <HandleFollowBtn profileUserId={profileUser?._id} />
+                )
               )}
             </div>
             <div className="right">
-              {currentUser?._id !== profileUser?._id && (
-                <Link to={`/messages/${currentUser?._id}-${profileUser?._id}`}>
-                  <MdEmail className="message-icon" fontSize={24} />
-                </Link>
+              {fetching ? (
+                <Skeleton height={"2rem"} width={"2rem"} />
+              ) : (
+                currentUser?._id !== profileUser?._id && (
+                  <Link
+                    to={`/messages/${currentUser?._id}-${profileUser?._id}`}
+                  >
+                    <MdEmail className="message-icon" fontSize={24} />
+                  </Link>
+                )
               )}
               {currentUser?._id === profileUser?._id && (
                 <button
