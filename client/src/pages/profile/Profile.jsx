@@ -120,7 +120,7 @@ const Profile = () => {
                   </Link>
                 )
               )}
-              {currentUser?._id === profileUser?._id && (
+              {!fetching && currentUser?._id === profileUser?._id && (
                 <button
                   className="profile-edit-button"
                   onClick={() => dispatch(setEditProfile())}
