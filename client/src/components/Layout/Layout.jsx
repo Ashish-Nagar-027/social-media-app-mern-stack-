@@ -4,8 +4,13 @@ import { Outlet } from "react-router-dom";
 import RightBar from "../rightBar/RightBar";
 import LeftBar from "../leftBar/LeftBar";
 import Navbar from "../navbar/Navbar";
+import { useSelector } from "react-redux";
+import { editCurrentUser } from "../../features/userSlice";
+import EditUserInfo from "../Edit-current -user/EditUserInfo";
 
 const Layout = () => {
+  const editUserInfo = useSelector(editCurrentUser);
+
   return (
     <>
       <Navbar />
@@ -22,6 +27,7 @@ const Layout = () => {
         </div>
         <RightBar />
       </div>
+      {editUserInfo && <EditUserInfo />}
     </>
   );
 };
