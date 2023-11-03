@@ -15,6 +15,9 @@ import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingData from "../LoadingData";
 import { getBaseUrl } from "../../utility/utility";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { PostSkeleton } from "../skeletons/skeletons";
 
 const Posts = ({ id }) => {
   const location = useLocation();
@@ -147,7 +150,7 @@ const Posts = ({ id }) => {
                 ) : (
                   <CgProfile size={30} />
                 )}
-                <p>{currentUser?.name}</p>
+                <p>{currentUser?.name || <Skeleton width={"5rem"} />}</p>
               </div>
               <input
                 placeholder="Write here..."
@@ -205,10 +208,16 @@ const Posts = ({ id }) => {
       )}
       {loadingData && <LoadingData />}
       <div className="posts">
+        {!timeLinePosts && <PostSkeleton items={5} />}
+
         {timeLinePosts &&
           !loadingData &&
           (timeLinePosts?.length > 0 ? (
-            timeLinePosts?.map((post) => <Post post={post} key={post?._id} />)
+            <>
+              {timeLinePosts?.map((post) => (
+                <Post post={post} key={post?._id} />
+              ))}
+            </>
           ) : (
             <div
               style={{
