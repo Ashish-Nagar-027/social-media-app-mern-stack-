@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import Skeleton from "react-loading-skeleton";
@@ -50,9 +50,16 @@ const Profile = () => {
     }
   }, [userId, dispatch, setFetching, isAdmin, currentUser]);
 
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [userId]);
+
   return (
     <>
-      <div className="profile">
+      <div className="profile" ref={scrollRef}>
         <div className="images">
           {profileUser?.coverPic?.url ? (
             <img src={profileUser?.coverPic.url} alt="" className="cover" />
