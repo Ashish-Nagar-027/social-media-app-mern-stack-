@@ -1,87 +1,89 @@
-
+@import "../../style.scss";
 
 .connections {
-    h2{
-        text-transform: capitalize;
-        padding: 1rem 0rem;
+  h2 {
+    text-transform: capitalize;
+    padding: 1rem 0rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .back-icon {
+      cursor: pointer;
+    }
+  }
+
+  .main-div {
+    .connections-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid gainsboro;
+
+      .connection-type {
+        font-size: 1.2rem;
+        font-weight: 500;
+        width: 50%;
+        text-align: center;
+        padding: 1rem;
+        @include tablet {
+          font-size: 1rem;
+        }
+        @include mobile {
+          font-size: 0.9rem;
+        }
+
+        &:hover {
+          cursor: pointer;
+          background-color: gainsboro;
+        }
+      }
+
+      .connection-active-link {
+        background-color: rgba(231, 226, 226, 0.726);
+        border-bottom: 3px solid blue;
+      }
+    }
+
+    .connections-div {
+      .user {
         display: flex;
+        gap: 5px;
+        justify-content: space-between;
         align-items: center;
-        gap: 1rem;
+        margin: 15px;
+        border-bottom: 1px solid gainsboro;
+        padding: 10px;
 
-        .back-icon {
-            cursor: pointer;
+        .userInfo {
+          display: flex;
+          gap: 10px;
+
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          span {
+            font-weight: 500;
+          }
         }
+
+        button {
+          border: none;
+          padding: 5px;
+          color: white;
+          cursor: pointer;
+
+          &:first-child {
+            background-color: #5271ff;
+          }
+          &:last-child {
+            background-color: #f0544f;
+          }
+        }
+      }
     }
-
-    .main-div {
-
-        .connections-header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid gainsboro;
-            
-
-            .connection-type {
-                font-size: 1.2rem;
-                font-weight: 500;
-                width: 50%;
-                text-align: center;
-                padding: 1rem;
-
-               
-                &:hover {
-                    cursor: pointer;
-                    background-color: gainsboro;
-                }
-            }
-            
-            .connection-active-link{
-                background-color: rgba(231, 226, 226, 0.726);
-                border-bottom: 3px solid blue;
-            }
-        }
-
-        .connections-div {
-           
-            .user {
-                display: flex;
-                gap: 5px;
-                justify-content: space-between;
-                align-items: center;
-                margin: 15px;
-                border-bottom: 1px solid gainsboro;
-                padding: 10px;
-                
-                .userInfo {
-                    display: flex;
-                    gap: 10px;
-
-                    img{
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                    }
-
-                    span {
-                        font-weight: 500;
-                    }
-                }
-
-                    button {
-                        border: none;
-                        padding: 5px;
-                        color: white;
-                        cursor: pointer;
-
-                        &:first-child {
-                            background-color: #5271ff;
-                        }
-                        &:last-child {
-                            background-color: #f0544f;
-                        }
-                    }
-            }
-        }
-    }
+  }
 }
