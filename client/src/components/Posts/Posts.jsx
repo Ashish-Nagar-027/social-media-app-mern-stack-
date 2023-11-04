@@ -16,7 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getBaseUrl } from "../../utility/utility";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { PostSkeleton } from "../Skeletons/Skeletons";
+import { PostSkeleton } from "../Skeletons/Skeletons.jsx";
 
 const Posts = ({ id }) => {
   const location = useLocation();
