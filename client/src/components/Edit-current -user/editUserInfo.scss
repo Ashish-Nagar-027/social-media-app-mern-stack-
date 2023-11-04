@@ -1,217 +1,201 @@
-
-
 .edit-currentuser {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(183, 185, 187, 0.788);
-    z-index: 19;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   padding-top: 200px;
-   overflow: scroll;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(183, 185, 187, 0.788);
+  z-index: 19;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200px;
+  overflow: scroll;
 
+  .edit-model {
+    min-height: fit-content;
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    padding: 1rem;
+    color: rgb(39, 32, 32);
+    margin-bottom: 50px;
 
-    
+    .model-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 10px;
 
-    .edit-model {
-        min-height: fit-content;
-        width: 90%;
-        background-color: rgb(255, 255, 255);
-        padding: 1rem;
-        color: rgb(39, 32, 32);
-        margin-bottom: 50px;
-      
-        .model-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 5px 10px;
+      h2 {
+        margin: auto;
+      }
 
-           h2{
-            margin: auto;
-           }
-
-            .close-model {
-                cursor: pointer;
-            }
-        }
-        .user-info-card {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-       
-           
-            
-            .card {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-                padding: 2rem;
-                border-radius: 10px;
-                border: 1px solid gainsboro;
-                text-align: center;
-
-                
-            }
-
-         button {
-                 padding: 10px;
-                 border-radius: 5px;
-                 cursor: pointer;
-                 font-size: 1.2rem;
-                 max-width: fit-content;
-                 margin: auto;
-             }
-            
-           
-        
-            form  {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-               
-
-                .images {
-                    width: 100%;
-                    height: 300px;
-                    margin-bottom: 4rem;
-
-                    
-
-                    
-                 
-                  .image-div {
-                    position: relative;
-                    cursor: pointer;
-                    max-height: 300px;
-
-                    .add-photo-icon {
-                        display: none;
-                    }
-                    
-                    &:hover {
-                        .add-photo-icon {
-                            display: flex;
-                        }
-                    }
-
-                    .cover{
-                        width: 100%;
-                        height:100%;
-                        object-fit: cover;
-                    }
-
-                    .bg-blank-img {
-                        background-color: #333639;
-                        height: 300px;
-                    }
-            
-                    .profilePic {
-                        width: 150px;
-                        height:150px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                        position: absolute;
-                        left:7%;
-                        right: 0px;
-                        top: -85px;
-                    }
-
-                     .profile-blank-img {
-                        background: #7a7878e8;
-                    }
-
-                    .add-photo-icon {
-                        z-index: 10;
-                        font-size: 4rem;
-                        cursor: pointer;
-                      color: blue;
-                       
-                    }
-
-                    .add-photo-icon-bottom {
-                        position: absolute; 
-                        left: 0; 
-                        right: 0; 
-                        top: 0;
-                        bottom: 0;
-                        margin-left: 15%; 
-                        margin-right: auto; 
-                        margin-top: auto; 
-                        margin-bottom: auto; 
-                       
-   
-                    }
-
-                    .add-photo-icon-top {
-                       
-                        position: absolute; 
-                        left: 0; 
-                        right: 0; 
-                        top: 0;
-                        bottom: 0; 
-                        margin-left: auto; 
-                        margin-right: auto; 
-                        margin-top: auto; 
-                        margin-bottom: auto; 
-                        width: 100px; 
-                     
-                        
-                    }
-                }
-            
-                }
-        
-            button {
-                    padding: 10px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-size: 1.2rem;
-                    max-width: fit-content;
-                    margin: auto;
-                }
-        
-            input {
-                padding: 10px 20px;
-                font-size: 1.2rem;
-                border-radius: 5px;
-                outline: none;
-            }
-        
-            .form-warning {
-                font-size: 0.9rem;
-                color: red;
-                text-align: start;
-            }
-        
-            .center {
-                text-align: center;
-                font-weight: bold;
-            }
-        
-        
-            .form-submitting {
-              pointer-events: none;
-            }
-            }
-        
-        
-            p  {
-                font-size: 1.1rem;
-                a {
-                    text-decoration: none;
-                    color: blue;
-                    cursor: pointer;
-                }
-            }
-        }
+      .close-model {
+        cursor: pointer;
+      }
     }
+    .user-info-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 2rem;
+        border-radius: 10px;
+        border: 1px solid gainsboro;
+        text-align: center;
+      }
+
+      button {
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        max-width: fit-content;
+        margin: auto;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .images {
+          width: 100%;
+          height: 300px;
+          margin-bottom: 4rem;
+
+          .image-div {
+            position: relative;
+            cursor: pointer;
+
+            .add-photo-icon {
+              display: none;
+            }
+
+            &:hover {
+              .add-photo-icon {
+                display: flex;
+              }
+            }
+
+            .cover {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .bg-blank-img {
+              background-color: #333639;
+              height: 300px;
+            }
+
+            .profilePic {
+              width: 150px;
+              height: 150px;
+              border-radius: 50%;
+              object-fit: cover;
+              position: absolute;
+              left: 7%;
+              right: 0px;
+              top: -85px;
+            }
+
+            .profile-blank-img {
+              background: #7a7878e8;
+            }
+
+            .add-photo-icon {
+              z-index: 10;
+              font-size: 4rem;
+              cursor: pointer;
+              color: blue;
+            }
+
+            .add-photo-icon-bottom {
+              position: absolute;
+              left: 0px;
+              right: 0;
+              top: 0px;
+              bottom: 0;
+              margin-left: 15%;
+              margin-right: auto;
+              margin-top: auto;
+              margin-bottom: auto;
+            }
+
+            .add-photo-icon-top {
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top: auto;
+              margin-bottom: auto;
+              width: 100px;
+            }
+          }
+
+          .image-div-2 {
+            position: relative;
+            cursor: pointer;
+            max-height: 300px;
+          }
+
+          .image-div-1 {
+            height: 300px;
+          }
+        }
+
+        button {
+          padding: 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 1.2rem;
+          max-width: fit-content;
+          margin: auto;
+        }
+
+        input {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+          border-radius: 5px;
+          outline: none;
+        }
+
+        .form-warning {
+          font-size: 0.9rem;
+          color: red;
+          text-align: start;
+        }
+
+        .center {
+          text-align: center;
+          font-weight: bold;
+        }
+
+        .form-submitting {
+          pointer-events: none;
+        }
+      }
+
+      p {
+        font-size: 1.1rem;
+        a {
+          text-decoration: none;
+          color: blue;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
