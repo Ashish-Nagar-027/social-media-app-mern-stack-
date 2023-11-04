@@ -207,7 +207,7 @@ const Posts = ({ id }) => {
       )}
       {loadingData && <PostSkeleton items={3} />}
       <div className="posts">
-        {!timeLinePosts && <PostSkeleton items={5} />}
+        {!timeLinePosts && <PostSkeleton items={3} />}
 
         {timeLinePosts &&
           !loadingData &&
