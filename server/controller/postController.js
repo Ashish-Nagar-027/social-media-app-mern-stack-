@@ -294,23 +294,27 @@ const timeLinePosts = async (req, res) => {
 ///======================
 // Get user all  posts
 ///=====================
+
 const getUserPosts = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const user = await User.findById(userId);
-
+       const user = await User.findById(userId);
     const userPosts = await Promise.all(
-      user.posts.map((postId) => {
-        return Post.findById(postId);
+      user.posts.map(async (postId) => {
+        let post = await Post.findById(postId)
+        post =  post.toObject()
+        post.user = { ...post.user, profilePic: user.profilePic };
+        return post 
       })
     );
 
-    res.status(200).json(userPosts);
+    res.status(200).json(userPosts); 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
@@ -370,10 +374,18 @@ const getUserBookmarkedPosts = async (req, res) => {
     const user = await User.findById(userId);
 
     const userPosts = await Promise.all(
-      user.bookmarkedPosts.map((postId) => {
-        return Post.findById(postId);
+      user.bookmarkedPosts.map(async (postId) => {
+        let post = await Post.findById(postId)
+        post = post.toObject()
+        let postUser = await User.findById(post.user.userId)
+        post.user = { ...post.user, profilePic: postUser.profilePic };
+        console.log('postuser ' , postUser.profilePic)
+        return post
       })
     );
+
+    // console.log('new post ',userPosts)
+
 
     res.status(200).json(userPosts);
   } catch (error) {
