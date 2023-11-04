@@ -13,11 +13,10 @@ import {
 } from "react-icons/md";
 import { selectPosts, setPosts } from "../../features/postSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-import LoadingData from "../LoadingData";
 import { getBaseUrl } from "../../utility/utility";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { PostSkeleton } from "../skeletons/skeletons";
+import { PostSkeleton } from "../Skeletons/Skeletons";
 
 const Posts = ({ id }) => {
   const location = useLocation();
@@ -206,7 +205,7 @@ const Posts = ({ id }) => {
           </div>
         </div>
       )}
-      {loadingData && <LoadingData />}
+      {loadingData && <PostSkeleton items={3} />}
       <div className="posts">
         {!timeLinePosts && <PostSkeleton items={5} />}
 
