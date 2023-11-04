@@ -65,6 +65,7 @@ const EditUserInfo = () => {
         data: formData,
       }).then((updatedData) => {
         dispatch(loginUser(updatedData.data));
+        dispatch(setEditProfile());
       });
 
       formik.setSubmitting(false);
@@ -124,7 +125,7 @@ const EditUserInfo = () => {
             <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
               <div className="images">
                 <div
-                  className="image-div"
+                  className="image-div-1 image-div"
                   onClick={() => coverPicInputRef.current.click()}
                 >
                   {formik.values.cover ? (
@@ -143,7 +144,7 @@ const EditUserInfo = () => {
                   <MdAddAPhoto className="add-photo-icon add-photo-icon-top" />
                 </div>
                 <div
-                  className="image-div"
+                  className=" image-div-2 image-div"
                   onClick={() => profilePicInputRef.current.click()}
                 >
                   {formik.values.profilePic ? (
