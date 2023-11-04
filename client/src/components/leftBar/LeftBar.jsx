@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { MdOutlineBookmarks } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { LeftbarSkeleton } from "../skeletons/skeletons";
+import { LeftbarSkeleton } from "../Skeletons/Skeletons.jsx";
 
 const LeftBar = () => {
   const currentUser = useSelector(selectUser);

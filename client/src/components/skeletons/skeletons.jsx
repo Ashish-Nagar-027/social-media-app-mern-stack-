@@ -1,7 +1,8 @@
 import React from "react";
+
+import { CgProfile } from "react-icons/cg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { CgProfile } from "react-icons/cg";
 
 const PStyle = { maxWidth: "50%", margin: "10px" };
 const hrStyle = { margin: "1rem", maxWidth: "70%" };
