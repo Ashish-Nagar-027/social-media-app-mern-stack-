@@ -18,12 +18,12 @@ code {
   }
 }
 @mixin tablet {
-  @media (max-width: 960px) {
+  @media (max-width: 730px) {
     @content;
   }
 }
 @mixin bigScreens {
-  @media (max-width: 1200px) {
+  @media (max-width: 1000px) {
     @content;
   }
 }
