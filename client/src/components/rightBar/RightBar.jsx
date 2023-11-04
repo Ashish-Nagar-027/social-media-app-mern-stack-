@@ -7,7 +7,7 @@ import HandleFollowBtn from "../following Button/HandleFollowBtn";
 import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
 import { getBaseUrl } from "../../utility/utility";
-import { RightbarSkeleton } from "../Skeletons/Skeletons";
+import { RightbarSkeleton } from "../Skeletons/Skeletons.jsx";
 
 const RightBar = () => {
   const [suggestUsers, setSuggestUsers] = useState(null);
