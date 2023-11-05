@@ -8,14 +8,24 @@ import { MdOutlineBookmarks } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { LeftbarSkeleton } from "../Skeletons/Skeletons.jsx";
+import { showSideBar, toggleSideBar } from "../../features/showSideBarSlice.js";
 
 const LeftBar = () => {
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
+  const showSideBarState = useSelector(showSideBar);
 
   return (
     <>
-      <div className="leftbar">
+      <div className={showSideBarState ? "leftbar show-left-bar" : "leftbar"}>
+        <div
+          className="close-icon"
+          onClick={() => showSideBarState && dispatch(toggleSideBar())}
+        >
+          <div className="line-1 line"></div>
+          <div className="line-2 line"></div>
+        </div>
+
         <div className="user-div">
           {currentUser?.coverPic?.url ? (
             <img
@@ -41,19 +51,29 @@ const LeftBar = () => {
           <div className="user-info">
             {!currentUser && <LeftbarSkeleton />}
             <p>
-              <Link to={`/profile/${currentUser?._id}/connections/followers`}>
+              <Link
+                to={`/profile/${currentUser?._id}/connections/followers`}
+                onClick={() => showSideBarState && dispatch(toggleSideBar())}
+              >
                 Followers : {currentUser?.followers?.length}
               </Link>
             </p>
             <p>
-              <Link to={`/profile/${currentUser?._id}/connections/followings`}>
+              <Link
+                to={`/profile/${currentUser?._id}/connections/followings`}
+                onClick={() => showSideBarState && dispatch(toggleSideBar())}
+              >
                 followings : {currentUser?.followings?.length}
               </Link>
             </p>
           </div>
 
           <nav className="navigations">
-            <Link className="left-nav-link" to="/">
+            <Link
+              className="left-nav-link"
+              to="/"
+              onClick={() => showSideBarState && dispatch(toggleSideBar())}
+            >
               <div className="icon">
                 <svg
                   viewBox="0 0 24 24"
@@ -67,16 +87,28 @@ const LeftBar = () => {
               </div>
               <span>Home</span>
             </Link>
-            <Link className="left-nav-link" to={`/profile/${currentUser?._id}`}>
+            <Link
+              className="left-nav-link"
+              onClick={() => showSideBarState && dispatch(toggleSideBar())}
+              to={`/profile/${currentUser?._id}`}
+            >
               <CgProfile className="icon react-icon" size={20} />
               <span>Profile</span>
             </Link>
-            <Link className="left-nav-link" to="/bookmarks">
+            <Link
+              className="left-nav-link"
+              to="/bookmarks"
+              onClick={() => showSideBarState && dispatch(toggleSideBar())}
+            >
               <MdOutlineBookmarks className="icon react-icon" size={20} />
 
               <span>Bookmark</span>
             </Link>
-            <Link className="left-nav-link" to="/messages">
+            <Link
+              className="left-nav-link"
+              to="/messages"
+              onClick={() => showSideBarState && dispatch(toggleSideBar())}
+            >
               <div className="icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +130,10 @@ const LeftBar = () => {
           </nav>
           <div
             className="user-logout"
-            onClick={() => dispatch(setEditProfile())}
+            onClick={() => {
+              dispatch(setEditProfile());
+              showSideBarState && dispatch(toggleSideBar());
+            }}
           >
             {currentUser?.profilePic?.url ? (
               <img alt="profile" src={currentUser.profilePic.url} />
