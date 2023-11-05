@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setEditProfile } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
+import { toggleSideBar } from "../../features/showSideBarSlice";
 
 const Navbar = () => {
   const currentUser = useSelector(selectUser);
@@ -42,6 +43,11 @@ const Navbar = () => {
               <CgProfile size={30} />
             )}
             <span>{currentUser?.name}</span>
+          </div>
+          <div className="hamburger" onClick={() => dispatch(toggleSideBar())}>
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
           </div>
         </div>
       </div>

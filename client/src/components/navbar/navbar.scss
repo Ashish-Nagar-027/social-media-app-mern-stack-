@@ -1,100 +1,113 @@
-@import '../../style.scss';
-
-
-
+@import "../../style.scss";
 
 .navbar {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-bottom: 1px solid gainsboro;
-    margin-bottom: 10;
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 1;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid gainsboro;
+  margin-bottom: 10;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
 
+  a {
+    text-decoration: none;
+  }
 
-    a {
-        text-decoration: none;
-    }
-
-    .left-nav {
+  .left-nav {
     display: flex;
     align-items: center;
     gap: 20px;
     padding: 5px 10px;
 
     span {
-        font-size: 1.2rem;
-        font-weight: 600;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
-    .search-input{
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        border: 1px solid gainsboro;
-        border-radius: 5px;
+    .search-input {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid gainsboro;
+      border-radius: 5px;
 
-        input {
-            padding: 3px;
-            outline: none;
-            border: none;
+      input {
+        padding: 3px;
+        outline: none;
+        border: none;
 
-            @include mobile{
-                display: none;
-            }
+        @include mobile {
+          display: none;
         }
+      }
     }
+  }
 
+  .right-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 5px 10px;
+
+    .hamburger {
+      display: none;
     }
-
-    .right-nav {
+    @include tablet {
+      .hamburger {
+        position: fixed;
         display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 5px 10px;
-       
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        z-index: 10;
+        right: 1rem;
+
+        .line {
+          width: 2.3rem;
+          height: 0.2rem;
+          background-color: blue;
+        }
+      }
+    }
 
     .user {
-        display: flex;
-        align-items: center;
-        gap: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      @include tablet {
+        display: none;
+      }
 
-        img {
+      img {
         height: 30px;
         width: 30px;
-        border-radius:50% ;
+        border-radius: 50%;
         object-fit: cover;
-        }
+      }
 
-        span {
-            font-weight: 500;
-            @include mobile{
-                display: none;
-            }
+      span {
+        font-weight: 500;
+        @include mobile {
+          display: none;
         }
+      }
 
-        &:hover {
-            cursor: pointer;
-            .profile-modal-div {
-                display: flex;
-            }
+      &:hover {
+        cursor: pointer;
+        .profile-modal-div {
+          display: flex;
         }
-
+      }
     }
+  }
 
+  .icon {
+    @include tablet {
+      display: none;
     }
-
-    .icon {
-        @include mobile{
-            display: none;
-        }
-        
-    }
+  }
 }
-
-
