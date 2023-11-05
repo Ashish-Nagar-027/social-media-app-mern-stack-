@@ -1,131 +1,114 @@
-
-@import '../../style.scss';
-
+@import "../../style.scss";
 
 .profile {
+  .images {
+    width: 100%;
+    height: 300px;
+    position: relative;
 
-    .images {
-        width: 100%;
-        height: 300px;
-        position: relative;
-
-        .cover{
-            width: 100%;
-            height:100%;
-            object-fit: cover;
-        }
-
-        .bg-blank-img {
-            background-color: #333639;
-        }
-
-        .profilePic {
-            width: 200px;
-            height:200px;
-            border-radius: 50%;
-            object-fit: cover;
-            position: absolute;
-            left: 40px;
-            right: 0px;
-            top: 200px;
-        }
-
-        .profile-blank-img {
-            background: #7a7878e8;
-        }
-
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .userInfo {
-        border: 1px solid gainsboro;
+    .bg-blank-img {
+      background-color: #333639;
+    }
+
+    .profilePic {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      position: absolute;
+      left: 40px;
+      right: 0px;
+      top: 200px;
+    }
+
+    .profile-blank-img {
+      background: #7a7878e8;
+    }
+  }
+
+  .userInfo {
+    border: 1px solid gainsboro;
+    display: flex;
+    padding: 100px 50px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    @include mobile {
+      padding: 90px 10px;
+    }
+
+    .center {
+      margin-top: 10px;
+      flex: 1;
+      display: flex;
+      gap: 5px;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .connections-div {
         display: flex;
-        padding: 100px 50px;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-        // margin-top: 20px;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
 
+      p a {
+        font-weight: 500;
+        text-decoration: none;
+        color: gray;
+      }
 
-        @include mobile{
-            flex-direction: column-reverse;
-           padding: 90px 10px;
+      .followers:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
-        }
+      .followings a:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
-      
-        .center {
-            margin-top: 10px;
-            flex: 1;
-            display: flex;
-            gap: 5px;
-            flex-direction: column;
-           align-items: flex-start;
+      span {
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
 
-           .connections-div {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        
-           }
-
-           p a{
-            font-weight: 500;
-            text-decoration: none;
-            color: gray;
-            
-           }
-
-           .followers:hover  {
-            cursor: pointer;
-            text-decoration: underline;
-            
-           }
-
-           .followings a:hover {
-            cursor: pointer;
-            text-decoration: underline;
-           }
-
-           span {
-            font-size: 1.3rem;
-            font-weight:500 ;
-        
-           }
-
-           button {
-            cursor: pointer;
-            padding: 10px 25px;
-            font-size: 1.05rem;
-            border-radius: 5px;
-            background-color: #5271ff;
-            color: white;
-           }
-
-        }
-        .right {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
-
-            .message-icon {
-                cursor: pointer;
-            }
-
-            .profile-edit-button {
-                display: flex;
-                align-items: center;
-                padding: 5px;
-                gap: 5px;
-                color: white;
-                cursor: pointer;
-                background-color:#5271ff
-            }
-
-        }
-
+      button {
+        cursor: pointer;
+        padding: 10px 25px;
+        font-size: 1.05rem;
+        border-radius: 5px;
+        background-color: #5271ff;
+        color: white;
+      }
     }
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
 
+      .message-icon {
+        cursor: pointer;
+      }
 
+      .profile-edit-button {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        gap: 5px;
+        color: white;
+        cursor: pointer;
+        background-color: #5271ff;
+      }
+    }
+  }
 }
