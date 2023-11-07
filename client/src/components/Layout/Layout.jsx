@@ -7,6 +7,7 @@ import Navbar from "../navbar/Navbar";
 import { useSelector } from "react-redux";
 import { editCurrentUser } from "../../features/userSlice";
 import EditUserInfo from "../Edit-current -user/EditUserInfo";
+import { Toaster } from "sonner";
 
 const Layout = () => {
   const editUserInfo = useSelector(editCurrentUser);
@@ -28,6 +29,7 @@ const Layout = () => {
         <RightBar />
       </div>
       {editUserInfo && <EditUserInfo />}
+      <Toaster position="top-center" richColors />
     </>
   );
 };
