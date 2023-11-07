@@ -7,6 +7,7 @@ import {
 
 import axios from 'axios'
 import { getBaseUrl } from "../utility/utility";
+import { toast } from "sonner";
 
 
 const useHandleFollowing = (id) => {
@@ -22,7 +23,13 @@ const useHandleFollowing = (id) => {
           await axios(url + "follow", {
             method: "PUT",
             withCredentials: true,
-          }).then(() => dispatch(setFollowings([...currentUser.followings, id])));
+          }).then((d) => {
+          dispatch(setFollowings([...currentUser.followings, id]))
+           toast.success(d.data, {
+         className: "my-classname",
+         duration: 3000,
+       })
+        });
         } else {
           const followingsArray = currentUser.followings;
     
@@ -33,7 +40,14 @@ const useHandleFollowing = (id) => {
           await axios(url + "unfollow", {
             method: "PUT",
             withCredentials: true,
-          }).then(() => dispatch(setFollowings(newFollowings)));
+          }).then((d) => {
+            dispatch(setFollowings(newFollowings))
+           
+             toast.success(d.data, {
+         className: "my-classname",
+         duration: 3000,
+       });
+          })
         }
       };
 
