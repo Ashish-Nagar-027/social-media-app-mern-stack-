@@ -17,6 +17,7 @@ import { getBaseUrl } from "../../utility/utility";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { PostSkeleton } from "../Skeletons/Skeletons.jsx";
+import { toast } from "sonner";
 
 const Posts = ({ id }) => {
   const location = useLocation();
@@ -58,7 +59,20 @@ const Posts = ({ id }) => {
           data: newPost,
         });
 
-        dispatch(setPosts([postData.data.post, ...timeLinePosts]));
+        const newPostDetails = {
+          ...postData.data.post,
+          user: {
+            ...postData.data.post.user,
+            profilePic: currentUser.profilePic,
+          },
+        };
+
+        // dispatch(setPosts([postData.data.post, ...timeLinePosts]));
+        dispatch(setPosts([newPostDetails, ...timeLinePosts]));
+        toast.success("Your New Post Added Successfully", {
+          className: "my-classname",
+          duration: 3000,
+        });
         setCaptionText("");
         setImage(null);
       } catch (error) {
@@ -143,7 +157,7 @@ const Posts = ({ id }) => {
                 {currentUser?.profilePic?.url ? (
                   <img
                     className="profile-pic-img"
-                    src={currentUser?.profilePic.url}
+                    src={currentUser?.profilePic?.url}
                     alt={currentUser?.name}
                   />
                 ) : (
