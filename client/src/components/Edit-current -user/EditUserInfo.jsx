@@ -14,6 +14,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getBaseUrl } from "../../utility/utility";
+import { toast } from "sonner";
 
 // for formik errors
 const validate = (values) => {
@@ -66,6 +67,10 @@ const EditUserInfo = () => {
       }).then((updatedData) => {
         dispatch(loginUser(updatedData.data));
         dispatch(setEditProfile());
+        toast.success("Your Profile Updated", {
+          className: "my-classname",
+          duration: 3000,
+        });
       });
 
       formik.setSubmitting(false);
