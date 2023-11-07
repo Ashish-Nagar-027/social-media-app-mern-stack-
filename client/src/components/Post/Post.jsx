@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
 import useDateHandler from "../../hooks/useDateHandler";
 import { getBaseUrl } from "../../utility/utility";
+import { toast } from "sonner";
 
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
@@ -51,13 +52,27 @@ const Post = ({ post }) => {
         data: {
           userId: currentUser._id,
         },
-      }).then(() => {
+      }).then((d) => {
         dispatch(
           setLikes({ postId: post._id, currentUserId: currentUser._id })
         );
+        let msg = "Your like added";
+        if (d.data === "your like removed") {
+          msg = "Your Like Removed";
+        }
+        toast.success("Like added ", {
+          className: "my-classname",
+          description: msg,
+          duration: 3000,
+        });
       });
     } catch (error) {
       console.log(error);
+      toast.error("Like added ", {
+        className: "my-classname",
+        description: error,
+        duration: 3000,
+      });
     }
   };
 
@@ -68,9 +83,23 @@ const Post = ({ post }) => {
         withCredentials: true,
       }).then((d) => {
         dispatch(setBookmarks({ postId: post._id }));
+        let msg = "You added a post in bookmark";
+        if (d.data !== "Post bookmarked added") {
+          msg = "You removed post a post from bookmark ";
+        }
+        toast.success("Bookmark added ", {
+          className: "my-classname",
+          description: msg,
+          duration: 3000,
+        });
       });
     } catch (error) {
       console.log(error);
+      toast.error("error ", {
+        className: "my-classname",
+        description: error,
+        duration: 3000,
+      });
     }
   };
 
@@ -90,9 +119,19 @@ const Post = ({ post }) => {
           (DeletePost) => DeletePost._id !== post._id
         );
         dispatch(setPosts(deletePost));
+        toast.success("You Deleted A Post", {
+          className: "my-classname",
+          description: "Your Post Deleted Successfully ",
+          duration: 3000,
+        });
       });
     } catch (error) {
       console.log(error);
+      toast.error("error while deleting post", {
+        className: "my-classname",
+        description: "Your post is not deleted",
+        duration: 3000,
+      });
     }
   };
 
