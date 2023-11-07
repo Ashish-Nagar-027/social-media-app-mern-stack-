@@ -55,8 +55,8 @@ const updateUser = async (req, res) => {
 
       const updatedItems = { ...req.body };
 
+
       if (req.files) {
-        console.log(req.files);
         let { cover, profilePic } = req.files;
 
         if (cover) {
@@ -94,9 +94,12 @@ const updateUser = async (req, res) => {
         user.password = undefined;
         res.status(200).json(user);
       } else {
-        res
-          .status(403)
-          .json("Access Denied ! you can only update your profile");
+           const user = await User.findByIdAndUpdate(id, updatedItems, {
+          new: true,
+        });
+        user.password = undefined;
+        res.status(200).json(user);
+
       }
     }
   } catch (error) {
@@ -251,7 +254,7 @@ const unfollow = async (req, res) => {
       await unfollowUser.updateOne({
         $pull: { followers: req.user.id },
       });
-      res.status(200).json("unfollowing " + unfollowUser.name);
+      res.status(200).json("You unfollowed " + unfollowUser.name);
     } else {
       res.status(403).json("You do not follow this user");
     }
