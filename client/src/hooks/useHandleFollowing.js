@@ -8,18 +8,22 @@ import {
 import axios from 'axios'
 import { getBaseUrl } from "../utility/utility";
 import { toast } from "sonner";
+import { useState } from "react";
 
 
 const useHandleFollowing = (id) => {
     const currentUser = useSelector(selectUser);
     const dispatch = useDispatch();
+    const [followRequest, setFollowRequest] = useState(false)
     
 
     const followingHandling = async (id) => {
+   
+      setFollowRequest(true)
         const url = getBaseUrl+"/api/v1/user/" + id + "/";
-       
-    
+
         if (!currentUser.followings.includes(id)) {
+          
           await axios(url + "follow", {
             method: "PUT",
             withCredentials: true,
@@ -49,10 +53,12 @@ const useHandleFollowing = (id) => {
        });
           })
         }
+      setFollowRequest(false)
       };
 
       return {
-        followingHandling
+        followingHandling,
+        followRequest
       } 
 }
 
