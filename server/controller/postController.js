@@ -383,10 +383,6 @@ const getUserBookmarkedPosts = async (req, res) => {
         return post
       })
     );
-
-    // console.log('new post ',userPosts)
-
-
     res.status(200).json(userPosts);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -459,6 +455,42 @@ const addComment = async (req, res) => {
   }
 };
 
+
+///======================
+// get comment
+///=====================
+const getComments = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    
+    if (!postId) {
+      throw Error("please send post id to like in params");
+    }
+    if (!mongoose.isValidObjectId(postId)) {
+      throw Error("post id is not valid id");
+    }
+
+    const post = await Post.findById(postId).select("comments")
+   const newPost =  await Promise.all(
+    post.comments.map( async (p) => {
+      const {id,user, comment,createdAt} = p
+
+    const commentUser = await User.findById(user.userId).select('profilePic')
+    user.profilePic = commentUser.profilePic
+   return {_id: id, comment,createdAt, user:{...user}}
+   }))
+
+    if (!post) {
+      return res.status(403).json("post not found");
+    }
+
+    res.status(200).json(newPost);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 ///======================
 // delete comment
 ///=====================
@@ -502,6 +534,9 @@ const deleteComment = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = {
   createPost,
   getPost,
@@ -514,6 +549,6 @@ module.exports = {
   addComment,
   bookmarkPost,
   getUserBookmarkedPosts ,
-  deleteComment
-
+  deleteComment,
+getComments
 };
