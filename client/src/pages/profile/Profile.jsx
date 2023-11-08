@@ -47,6 +47,9 @@ const Profile = () => {
     scrollRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
+    return () => {
+      scrollRef?.current?.removeEventListener("scroll", () => {});
+    };
   }, [userId.id]);
 
   return (
