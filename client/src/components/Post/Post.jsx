@@ -24,7 +24,9 @@ import { toast } from "sonner";
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
   const [showMoreBtn, setShowMoreBtn] = useState(false);
-  const [comments, setComments] = useState(post?.comments);
+
+  const [likingPost, setLikingPost] = useState(false);
+  const [bookmarking, setBookmarking] = useState(false);
 
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -46,6 +48,8 @@ const Post = ({ post }) => {
 
   const handleLikes = async () => {
     try {
+      setLikingPost(true);
+      dispatch(setLikes({ postId: post._id, currentUserId: currentUser._id }));
       await axios(getBaseUrl + "/api/v1/post/" + post._id + "/like", {
         method: "PUT",
         withCredentials: true,
@@ -53,9 +57,6 @@ const Post = ({ post }) => {
           userId: currentUser._id,
         },
       }).then((d) => {
-        dispatch(
-          setLikes({ postId: post._id, currentUserId: currentUser._id })
-        );
         let msg = "Your like added";
         if (d.data === "your like removed") {
           msg = "Your Like Removed";
@@ -68,21 +69,25 @@ const Post = ({ post }) => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Like added ", {
+      dispatch(setLikes({ postId: post._id, currentUserId: currentUser._id }));
+      toast.error("something is wrong with server", {
         className: "my-classname",
-        description: error,
+        description: "You Like couldn't be added at this time",
         duration: 3000,
       });
+    } finally {
+      setLikingPost(false);
     }
   };
 
   const handleBookmarkedPost = async () => {
     try {
+      setBookmarking(true);
+      dispatch(setBookmarks({ postId: post._id }));
       await axios(getBaseUrl + "/api/v1/post/" + post._id + "/bookmark", {
         method: "PUT",
         withCredentials: true,
       }).then((d) => {
-        dispatch(setBookmarks({ postId: post._id }));
         let msg = "You added a post in bookmark";
         if (d.data !== "Post bookmarked added") {
           msg = "You removed post a post from bookmark ";
@@ -95,11 +100,14 @@ const Post = ({ post }) => {
       });
     } catch (error) {
       console.log(error);
+      dispatch(setBookmarks({ postId: post._id }));
       toast.error("error ", {
         className: "my-classname",
         description: error,
         duration: 3000,
       });
+    } finally {
+      setBookmarking(false);
     }
   };
 
@@ -167,9 +175,11 @@ const Post = ({ post }) => {
               />
             )}
             {showMoreBtn && (
-              <button className="delete-btn btn" onClick={deletePostFunction}>
-                Delete post
-              </button>
+              <div>
+                <button className="delete-btn btn" onClick={deletePostFunction}>
+                  Delete post
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -182,7 +192,7 @@ const Post = ({ post }) => {
           )}
         </div>
         <div className="info">
-          <div className="item">
+          <div className={likingPost ? "item disableClick" : "item"}>
             {post?.likes?.includes(currentUser._id) ? (
               <MdFavorite size={20} onClick={handleLikes} />
             ) : (
@@ -192,12 +202,15 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
-            <span> {comments?.length} comments</span>
+            <span> {post?.comments?.length} comments</span>
           </div>
           <div className="item">
             <MdShare size={20} />
           </div>
-          <div className="item" onClick={handleBookmarkedPost}>
+          <div
+            className={bookmarking ? "item disableClick" : "item"}
+            onClick={handleBookmarkedPost}
+          >
             {currentUser.bookmarkedPosts?.includes(post?._id) ? (
               <MdBookmark size={22} />
             ) : (
@@ -205,13 +218,7 @@ const Post = ({ post }) => {
             )}
           </div>
         </div>
-        {showComment && (
-          <Comments
-            postId={post?._id}
-            userComments={comments}
-            setComments={setComments}
-          />
-        )}
+        {showComment && <Comments postId={post?._id} />}
       </div>
     </div>
   );
