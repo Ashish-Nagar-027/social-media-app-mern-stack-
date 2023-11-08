@@ -14,7 +14,8 @@ const {
   addComment,
   bookmarkPost,
   getUserBookmarkedPosts,
-  deleteComment
+  deleteComment,
+  getComments
 } = require("../controller/postController");
 
 // create post
@@ -49,6 +50,9 @@ router.get("/explore", verifyToken, getAllPosts);
 
 // add comment
 router.put("/:id/comment", verifyToken, addComment);
+
+// get comments
+router.get("/:id/comment", verifyToken, getComments);
 
 // delete comment
 router.delete("/:id/comment", verifyToken, deleteComment);
