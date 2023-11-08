@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import "./comments.scss";
 import { useSelector } from "react-redux";
-
 import axios from "axios";
-
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { selectUser } from "../../features/userSlice";
 import { MdDelete } from "react-icons/md";
 import { getBaseUrl } from "../../utility/utility";
+import LoadingData from "../LoadingData";
+import useDateHandler from "../../hooks/useDateHandler";
 
-const Comments = ({ postId, userComments, setComments }) => {
+const Comments = ({ postId }) => {
   const currentUser = useSelector(selectUser);
 
   const [commentInputValue, setCommentInputValue] = useState("");
+  const [newComments, setNewComments] = useState(null);
+  const [fetchingComments, setFetchingComments] = useState(false);
+  const { formatTimestamp } = useDateHandler();
 
   const handCommentSubmit = async () => {
     if (commentInputValue !== "") {
@@ -25,7 +28,7 @@ const Comments = ({ postId, userComments, setComments }) => {
             comment: commentInputValue,
           },
         }).then((comment) => {
-          setComments((prevComments) => [
+          setNewComments((prevComments) => [
             ...prevComments,
             comment.data.comment,
           ]);
@@ -46,7 +49,7 @@ const Comments = ({ postId, userComments, setComments }) => {
           commentId: id,
         },
       }).then((msg) => {
-        setComments((prevComment) => {
+        setNewComments((prevComment) => {
           return prevComment.filter((comment) => comment._id !== id);
         });
       });
@@ -54,6 +57,26 @@ const Comments = ({ postId, userComments, setComments }) => {
       console.log(error);
     }
   };
+
+  const fetchComments = useCallback(async () => {
+    try {
+      setFetchingComments(true);
+      await axios(getBaseUrl + "/api/v1/post/" + postId + "/comment", {
+        method: "get",
+        withCredentials: true,
+      }).then((d) => {
+        setNewComments(d.data);
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFetchingComments(false);
+    }
+  }, [postId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [postId]);
 
   return (
     <div className="comments">
@@ -72,9 +95,10 @@ const Comments = ({ postId, userComments, setComments }) => {
         />
         <button onClick={handCommentSubmit}>Send</button>
       </div>
+      {fetchingComments && <LoadingData />}
       {/* show comments */}
       <div className="show-comments">
-        {userComments?.map((comment) => {
+        {newComments?.map((comment) => {
           return (
             <div key={comment._id} className="comment">
               <div className="link_div">
@@ -82,8 +106,8 @@ const Comments = ({ postId, userComments, setComments }) => {
                   className="userInfo"
                   to={`/profile/${comment.user.userId}`}
                 >
-                  {currentUser?.profilePic?.url ? (
-                    <img alt="profile" src={currentUser.profilePic.url} />
+                  {comment.user?.profilePic?.url ? (
+                    <img alt="profile" src={comment.user.profilePic.url} />
                   ) : (
                     <CgProfile size={30} />
                   )}
@@ -100,7 +124,9 @@ const Comments = ({ postId, userComments, setComments }) => {
                   />
                 )}
               </div>
-              <span className="date">1 min</span>
+              <span className="date">
+                {formatTimestamp(comment?.createdAt)}
+              </span>
             </div>
           );
         })}
@@ -109,4 +135,4 @@ const Comments = ({ postId, userComments, setComments }) => {
   );
 };
 
-export default Comments;
+export default memo(Comments);
