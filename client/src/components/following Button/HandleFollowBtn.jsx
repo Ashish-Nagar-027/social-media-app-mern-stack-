@@ -9,19 +9,16 @@ const HandleFollowBtn = ({ profileUserId }) => {
   const { followingHandling, followRequest } = useHandleFollowing();
 
   const disableBtnStyle = {
-    backgroundColor:
-      (currentUser?._id === profileUserId || followRequest) && "gray",
+    opacity: (currentUser?._id === profileUserId || followRequest) && 0.6,
     PointerEvent:
       (currentUser?._id === profileUserId || followRequest) && "none",
-    cursor:
-      (currentUser?._id === profileUserId || followRequest) && "not-allowed",
+    cursor: currentUser?._id === profileUserId && "not-allowed",
   };
 
   return (
     <button
       onClick={() => followingHandling(profileUserId)}
       style={disableBtnStyle}
-      disabled={currentUser?._id === profileUserId}
     >
       {profileUserId
         ? currentUser?.followings?.includes(profileUserId)
