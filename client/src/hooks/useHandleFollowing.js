@@ -18,10 +18,20 @@ const useHandleFollowing = (id) => {
     
 
     const followingHandling = async (id) => {
-   
+      
+      if(id == currentUser?._id){
+         toast.error("You Can Not Follow Yourselt", {
+        className: "my-classname",
+        description: "The User You Are Trying To Follow Is YourSelf.",
+        duration: 3000,
+      });
+
+        return
+      }
+
       setFollowRequest(true)
         const url = getBaseUrl+"/api/v1/user/" + id + "/";
-
+    
         if (!currentUser.followings.includes(id)) {
           
           await axios(url + "follow", {
