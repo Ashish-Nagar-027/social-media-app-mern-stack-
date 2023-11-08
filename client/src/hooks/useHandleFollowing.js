@@ -25,7 +25,6 @@ const useHandleFollowing = (id) => {
         description: "The User You Are Trying To Follow Is YourSelf.",
         duration: 3000,
       });
-
         return
       }
 
