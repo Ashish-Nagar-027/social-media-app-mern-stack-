@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { MdEmail, MdEdit } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import Skeleton from "react-loading-skeleton";
@@ -23,39 +23,31 @@ const Profile = () => {
   const dispatch = useDispatch();
   const profileUser = useSelector(selectProfileUser);
   const [fetching, setFetching] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+
+  const fetchDataFunction = useCallback(async () => {
+    setFetching(true);
+
+    const fetchData = await axios.get(
+      `${getBaseUrl}/api/v1/user/${userId.id}`,
+      {
+        method: "GET",
+        withCredentials: true,
+      }
+    );
+    dispatch(setProfileUser(fetchData.data));
+    setFetching(false);
+  }, [userId.id, dispatch]);
 
   useEffect(() => {
-    userId?.id === currentUser?._id ? setIsAdmin(true) : setIsAdmin(false);
-  }, [userId, currentUser, setIsAdmin]);
-
-  useEffect(() => {
-    const fetchDataFunction = async () => {
-      setFetching(true);
-      const fetchData = await axios.get(
-        `${getBaseUrl}/api/v1/user/${userId.id}`,
-        {
-          method: "GET",
-          withCredentials: true,
-        }
-      );
-      dispatch(setProfileUser(fetchData.data));
-      setFetching(false);
-    };
-
-    if (isAdmin) {
-      setProfileUser(currentUser);
-    } else {
-      fetchDataFunction();
-    }
-  }, [userId, dispatch, setFetching, isAdmin, currentUser]);
+    fetchDataFunction();
+  }, [userId.id, fetchDataFunction]);
 
   const scrollRef = useRef(null);
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [userId]);
+  }, [userId.id]);
 
   return (
     <>
@@ -147,4 +139,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default memo(Profile);
