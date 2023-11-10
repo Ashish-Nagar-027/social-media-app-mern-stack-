@@ -19,7 +19,7 @@ const useHandleFollowing = (id) => {
 
     const followingHandling = async (id) => {
       
-      if(id == currentUser?._id){
+      if(id === currentUser?._id){
          toast.error("You Can Not Follow Yourselt", {
         className: "my-classname",
         description: "The User You Are Trying To Follow Is YourSelf.",
