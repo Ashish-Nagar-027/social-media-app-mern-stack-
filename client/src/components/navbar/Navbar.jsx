@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./navbar.scss";
 import {
@@ -11,10 +11,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setEditProfile } from "../../features/userSlice";
 import { CgProfile } from "react-icons/cg";
 import { toggleSideBar } from "../../features/showSideBarSlice";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const currentUser = useSelector(selectUser);
   const dispatch = useDispatch();
+  const [inputSearch, setInputSearch] = useState("");
+
+  const handleInputSearch = (e) => {
+    e.preventDefault();
+    toast.error("This Feature Is Not Available Yet", {
+      className: "my-classname",
+      description: "search user feature will be availble soon",
+      duration: 2000,
+    });
+    setInputSearch("");
+  };
 
   return (
     <>
@@ -24,8 +36,15 @@ const Navbar = () => {
             <span>BeingSocial</span>
           </Link>
           <div className="search-input">
-            <input type="text" placeholder="Search" />
-            <MdOutlineSearch fontSize={24} />
+            <form onSubmit={handleInputSearch}>
+              <input
+                type="text"
+                placeholder="Search"
+                value={inputSearch}
+                onChange={(e) => setInputSearch(e.target.value)}
+              />
+              <MdOutlineSearch fontSize={24} onClick={handleInputSearch} />
+            </form>
           </div>
         </div>
         <div className="right-nav">
@@ -35,7 +54,17 @@ const Navbar = () => {
           <Link to={`/profile/${currentUser?._id}/connections/followings`}>
             <MdGroup fontSize={24} className="icon" />
           </Link>
-          <MdNotificationsNone fontSize={24} className="icon" />
+          <MdNotificationsNone
+            fontSize={24}
+            className="icon"
+            onClick={() =>
+              toast.error("This Feature Is Not Available Yet", {
+                className: "my-classname",
+                description: "search user feature will be availble soon",
+                duration: 2000,
+              })
+            }
+          />
           <div className="user" onClick={() => dispatch(setEditProfile())}>
             {currentUser?.profilePic?.url ? (
               <img alt="profile" src={currentUser.profilePic.url} />

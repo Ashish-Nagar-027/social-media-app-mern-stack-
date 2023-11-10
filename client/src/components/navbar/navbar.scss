@@ -29,19 +29,21 @@
     }
 
     .search-input {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      border: 1px solid gainsboro;
-      border-radius: 5px;
+      form {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
 
-      input {
-        padding: 3px;
-        outline: none;
-        border: none;
+        input {
+          padding: 3px;
+          outline: none;
+          border: none;
 
-        @include mobile {
-          display: none;
+          @include mobile {
+            display: none;
+          }
         }
       }
     }
