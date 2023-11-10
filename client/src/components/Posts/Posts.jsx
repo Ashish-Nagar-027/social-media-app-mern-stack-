@@ -168,7 +168,7 @@ const Posts = ({ id }) => {
               <input
                 placeholder="Write here..."
                 value={captionText}
-                onChange={(e) => setCaptionText(e.target.value)}
+                onChange={(e) => currentUser && setCaptionText(e.target.value)}
               />
               {image && (
                 <div className="uploaded-img">
@@ -180,46 +180,50 @@ const Posts = ({ id }) => {
                   <img src={URL.createObjectURL(image)} alt="" />
                 </div>
               )}
-              <div className="upload-items">
-                <div>
-                  <div
-                    className="upload-item"
-                    onClick={() => imageRef.current.click()}
-                  >
-                    <MdOutlineImage size={20} />
-                    <span>Image</span>
+              {!currentUser ? (
+                <Skeleton height={"2rem"} />
+              ) : (
+                <div className="upload-items">
+                  <div>
+                    <div
+                      className="upload-item"
+                      onClick={() => imageRef.current.click()}
+                    >
+                      <MdOutlineImage size={20} />
+                      <span>Image</span>
+                    </div>
+                    <div
+                      className="upload-item"
+                      onClick={() => imageRef.current.click()}
+                    >
+                      <MdOutlineVideoFile size={20} />
+                      <span>video</span>
+                    </div>
+                    <div style={{ display: "none" }}>
+                      <input
+                        type="file"
+                        name="image-input"
+                        ref={imageRef}
+                        onChange={handleImageChange}
+                      />
+                    </div>
                   </div>
-                  <div
-                    className="upload-item"
-                    onClick={() => imageRef.current.click()}
-                  >
-                    <MdOutlineVideoFile size={20} />
-                    <span>video</span>
-                  </div>
-                  <div style={{ display: "none" }}>
-                    <input
-                      type="file"
-                      name="image-input"
-                      ref={imageRef}
-                      onChange={handleImageChange}
-                    />
-                  </div>
+                  {sharingTime ? (
+                    <button disabled>
+                      sharing... <MdOutlineSend size={20} />
+                    </button>
+                  ) : (
+                    <button onClick={sharePost}>
+                      Share Post <MdOutlineSend size={20} />
+                    </button>
+                  )}
                 </div>
-                {sharingTime ? (
-                  <button disabled>
-                    sharing... <MdOutlineSend size={20} />
-                  </button>
-                ) : (
-                  <button onClick={sharePost}>
-                    Share Post <MdOutlineSend size={20} />
-                  </button>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
       )}
-      {loadingData && <PostSkeleton items={3} />}
+      {loadingData && <PostSkeleton items={3} gap />}
       <div className="posts">
         {!timeLinePosts && <PostSkeleton items={3} />}
 

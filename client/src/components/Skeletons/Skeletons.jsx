@@ -1,6 +1,4 @@
 import React from "react";
-
-import { CgProfile } from "react-icons/cg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -44,8 +42,8 @@ export const RightbarSkeleton = ({ items }) => {
             <div className="user" key={i}>
               <div className="userInfo">
                 <p className="userInfo">
-                  <CgProfile size={35} />
-                  {<Skeleton width={"8rem"} height={"1.8rem"} />}
+                  <Skeleton width={32} height={32} circle />
+                  <Skeleton width={"8rem"} height={"1.8rem"} />
                 </p>
               </div>
               <div className="buttons">
@@ -58,14 +56,18 @@ export const RightbarSkeleton = ({ items }) => {
   );
 };
 
-export const PostSkeleton = ({ items }) => {
+export const PostSkeleton = ({ items, gap }) => {
   return (
     <>
       {Array(items)
         .fill(0)
         .map((item, i) => {
           return (
-            <div className="post" key={i}>
+            <div
+              className="post"
+              key={i}
+              style={{ marginBottom: gap ? "1rem" : "" }}
+            >
               <div className="container">
                 <div className="user">
                   <div className="userInfo">
