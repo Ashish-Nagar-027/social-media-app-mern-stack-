@@ -1,42 +1,42 @@
 
 
 const useDateHandler = (timestamp) => {
+
  
 
-    function formatTimestamp(timestamp) {
-    const now = new Date();
-    const dateObj = new Date(timestamp);
 
-    const timeDifference = now - dateObj;
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-    const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
 
-    if (minutesDifference < 1) {
-      return "just now";
-    } else if (hoursDifference < 1) {
-      return `${minutesDifference} minutes ago`;
-    } else if (hoursDifference < 24) {
-      if (hoursDifference === 1) {
-        return "1 hour ago";
-      } else {
-        return `${hoursDifference} hours ago`;
-      }
+function formatTimestamp(timestamp) {
+  const now = new Date();
+  const dateObj = new Date(timestamp);
+  
+  const timeDifference = now - dateObj;
+  const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+  const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const weeksDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
+  const monthsDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 30));
+
+  if (minutesDifference < 1) {
+    return "just now";
+  } else if (hoursDifference < 1) {
+    return `${minutesDifference} minutes ago`;
+  } else if (daysDifference < 1) {
+    return `${hoursDifference} hours ago`;
+  } else if (weeksDifference < 1) {
+    return `${daysDifference} days ago`;
+  } else if (monthsDifference < 1) {
+    if (now.getMonth() === dateObj.getMonth() && now.getFullYear() === dateObj.getFullYear()) {
+      return dateObj.toLocaleString("en-US", { month: "short", day: "numeric" });
     } else {
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(dateObj);
-
-      const formattedTime = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }).format(dateObj);
-
-      return `${formattedDate}, ${formattedTime}`;
+      return `${dateObj.toLocaleString("en-US", { hour: "numeric", minute: "numeric" })} · ${dateObj.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
     }
+  } else {
+    return `${dateObj.toLocaleString("en-US", { hour: "numeric", minute: "numeric" })} · ${dateObj.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
   }
+}
+
+
 
 
   return {
