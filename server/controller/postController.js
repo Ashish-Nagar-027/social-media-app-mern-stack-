@@ -304,7 +304,7 @@ const getUserPosts = async (req, res) => {
       user.posts.map(async (postId) => {
         let post = await Post.findById(postId)
         post =  post.toObject()
-        post.user = { ...post.user, profilePic: user.profilePic };
+        post.user = { ...post.user,name: user.name, profilePic: user.profilePic };
         return post 
       })
     );
@@ -367,27 +367,37 @@ const bookmarkPost = async (req, res) => {
 ///======================
 // Get user bookmarked posts
 ///=====================
+
 const getUserBookmarkedPosts = async (req, res) => {
   try {
     const userId = req.params.id;
-
     const user = await User.findById(userId);
 
     const userPosts = await Promise.all(
       user.bookmarkedPosts.map(async (postId) => {
-        let post = await Post.findById(postId)
+        let post = await Post.findById(postId);
+        if (!post) {
+          // Handle the case where the post is not found (e.g., send an error response).
+          return null;
+        }
         post = post.toObject()
-        let postUser = await User.findById(post.user.userId)
-        post.user = { ...post.user, profilePic: postUser.profilePic };
-        console.log('postuser ' , postUser.profilePic)
-        return post
+        let postUser = await User.findById(post.user.userId);
+        
+        post.user = { userId: post.user.userId ,name:postUser.name, profilePic: postUser.profilePic };
+        return post;
       })
     );
-    res.status(200).json(userPosts);
+
+    // Filter out null entries (posts that were not found).
+    const validUserPosts = userPosts.filter((post) => post !== null);
+
+    console.log(validUserPosts);
+    res.status(200).json(validUserPosts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
@@ -434,8 +444,8 @@ const addComment = async (req, res) => {
     const commentInfo = {
       user: {
         name: userInfo.name,
-        avtar: userInfo.avtar,
         userId: userInfo.id,
+        profilePic: userInfo.profilePic
       },
       comment,
       createdAt: Date.now()
@@ -447,9 +457,12 @@ const addComment = async (req, res) => {
       { new: true }
     );
 
+    const sendCommentInfo = {...updatedPost.comments[updatedPost.comments.length - 1].toObject(), user:{name: userInfo.name,userId:userInfo.id,profilePic:userInfo.profilePic}}
+
+       
     res.status(200).json({
       message: "you comment added",
-      comment: updatedPost.comments[updatedPost.comments.length - 1],
+      comment: sendCommentInfo,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -476,8 +489,9 @@ const getComments = async (req, res) => {
     post.comments.map( async (p) => {
       const {id,user, comment,createdAt} = p
 
-    const commentUser = await User.findById(user.userId).select('profilePic')
+    const commentUser = await User.findById(user.userId).select('profilePic name')
     user.profilePic = commentUser.profilePic
+    user.name = commentUser.name
    return {_id: id, comment,createdAt, user:{...user}}
    }))
 
