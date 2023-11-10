@@ -1,22 +1,21 @@
-
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import Bookmarked from "./components/Bookmarked posts/Bookmarked"
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Home from "./pages/home/Home";
-import Profile from "./pages/profile/Profile";
 import "./style.scss";
+
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import Bookmarked from "./components/Bookmarked posts/Bookmarked"
+import Profile from "./pages/profile/Profile";
 import UserConnections from "./pages/userConnections/UserConnections";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout/Layout";
 import Messages from "./pages/messages/Messages";
 import UserMessages from "./components/MessagesContainer.jsx/UserMessages";
-
 
 
 function App() {
@@ -46,8 +45,8 @@ function App() {
   );
 
   return (
-    <div className="App">
-      <RouterProvider router={router} />
+    <div className="App"> 
+        <RouterProvider router={router} /> 
     </div>
   );
 }
