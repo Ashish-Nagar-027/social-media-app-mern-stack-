@@ -44,11 +44,14 @@ const Profile = () => {
 
   const scrollRef = useRef(null);
   useEffect(() => {
-    scrollRef?.current?.scrollIntoView({
+    const scrollElement = scrollRef.current;
+
+    scrollElement?.scrollIntoView({
       behavior: "smooth",
     });
+
     return () => {
-      scrollRef?.current?.removeEventListener("scroll", () => {});
+      scrollElement?.removeEventListener("scroll", () => {});
     };
   }, [userId.id]);
 
