@@ -52,8 +52,8 @@ const updateUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         req.body.password = hashedPassword;
       }
-
-      const updatedItems = { ...req.body };
+      
+      const  updatedItems = { name:req.body.name, email: req.body.email };
 
 
       if (req.files) {
@@ -99,7 +99,6 @@ const updateUser = async (req, res) => {
         });
         user.password = undefined;
         res.status(200).json(user);
-
       }
     }
   } catch (error) {
