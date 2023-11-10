@@ -3,7 +3,6 @@ import {
   MdFavoriteBorder,
   MdFavorite,
   MdMoreHoriz,
-  MdShare,
   MdOutlineMessage,
   MdBookmarkBorder,
   MdBookmark,
@@ -24,7 +23,7 @@ import { toast } from "sonner";
 const Post = ({ post }) => {
   const [showComment, setShowComment] = useState(false);
   const [showMoreBtn, setShowMoreBtn] = useState(false);
-
+  const [newComments, setNewComments] = useState(null);
   const [likingPost, setLikingPost] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
 
@@ -202,10 +201,10 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setShowComment(!showComment)}>
             <MdOutlineMessage size={20} />
-            <span> {post?.comments?.length} comments</span>
-          </div>
-          <div className="item">
-            <MdShare size={20} />
+            <span>
+              {" "}
+              {newComments?.length || post?.comments?.length} comments
+            </span>
           </div>
           <div
             className={bookmarking ? "item disableClick" : "item"}
@@ -218,7 +217,13 @@ const Post = ({ post }) => {
             )}
           </div>
         </div>
-        {showComment && <Comments postId={post?._id} />}
+        {showComment && (
+          <Comments
+            postId={post?._id}
+            newComments={newComments}
+            setNewComments={setNewComments}
+          />
+        )}
       </div>
     </div>
   );
