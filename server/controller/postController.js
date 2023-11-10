@@ -438,6 +438,7 @@ const addComment = async (req, res) => {
         userId: userInfo.id,
       },
       comment,
+      createdAt: Date.now()
     };
 
     const updatedPost = await Post.findOneAndUpdate(
