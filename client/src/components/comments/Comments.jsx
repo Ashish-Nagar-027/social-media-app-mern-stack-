@@ -139,6 +139,11 @@ const Comments = ({ postId, newComments, setNewComments }) => {
             </div>
           );
         })}
+
+        {/* if no comments */}
+        {newComments?.length === 0 && (
+          <p style={{ margin: "auto" }}>No comments Yet</p>
+        )}
       </div>
     </div>
   );
