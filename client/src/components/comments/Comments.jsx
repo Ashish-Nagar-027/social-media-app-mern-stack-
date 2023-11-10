@@ -9,12 +9,12 @@ import { MdDelete } from "react-icons/md";
 import { getBaseUrl } from "../../utility/utility";
 import LoadingData from "../LoadingData";
 import useDateHandler from "../../hooks/useDateHandler";
+import { toast } from "sonner";
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, newComments, setNewComments }) => {
   const currentUser = useSelector(selectUser);
 
   const [commentInputValue, setCommentInputValue] = useState("");
-  const [newComments, setNewComments] = useState(null);
   const [fetchingComments, setFetchingComments] = useState(false);
   const { formatTimestamp } = useDateHandler();
 
@@ -32,6 +32,11 @@ const Comments = ({ postId }) => {
             ...prevComments,
             comment.data.comment,
           ]);
+          toast.success("Your Comment added ", {
+            className: "my-classname",
+            description: `Comment: ${commentInputValue}`,
+            duration: 3000,
+          });
         });
       } catch (error) {
         console.log(error);
@@ -51,6 +56,10 @@ const Comments = ({ postId }) => {
       }).then((msg) => {
         setNewComments((prevComment) => {
           return prevComment.filter((comment) => comment._id !== id);
+        });
+        toast.success("Your Comment Deleted ", {
+          className: "my-classname",
+          duration: 3000,
         });
       });
     } catch (error) {
