@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import MessageProfile from "../../components/messages_profile/Messageprofile";
 import "./messages.scss";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import axios from "axios";
@@ -11,9 +10,11 @@ import {
   setConversation,
 } from "../../features/conversationSlice";
 import { getBaseUrl } from "../../utility/utility";
+import { toast } from "sonner";
 
 const Messages = () => {
   const [fetching, setFetching] = useState(false);
+  const [searchUserInput, SetSearchUserInput] = useState("");
   const currentUser = useSelector(selectUser);
 
   const dispatch = useDispatch();
@@ -38,11 +39,23 @@ const Messages = () => {
     fetchConnections();
   }, [fetchConnections]);
 
+  const handleUserSearchInput = (e) => {
+    SetSearchUserInput(e.target.value);
+    toast.warning("Search User Feature Will Be Available Soon.", {
+      className: "my-classname",
+      duration: 1000,
+    });
+  };
+
   return (
     <div className="container">
-      <Link className="serach_component" to={"/messages/id"}>
-        <h3>Search Profile</h3>
-      </Link>
+      <input
+        className="serach_input"
+        type="text"
+        placeholder="Search Dirct Messages"
+        value={searchUserInput}
+        onChange={handleUserSearchInput}
+      ></input>
       {fetching && !conversations && <LoadingData />}
       {!fetching && conversations?.length === 0 ? (
         <h2>you don't have any previous conversation</h2>
