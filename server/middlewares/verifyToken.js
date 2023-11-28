@@ -4,6 +4,7 @@ const User = require("../models/User");
 
 const verifyToken = async (req, res, next) => {
   try {
+ 
     const token = req.cookies.accessToken;
 
     if (!token) {
