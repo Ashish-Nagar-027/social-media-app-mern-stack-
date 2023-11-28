@@ -112,8 +112,10 @@ const updatePost = async (req, res) => {
 
 // delete post
 const deletePost = async (req, res) => {
+  
   try {
     const postId = req.params.id;
+    console.log(req.params.id)
     if (!postId) {
       throw Error("please send post id to delete");
     }
