@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import MessageProfile from "../../components/messages_profile/Messageprofile";
 import "./messages.scss";
 import { Link } from "react-router-dom";
@@ -13,29 +13,30 @@ import {
 import { getBaseUrl } from "../../utility/utility";
 
 const Messages = () => {
-  const currentUser = useSelector(selectUser);
-
   const [fetching, setFetching] = useState(false);
+  const currentUser = useSelector(selectUser);
 
   const dispatch = useDispatch();
 
   const conversations = useSelector(selectConversation);
 
-  useEffect(() => {
-    const fetchConnections = async () => {
-      setFetching(true);
-      let url = getBaseUrl + `/api/v1/conversations/${currentUser?._id}`;
-      const fetchData = await axios.get(url, {
-        method: "GET",
-        withCredentials: true,
-      });
+  const fetchConnections = useCallback(async () => {
+    setFetching(true);
 
-      dispatch(setConversation(fetchData.data));
-      setFetching(false);
-    };
+    let url = getBaseUrl + `/api/v1/conversations/${currentUser?._id}`;
 
-    fetchConnections();
+    const fetchData = await axios.get(url, {
+      method: "GET",
+      withCredentials: true,
+    });
+
+    dispatch(setConversation(fetchData.data));
+    setFetching(false);
   }, [currentUser?._id, dispatch]);
+
+  useEffect(() => {
+    fetchConnections();
+  }, [fetchConnections]);
 
   return (
     <div className="container">
@@ -47,14 +48,22 @@ const Messages = () => {
         <h2>you don't have any previous conversation</h2>
       ) : (
         conversations?.map((conversation) => {
+          const otherUserId = conversation?.members.filter(
+            (userId) => userId !== currentUser._id
+          )[0];
+
           return (
-            <Link
+            // <Link
+            //   key={conversation._id}
+            //   className="user-msg-profile"
+            //   to={`/messages/${currentUser?._id}-${otherUserId}`}
+            // >
+            <MessageProfile
               key={conversation._id}
-              className="user-msg-profile"
-              to={"/messages/" + conversation._id}
-            >
-              <MessageProfile user={conversation} />
-            </Link>
+              otherUserId={otherUserId}
+              conversationId={conversation._id}
+            />
+            // </Link>
           );
         })
       )}
