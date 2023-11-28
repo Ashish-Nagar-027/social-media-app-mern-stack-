@@ -3,48 +3,93 @@ import "./UserMessages.scss";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
-import { selectConversationUser } from "../../features/conversationSlice";
+import {
+  selectConversationUser,
+  setConversationUser,
+} from "../../features/conversationSlice";
 import axios from "axios";
 import useDateHandler from "../../hooks/useDateHandler";
 import { getBaseUrl } from "../../utility/utility";
+import LoadingData from "../../components/LoadingData";
 
 var socket;
 const UserMessages = () => {
   const navigate = useNavigate();
-  const params = useParams();
+  const { id } = useParams();
+  let otherUserId = id.split("-")[1];
   const scrollRef = useRef();
   const currentUser = useSelector(selectUser);
   const [msgInput, setMessageInput] = useState("");
-  const [msgList, setMsgList] = useState([]);
+  const [msgList, setMsgList] = useState(null);
   const conversationsUser = useSelector(selectConversationUser);
   const { formatTimestamp } = useDateHandler();
+  const dispatch = useDispatch();
+  const [currentConversation, setCurrentConversation] = useState(null);
+  const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    const fetchDataFunction = async () => {
+      setFetching(true);
+      const fetchData = await axios.get(
+        `${getBaseUrl}/api/v1/user/${otherUserId}`
+      );
+
+      dispatch(setConversationUser(fetchData.data));
+    };
+    fetchDataFunction();
+  }, [dispatch, otherUserId]);
+
+  useEffect(() => {
+    const fetchDataFunction = async () => {
+      setFetching(true);
+      const fetchData = await axios.get(
+        `${getBaseUrl}/api/v1/conversations/${otherUserId}`,
+        {
+          method: "GET",
+          withCredentials: true,
+        }
+      );
+      setCurrentConversation(...fetchData.data);
+    };
+    fetchDataFunction();
+  }, []);
 
   useEffect(() => {
     socket = io(getBaseUrl);
 
     // Clean up the socket connection when the component unmounts
     return () => {
-      console.log("cloesd component");
       socket.disconnect();
     };
-  }, []);
+  }, [currentConversation?._id]);
 
   useEffect(() => {
-    const fetchDataFunction = async () => {
-      const fetchData = await axios.get(
-        getBaseUrl + `/api/v1/messages/${params.id}`
-      );
-      setMsgList(fetchData.data);
-      socket.emit("join_chat", params.id);
-    };
-    fetchDataFunction();
-  }, [params.id]);
+    try {
+      const fetchDataFunction = async () => {
+        const fetchData = await axios.get(
+          getBaseUrl + `/api/v1/messages/${currentConversation?._id}`
+        );
+        if (Array.isArray(fetchData.data)) {
+          setMsgList(fetchData.data);
+        }
+        socket.emit("join_chat", currentConversation?._id);
+        setFetching(false);
+      };
+      if (currentConversation?._id) {
+        fetchDataFunction();
+      }
+    } catch (error) {
+      setFetching(false);
+
+      console.log(error.message);
+    }
+  }, [currentConversation?._id]);
 
   const sendMessage = async () => {
     const msg = {
-      conversationId: params.id,
+      conversationId: currentConversation?._id,
       sender: currentUser._id,
       text: msgInput,
     };
@@ -73,7 +118,7 @@ const UserMessages = () => {
     socket.on("recieve_message", (data) => {
       setMsgList((msgs) => [...msgs, data]);
     });
-  }, [setMsgList]);
+  }, [setMsgList, socket]);
 
   return (
     <div className="messages-container">
@@ -85,23 +130,35 @@ const UserMessages = () => {
       </div>
       <div className="messages_here">
         <ul>
-          {msgList.map((msgData) => {
-            if (msgData.sender === currentUser._id) {
+          {fetching && <LoadingData />}
+          {msgList &&
+            msgList.map((msgData) => {
+              if (msgData.sender === currentUser._id) {
+                return (
+                  <li className="its_me" key={msgData?._id} ref={scrollRef}>
+                    <div className="message_wrapper">{msgData.text}</div>
+                    <p>{formatTimestamp(msgData.createdAt)}</p>
+                  </li>
+                );
+              }
+
               return (
-                <li className="its_me" key={msgData?._id} ref={scrollRef}>
+                <li key={msgData._id} ref={scrollRef}>
                   <div className="message_wrapper">{msgData.text}</div>
                   <p>{formatTimestamp(msgData.createdAt)}</p>
                 </li>
               );
-            }
-
-            return (
-              <li key={msgData._id} ref={scrollRef}>
-                <div className="message_wrapper">{msgData.text}</div>
-                <p>{formatTimestamp(msgData.createdAt)}</p>
-              </li>
-            );
-          })}
+            })}
+          {msgList && msgList?.length === 0 && !fetching && (
+            <h2
+              style={{
+                display: "flex",
+                textAlign: "center",
+              }}
+            >
+              you don't have any any messages yet 😅
+            </h2>
+          )}
         </ul>
       </div>
       <div className="msg_input">
