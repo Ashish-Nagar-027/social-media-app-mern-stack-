@@ -1,55 +1,72 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 
 import "./message_profile.scss";
-import { selectUser } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import {
-  selectConversationUser,
-  setConversationUser,
-} from "../../features/conversationSlice";
+
 import { getBaseUrl } from "../../utility/utility";
+import { selectUser } from "../../features/userSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-const MessageProfile = ({ user }) => {
-  const currentUser = useSelector(selectUser);
-  const otherUserId = user?.members.filter(
-    (userId) => userId !== currentUser._id
-  )[0];
-
+const MessageProfile = ({ otherUserId, conversationId }) => {
   const dispatch = useDispatch();
-  const conversationsUser = useSelector(selectConversationUser);
+  const navigate = useNavigate();
+  const currentUser = useSelector(selectUser);
+
+  const [msgProfileUser, setMsgProfileUser] = useState("");
 
   useEffect(() => {
     const fetchDataFunction = async () => {
       const fetchData = await axios.get(
         `${getBaseUrl}/api/v1/user/${otherUserId}`
       );
-      dispatch(setConversationUser(fetchData.data));
+      setMsgProfileUser(fetchData.data);
     };
     fetchDataFunction();
   }, [dispatch, otherUserId]);
 
-  if (conversationsUser) {
+  const deleteConversationFunction = async (e) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure, you wanna Delete This Conversation ?")) {
+      // console.log(conversationId);
+      await axios
+        .delete(`${getBaseUrl}/api/v1/conversations/${conversationId}`, {
+          withCredentials: true,
+        })
+        .then((d) => console.log(d.data));
+    }
+  };
+  const handleMsgProfileUser = (e) => {
+    if (e.target.className === "msg-profile-user user-msg-profile") {
+      navigate(`/messages/${currentUser?._id}-${otherUserId}`);
+    }
+  };
+
+  if (msgProfileUser)
     return (
-      <div className="msg-profile-user">
+      <div
+        className="msg-profile-user user-msg-profile"
+        onClick={handleMsgProfileUser}
+      >
         <div className="userInfo">
           <div className="userInfo">
-            {conversationsUser.profilePic?.url ? (
+            {msgProfileUser?.profilePic?.url ? (
               <img
                 className="profile-img"
-                src={conversationsUser.profilePic.url}
-                alt={conversationsUser.name}
+                src={msgProfileUser?.profilePic?.url}
+                alt={msgProfileUser?.name}
               />
             ) : (
               <CgProfile size={30} />
             )}
-            <span>{conversationsUser.name} </span>
+            <span>{msgProfileUser?.name} </span>
           </div>
         </div>
+        <button onClick={deleteConversationFunction}>delete</button>
       </div>
     );
-  }
 };
 
 export default memo(MessageProfile);
