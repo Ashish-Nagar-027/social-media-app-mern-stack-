@@ -64,7 +64,12 @@ const MessageProfile = ({ otherUserId, conversationId }) => {
             <span>{msgProfileUser?.name} </span>
           </div>
         </div>
-        <button onClick={deleteConversationFunction}>delete</button>
+        <button
+          className="delete-profile-button"
+          onClick={deleteConversationFunction}
+        >
+          delete
+        </button>
       </div>
     );
 };

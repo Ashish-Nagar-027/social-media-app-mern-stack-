@@ -20,18 +20,9 @@
     }
   }
 
-  .buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-
-    button {
-      border: none;
-      padding: 5px;
-      color: white;
-      cursor: pointer;
-      background-color: #5271ff;
-    }
+  button {
+    padding: 0.2rem;
+    border-radius: 1rem;
+    cursor: pointer;
   }
 }
