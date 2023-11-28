@@ -53,10 +53,12 @@ const Register = () => {
       } else {
         setServerError(jsonData.message);
       }
-      formik.setSubmitting(false);
       formik.resetForm();
     } catch (error) {
       setServerError(error.message);
+    } finally {
+      formik.setSubmitting(false);
+      setBtnDisabled("");
     }
   };
 
@@ -85,6 +87,9 @@ const Register = () => {
     } catch (error) {
       console.log(error);
       setServerError(error.message);
+    } finally {
+      formik.setSubmitting(false);
+      setBtnDisabled("");
     }
   };
 
