@@ -8,11 +8,11 @@ import { SkeletonTheme } from "react-loading-skeleton";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <SkeletonTheme baseColor="#DDDBDD" highlightColor="rgba(130, 130, 130, 0.5)">
         <App />
       </SkeletonTheme>
     </Provider>
-   </React.StrictMode>
+  //  {/* </React.StrictMode> */}/
 );
