@@ -66,17 +66,11 @@ const Messages = () => {
           )[0];
 
           return (
-            // <Link
-            //   key={conversation._id}
-            //   className="user-msg-profile"
-            //   to={`/messages/${currentUser?._id}-${otherUserId}`}
-            // >
             <MessageProfile
               key={conversation._id}
               otherUserId={otherUserId}
               conversationId={conversation._id}
             />
-            // </Link>
           );
         })
       )}
