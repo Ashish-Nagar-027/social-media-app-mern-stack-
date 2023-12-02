@@ -57,7 +57,9 @@ const UserMessages = () => {
   }, []);
 
   useEffect(() => {
-    socket = io(getBaseUrl);
+    socket = io(getBaseUrl, {
+      withCredentials: true,
+    });
 
     // Clean up the socket connection when the component unmounts
     return () => {

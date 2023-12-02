@@ -12,8 +12,9 @@ const { Server }  = require('socket.io');
 const io = new Server(server, {
   pingTimeout: 60000,
   cors : {
-     origin: "*",
-    methods: ["GET","POST"]
+     origin: ['http://localhost:3001'],
+    methods: ["GET","POST"],
+    credentials: true,
   }
 })
 
