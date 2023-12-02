@@ -70,6 +70,7 @@ const Messages = () => {
               key={conversation._id}
               otherUserId={otherUserId}
               conversationId={conversation._id}
+              fetchConnections={fetchConnections}
             />
           );
         })

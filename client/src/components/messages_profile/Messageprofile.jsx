@@ -1,45 +1,45 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
-
 import "./message_profile.scss";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-
 import { getBaseUrl } from "../../utility/utility";
 import { selectUser } from "../../features/userSlice";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
-const MessageProfile = ({ otherUserId, conversationId }) => {
+const MessageProfile = ({ otherUserId, conversationId, fetchConnections }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(selectUser);
-
   const [msgProfileUser, setMsgProfileUser] = useState("");
 
+  const fetchDataFunction = useCallback(async () => {
+    const fetchData = await axios.get(
+      `${getBaseUrl}/api/v1/user/${otherUserId}`
+    );
+    setMsgProfileUser(fetchData.data);
+  }, [otherUserId, dispatch]);
+
   useEffect(() => {
-    const fetchDataFunction = async () => {
-      const fetchData = await axios.get(
-        `${getBaseUrl}/api/v1/user/${otherUserId}`
-      );
-      setMsgProfileUser(fetchData.data);
-    };
     fetchDataFunction();
-  }, [dispatch, otherUserId]);
+  }, [fetchDataFunction]);
 
   const deleteConversationFunction = async (e) => {
     e.stopPropagation();
     if (window.confirm("Are you sure, you wanna Delete This Conversation ?")) {
-      // console.log(conversationId);
       await axios
         .delete(`${getBaseUrl}/api/v1/conversations/${conversationId}`, {
           withCredentials: true,
         })
-        .then((d) => console.log(d.data));
+        .then((d) => {
+          fetchConnections();
+          console.log(d.data);
+        });
     }
   };
+
   const handleMsgProfileUser = (e) => {
-    if (e.target.className === "msg-profile-user user-msg-profile") {
+    if (e.target.className !== "delete-profile-button") {
       navigate(`/messages/${currentUser?._id}-${otherUserId}`);
     }
   };
