@@ -12,7 +12,10 @@ const { Server }  = require('socket.io');
 const io = new Server(server, {
   pingTimeout: 60000,
   cors : {
-     origin: ['https://social-media-app-mern-stack.vercel.app/',"*"],
+     origin:  [
+      'https://social-media-app-mern-stack.vercel.app', 
+      'http://localhost:3001',
+    ],
     methods: ["GET","POST"],
     credentials: true,
   }
